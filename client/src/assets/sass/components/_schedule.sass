@@ -1,0 +1,55 @@
+.schedule
+	display: none
+	border: 1px solid #000
+	padding: 20px 10%
+	height: calc(100vh - #{$navbar_h})
+	&__select
+		height: 40px
+		width: 150px
+	&__container
+		height: calc( 100% - 50px )
+		padding: 0 3px 0 0
+		overflow: auto
+
+.interval
+	display: flex
+	align-items: center
+	justify-content: space-between
+	height: 40px
+	margin-bottom: 5px
+	padding: 0 20px
+	border-radius: 3px
+	background-color: #0d47a1
+	border: 1px solid darken(#0d47a1, 20%)
+	&:last-child
+		margin-bottom: 0
+	&.disabled
+		pointer-events: none
+		opacity: 0.6
+	&__hours
+		display: flex
+		align-items: center
+		justify-content: center
+		height: 30px
+		width: 140px
+		color: white
+		font-size: 1.2rem
+		margin-right: 20px
+		border-radius: 15px
+		border: 1px solid darken(#0d47a1, 20%)
+	&__rented
+		position: relative
+		margin-right: auto
+		color: white
+		font-size: 1.2rem
+		padding-left: 20px
+		&::before
+			position: absolute
+			width: 1px
+			height: 150%
+			background-color: #c1c1c1
+			top: -25%
+			left: 0
+			content: ''
+	&__button
+		padding: 5px

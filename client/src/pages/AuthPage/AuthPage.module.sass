@@ -1,0 +1,58 @@
+@import 'src/styleVariables'
+
+.authorization
+  display: flex
+  align-items: center
+  justify-content: center
+  width: 100%
+  height: calc( 100vh - #{$navbar_h} )
+
+.form
+  background-color: #546e7a
+  width: 450px
+  border-radius: 2px
+  padding: 20px
+
+.title
+    text-align: center
+    color: white
+    font-size: 1.5rem
+
+.input
+  height: 46px
+  width: 100%
+  font-size: 16px
+  padding: 0 10px
+  color: white
+  background-color: inherit
+  border: none
+  border-bottom: 1px solid #c1c1c1
+  outline: none
+  transition: border-color .3s
+  &_container
+    position: relative
+    display: flex
+    align-items: center
+  &_error
+    &:focus
+      border-bottom: 1px solid $color-2 !important
+  &:focus
+    border-bottom: 1px solid $color-1
+  &::placeholder
+    color: #c1c1c1
+
+.error
+  position: absolute
+  right: 10px
+  color: $color-2
+  font-size: 1.3rem
+
+.button
+  height: 36px
+  width: 80px
+
+
+@media (max-width: 576px)
+  .authorization
+    width: 90%
+    margin: auto

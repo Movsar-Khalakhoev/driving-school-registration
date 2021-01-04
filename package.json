@@ -1,0 +1,19 @@
+{
+  "name": "driving-school-registration",
+  "version": "1.0.0",
+  "description": "есть кабинет обычного пользователя и кабинет администратора.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Movsar-Khalakhoev/driving-school-registration.git"
+  },
+  "author": "Movsar Khalakhoev <movsar.kh.128@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Movsar-Khalakhoev/driving-school-registration/issues"
+  },
+  "homepage": "https://github.com/Movsar-Khalakhoev/driving-school-registration#readme"
+}

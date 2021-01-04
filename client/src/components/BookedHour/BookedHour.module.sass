@@ -1,0 +1,83 @@
+.interval
+  display: flex
+  align-items: center
+  justify-content: space-between
+  height: 40px
+  margin-bottom: 5px
+  padding: 0 20px
+  border-radius: 3px
+  background-color: #0d47a1
+  border: 1px solid darken(#0d47a1, 20%)
+  &:last-child
+    margin-bottom: 0
+  &.disabled
+    pointer-events: none
+    opacity: 0.6
+
+.hours
+  display: flex
+  align-items: center
+  justify-content: center
+  height: 30px
+  width: 140px
+  color: white
+  font-size: 1.2rem
+  margin-right: 20px
+  border-radius: 15px
+  border: 1px solid darken(#0d47a1, 20%)
+
+.rented
+  position: relative
+  margin-right: auto
+  color: white
+  font-size: 1.2rem
+  padding-left: 20px
+  &::before
+    position: absolute
+    width: 1px
+    height: 150%
+    background-color: #c1c1c1
+    top: -25%
+    left: 0
+    content: ''
+
+.button
+  padding: 5px
+
+
+@media (max-width: 992px)
+  .interval
+    padding: 0 10px
+  .hours
+    margin-right: 10px
+    width: 125px
+  .rented
+    padding-left: 10px
+    max-width: 320px
+    white-space: nowrap
+    overflow: hidden
+    text-overflow: ellipsis
+
+@media (max-width: 768px)
+  .interval
+    padding: 0 5px
+
+  .hours
+    font-size: 1.1rem
+    margin-right: 5px
+
+  .rented
+    font-size: 1rem
+    padding-left: 5px
+    max-width: 240px
+
+  .button
+    font-size: 0.8rem
+
+@media (max-width: 576px)
+  .hours
+    font-size: 0.9rem
+    width: 95px
+
+  .rented
+    font-size: 0.9rem

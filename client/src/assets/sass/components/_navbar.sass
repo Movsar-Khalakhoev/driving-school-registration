@@ -1,0 +1,94 @@
+.navbar
+	position: fixed
+	top: 0
+	display: flex
+	align-items: center
+	justify-content: space-between
+	width: 100%
+	height: $navbar_h
+	background-color: #0d47a1
+	padding: 0 20px
+	z-index: 2
+	&__logo
+		color: #fff
+		font-size: 1.3rem
+	&__sections
+		display: flex
+		align-items: center
+		height: 100%
+		transition: transform $trs-1
+		&.active
+			transform: translateX(0)
+			> .hamburger
+					transform: translateX(50px)
+	&__section
+		position: relative
+		display: flex
+		align-items: center
+		justify-content: center
+		height: 100%
+		width: 150px
+		cursor: pointer
+		color: #fff
+		font-size: 1rem
+		transition: background-color $trs-1
+		&::after
+			position: absolute
+			content: ''
+			width: 1px
+			height: 50%
+			background-color: #c1c1c1
+			left: 0
+		&:first-child::after
+			width: 0
+		&:hover
+			background-color: darken(#0d47a1, 5%)
+	&__ico
+		color: #fff
+		margin-right: 5px
+	&__logout
+		display: flex
+		align-items: center
+		justify-content: center
+		border-radius: 50%
+		cursor: pointer
+		color: #fff
+		width: 40px
+		height: 40px
+		transition: background-color $trs-1
+		&:hover
+			background-color: darken(#0d47a1, 5%)
+
+.hamburger
+  position: relative
+  display: none
+  align-items: center
+  justify-content: center
+  width: 30px
+  height: 30px
+		transition: all $trs-1
+		transform: translateX(0)
+
+.line
+  &_1, &_2, &_3
+    width: 100%
+    height: 6px
+    background-color: #fff
+    border-radius: 3px
+    transition: all $trs-1
+  &_1
+    position: absolute
+    top: 0
+  &_3
+    position: absolute
+    bottom: 0
+
+.active
+  .line
+    &_2
+      width: 0
+      opacity: 0
+    &_1
+      transform: translateY(200%) rotate(45deg)
+    &_3
+      transform: translateY(-200%) rotate(-45deg)

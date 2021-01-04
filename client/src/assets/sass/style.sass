@@ -1,0 +1,28 @@
+@import 'variables'
+@import 'templates'
+@import 'components/authorization'
+@import 'components/navbar'
+@import 'components/schedule'
+@import 'components/personal'
+@import 'components/students'
+@import 'media'
+
+*
+	margin: 0
+	padding: 0
+	box-sizing: border-box
+	font-family: sans-serif
+
+body
+	height: 100vh
+	background: url('./../img/background.jpg')
+	background-size: cover
+	padding-top: $navbar_h
+
+::-webkit-scrollbar
+	width: 10px
+
+::-webkit-scrollbar-thumb
+	border: 1px solid darken(#0d47a1, 20%)
+	border-radius: 4px
+	background-color: darken(#0d47a1, 10%)

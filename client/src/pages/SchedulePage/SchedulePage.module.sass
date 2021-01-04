@@ -1,0 +1,28 @@
+@import 'src/styleVariables'
+
+.schedule
+  border: 1px solid #000
+  padding: 20px 10%
+  height: calc(100vh - #{$navbar_h})
+
+.select
+  height: 40px
+  width: 150px
+
+.container
+  height: calc( 100% - 50px )
+  padding: 0 3px 0 0
+  overflow: auto
+
+
+@media (max-width: 768px)
+  .schedule
+    padding: 20px 5%
+
+  .select
+    height: 40px
+
+
+@media (max-width: 576px)
+  .schedule
+    padding: 10px 2%

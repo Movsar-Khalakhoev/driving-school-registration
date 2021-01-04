@@ -1,0 +1,176 @@
+@media (max-width: 1110px)
+	.personal
+		&__main
+			height: 260px
+		&__delete-student
+			top: unset
+			right: unset
+			bottom: 10px
+			left: 10px
+
+@media (max-width: 992px)
+	.personal
+		padding: 20px 5%
+		&__main
+			height: 240px
+		&__delete-student
+			bottom: 5px
+			left: 5px
+		&__image
+			width: 180px
+			height: 180px
+
+	.interval
+		padding: 0 10px
+		&__hours
+			margin-right: 10px
+			width: 125px
+		&__rented
+			padding-left: 10px
+			max-width: 320px
+			white-space: nowrap
+			overflow: hidden
+			text-overflow: ellipsis
+
+@media (max-width: 768px)
+	.personal
+		padding: 20px 10%
+		&__main
+			height: unset
+			flex-direction: column
+		&__info
+			margin-top: 20px
+			margin-left: 10px
+			margin-bottom: 60px
+		&__image
+			height: 200px
+			width: 200px
+
+	.rented
+		height: 90px
+		&__info
+			height: 90%
+			justify-content: space-between
+			flex-direction: column
+		&__type, &__date, &__time
+			&::after
+				width: 100%
+				height: 1px
+				top: unset
+				right: unset
+				bottom: -7px
+				left: 0
+
+	.navbar
+		&__sections
+			position: absolute
+			flex-direction: column
+			height: 100vh
+			width: 400px
+			padding: 100px 10px
+			top: 0
+			bottom: 0
+			right: 0
+			transform: translateX(100%)
+			background-color: #0d47a1
+		&__section
+			height: 50px
+			width: 100%
+			background-color: darken(#0d47a1, 10%)
+			margin-right: 0
+			margin-bottom: 10px
+			&::after
+				width: 0
+		&__logout
+			position: absolute
+			top: 10px
+			right: 10px
+	.hamburger
+		position: absolute
+		display: flex
+		top: 15px
+		left: -40px
+
+	.schedule
+		padding: 20px 5%
+		&__select
+			height: 40px
+
+	.students
+		padding: 20px 5%
+
+	.interval
+		padding: 0 5px
+		&__hours
+			font-size: 1.1rem
+			margin-right: 5px
+		&__rented
+			font-size: 1rem
+			padding-left: 5px
+			max-width: 240px
+		&__button
+			font-size: 0.8rem
+
+@media (max-width: 576px)
+	.authorization
+		width: 90%
+		margin: auto
+	.personal
+		padding: 5px 2%
+		&__main
+			margin-bottom: 5px
+
+		&__image
+			height: 150px
+			width: 150px
+		&__elems
+			justify-content: space-between
+			margin-top: 10px
+		&__visits, &__add-student
+			max-width: 170px
+			width: 49%
+			font-size: 0.9rem
+		&__delete-student, &__add-student, &__visits
+			height: 35px
+		&__info
+			margin-top: 5px
+			margin-left: 0
+			margin-bottom: 40px
+			padding-right: 10px
+		&__name
+			font-size: 1.5rem
+			margin-bottom: 10px
+		&__phone, &__date
+			font-size: 1rem
+			margin-bottom: 5px
+			> .phone, .date
+				white-space: nowrap
+				font-size: 1rem
+		&__container
+			margin-top: 5px
+
+	.rented
+		flex-direction: column
+		align-items: flex-start
+		height: 140px
+		padding: 10px 0 10px 20px
+		&__info
+			height: 80px
+
+	.navbar
+		&__sections
+			max-width: 400px
+			width: 100%
+
+	.schedule
+		padding: 10px 2%
+
+	.interval
+		&__hours
+			font-size: 0.9rem
+			width: 95px
+		&__rented
+			font-size: 0.9rem
+
+	.students
+		padding: 10px 2%

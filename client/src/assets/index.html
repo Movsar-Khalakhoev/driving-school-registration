@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="./libs/icofont/icofont.min.css">
+	<link rel="stylesheet" href="css/style.css">
+	<title>Автошкола «Евло»</title>
+</head>
+<body>
+	<section class="navbar">
+		<p class="navbar__logo">Автошкола</p>
+		<div class="navbar__sections">
+			<div class="navbar__section navbar__schedule">
+				<i class="icofont-notepad navbar__ico"></i>
+				Расписание
+			</div>
+			<div class="navbar__section navbar__acc mr3">
+				<i class="icofont-ui-user navbar__ico"></i>
+				Кабинет
+			</div>
+			<span class="navbar__logout">
+				<i class="icofont-logout"></i>
+			</span>
+			<span class="navbar__hamburger hamburger">
+				<span class="hamburger__line line_1"></span>
+				<span class="hamburger__line line_2"></span>
+				<span class="hamburger__line line_3"></span>
+			</span>
+		</div>
+	</section>
+	<section class="authorization">
+		<div class="authorization__form form shadow-1">
+			<p class="form__title">Авторизация</p>
+			<div class="form__inputs">
+				<input class="form__input mb2" type="text" placeholder="Логин">
+				<input class="form__input mb3" type="password" placeholder="Пароль">
+			</div>
+			<button class="form__button btn_1">Войти</button>
+		</div>
+	</section>
+	<section class="schedule">
+		<button class="schedule__select btn_1 mb1">Дропдаун</button>
+		<div class="schedule__container">
+			<div class="schedule__interval interval">
+				<span class="interval__hours">9:00 - 10:00</span>
+				<button class="interval__button btn_1">Забронировать</button>
+			</div>
+			<div class="schedule__interval interval disabled">
+				<span class="interval__hours">10:00 - 11:00</span>
+				<span class="interval__rented">Иванов Иван Иванович</span>
+			</div>
+			<div class="schedule__interval interval">
+				<span class="interval__hours">11:00 - 12:00</span>
+				<button class="interval__button btn_1">Забронировать</button>
+			</div>
+			<div class="schedule__interval interval">
+				<span class="interval__hours">12:00 - 13:00</span>
+				<button class="interval__button btn_1">Забронировать</button>
+			</div>
+			<div class="schedule__interval interval disabled">
+				<span class="interval__hours">13:00 - 14:00</span>
+				<span class="interval__rented">Иванов Иван Иванович</span>
+			</div>
+			<div class="schedule__interval interval">
+				<span class="interval__hours">14:00 - 15:00</span>
+				<button class="interval__button btn_1">Забронировать</button>
+			</div>
+			<div class="schedule__interval interval">
+				<span class="interval__hours">15:00 - 16:00</span>
+				<button class="interval__button btn_1">Забронировать</button>
+			</div>
+			<div class="schedule__interval interval">
+				<span class="interval__hours">16:00 - 17:00</span>
+				<button class="interval__button btn_1">Забронировать</button>
+			</div>
+			<div class="schedule__interval interval">
+				<span class="interval__hours">17:00 - 18:00</span>
+				<button class="interval__button btn_1">Забронировать</button>
+			</div>
+		</div>
+	</section>
+	<section class="personal">
+		<div class="personal__main mb2">
+			<div class="personal__image mr2">
+				<img src="./img/default_avatar.jpg" alt="Аватарка" class="image">
+			</div>
+			<div class="personal__info">
+				<p class="personal__name mb2">Иванов Иван Иванович</p>
+				<p class="personal__phone mb1">Номер телефона: <span class="phone">+7 777 777 77 77</span></p>
+				<p class="personal__date">Дата создания: <span class="date">12.12.2020</span></p>
+			</div>
+			<div class="personal__delete-student btn_2">Удалить студента</div>
+		</div>
+		<div class="personal__elems">
+			<button class="personal__visits btn_1 mr2">Дропдаун</button>
+			<button class="personal__add-student btn_1">Добавить студента</button>
+		</div>
+		<div class="personal__container mt1">
+			<div class="personal__container-rented rented">
+				<div class="rented__info">
+					<p class="rented__type">Практика на площадке</p>
+					<p class="rented__date">Дата: <span class="date">12.12.2020</span></p>
+					<p class="rented__time">Время: <span class="time">10:00 - 11:00</span></p>
+				</div>
+			</div>
+			<div class="personal__container-rented rented">
+				<div class="rented__info">
+					<p class="rented__type">Практика на площадке</p>
+					<p class="rented__date">Дата: <span class="date">12.12.2020</span></p>
+					<p class="rented__time">Время: <span class="time">10:00 - 11:00</span></p>
+				</div>
+				<div class="rented__undo btn_1">Отменить</div>
+			</div>
+		</div>
+	</section>
+	<section class="students">
+		<input class="students__input mb2" type="text" placeholder="ФИО студента">
+		<div class="students__container">
+			<div class="students__student student">
+				<p class="student__name">Иванов Иван Иванович</p>
+			</div>
+		</div>
+	</section>
+</body>
+</html>
