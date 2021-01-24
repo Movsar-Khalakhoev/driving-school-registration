@@ -1,48 +1,41 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import s from './SchedulePage.module.sass'
 import BookedHour from './subcomponents/BookedHour/BookedHour'
 import Loader from '../../components/Loader/Loader'
-import AuthContext from '../../context/AuthContext'
-import { useDispatch, useSelector } from 'react-redux'
-import {
-  getInstructors,
-  getPracticeModes,
-  getSchedule,
-  rentInterval,
-} from '../../redux/actions/schedule.action'
+import { useSelector } from 'react-redux'
+import { getSchedule, rentInterval } from '../../redux/actions/schedule.action'
 import Parameters from './subcomponents/Parameters'
 import { dateWithoutTime } from '../../utils/date'
+import useDispatchWithHttp from '../../hooks/dispatchWithHttp.hook'
 
 const SchedulePage = () => {
-  const { loading: scheduleLoading, schedule } = useSelector(
-    state => state.schedule.schedule
-  )
+  const { schedule } = useSelector(state => state.schedule.schedule)
   const { active: instructor } = useSelector(
     state => state.schedule.instructors
   )
   const { active: practiceMode } = useSelector(
     state => state.schedule.practiceModes
   )
-  const dispatch = useDispatch()
-  const [scheduleDate, setScheduleDate] = useState(dateWithoutTime())
-  const { token } = useContext(AuthContext)
+  const [dispatchSchedule, isLoadingSchedule] = useDispatchWithHttp()
+  const [dispatchRentInterval, isLoadingRentInterval] = useDispatchWithHttp()
+  const [scheduleDate, setScheduleDate] = useState(() => dateWithoutTime())
 
   const rentIntervalHandler = timestamp =>
-    dispatch(
-      rentInterval(instructor.value, practiceMode.value, timestamp, token)
-    )
-
-  useEffect(() => dispatch(getInstructors(token)), [dispatch, token])
-
-  useEffect(() => dispatch(getPracticeModes(token)), [dispatch, token])
+    dispatchRentInterval(rentInterval, [
+      instructor.value,
+      practiceMode.value,
+      timestamp,
+    ])
 
   useEffect(() => {
     if (practiceMode.value && instructor.value) {
-      dispatch(
-        getSchedule(scheduleDate, practiceMode.value, instructor.value, token)
-      )
+      dispatchSchedule(getSchedule, [
+        scheduleDate,
+        practiceMode.value,
+        instructor.value,
+      ])
     }
-  }, [practiceMode, instructor, dispatch, scheduleDate, token])
+  }, [practiceMode, instructor, dispatchSchedule, scheduleDate])
 
   return (
     <div className={s.schedule}>
@@ -57,7 +50,7 @@ const SchedulePage = () => {
         {!instructor.value ? (
           <h2 className={s.warning}>Выберите инструктора</h2>
         ) : null}
-        {scheduleLoading ? (
+        {isLoadingSchedule || isLoadingRentInterval ? (
           <Loader />
         ) : (
           schedule.map(item => (

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import s from '../SchedulePage.module.sass'
 import DatePicker from 'react-date-picker'
 import SkeletonLoader from '../../../components/SkeletonLoader/SkeletonLoader'
@@ -6,23 +6,25 @@ import Select from 'react-select'
 import {
   changeInstructor,
   changePracticeMode,
+  getInstructors,
+  getPracticeModes,
 } from '../../../redux/actions/schedule.action'
 import { useDispatch, useSelector } from 'react-redux'
 import { addMonth, dateWithoutTime } from '../../../utils/date'
+import useDispatchWithHttp from '../../../hooks/dispatchWithHttp.hook'
 
 const Parameters = ({ scheduleDate, setScheduleDate }) => {
   const maxDate = addMonth()
   const dispatch = useDispatch()
-  const {
-    loading: instructorsLoading,
-    instructors,
-    active: instructor,
-  } = useSelector(state => state.schedule.instructors)
-  const {
-    loading: practiceModesLoading,
-    practiceModes,
-    active: practiceMode,
-  } = useSelector(state => state.schedule.practiceModes)
+  const { instructors, active: instructor } = useSelector(
+    state => state.schedule.instructors
+  )
+  const { practiceModes, active: practiceMode } = useSelector(
+    state => state.schedule.practiceModes
+  )
+  const [dispatchInstructors, isLoadingInstructors] = useDispatchWithHttp()
+  const [dispatchPracticeModes, isLoadingPracticeModes] = useDispatchWithHttp()
+
   const changeDateHandler = value => {
     if (!value) return
     if (value.toString() === scheduleDate.toString()) return
@@ -50,6 +52,12 @@ const Parameters = ({ scheduleDate, setScheduleDate }) => {
     dispatch(changeInstructor(i))
   }
 
+  useEffect(() => dispatchInstructors(getInstructors), [dispatchInstructors])
+
+  useEffect(() => dispatchPracticeModes(getPracticeModes), [
+    dispatchPracticeModes,
+  ])
+
   return (
     <div className={s.parameters}>
       <DatePicker
@@ -63,7 +71,7 @@ const Parameters = ({ scheduleDate, setScheduleDate }) => {
       />
 
       <SkeletonLoader
-        loading={practiceModesLoading}
+        loading={isLoadingPracticeModes}
         className={s.practice_mode}
       >
         <Select
@@ -73,7 +81,7 @@ const Parameters = ({ scheduleDate, setScheduleDate }) => {
           placeholder='Выберите режим'
         />
       </SkeletonLoader>
-      <SkeletonLoader loading={instructorsLoading} className={s.instructors}>
+      <SkeletonLoader loading={isLoadingInstructors} className={s.instructors}>
         <Select
           onChange={changeInstructorHandler}
           options={instructors}

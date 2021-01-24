@@ -9,18 +9,18 @@ import AuthContext from './context/AuthContext'
 import Loader from './components/Loader/Loader'
 import { ToastContainer } from 'react-toastify'
 import Popup from './components/Popup/Popup'
-import { useDispatch } from 'react-redux'
 import { getVariables } from './redux/actions/variables.actions'
+import useDispatchWithHttp from './hooks/dispatchWithHttp.hook'
 
 function App() {
-  const dispatch = useDispatch()
+  const [dispatchVariables] = useDispatchWithHttp()
   const { token, userId, login, logout, isReady } = useAuth()
   const isAuthenticated = !!token
   const routes = useRoutes(isAuthenticated)
 
   useEffect(() => {
     if (isAuthenticated) {
-      dispatch(getVariables(token))
+      dispatchVariables(getVariables)
     }
   }, [isAuthenticated])
 
@@ -39,12 +39,12 @@ function App() {
       }}
     >
       <div
-        className="app"
+        className='app'
         style={{ backgroundImage: `url("${bg}")`, backgroundSize: 'cover' }}
       >
         {routes}
         <ToastContainer
-          position="top-right"
+          position='top-right'
           autoClose={4000}
           hideProgressBar
           newestOnTop={false}

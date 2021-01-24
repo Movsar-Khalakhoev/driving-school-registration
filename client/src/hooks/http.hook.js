@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import { useState } from 'react'
 
 const useHttp = () => {
   const [loading, setLoading] = useState(false)
@@ -11,8 +11,8 @@ const useHttp = () => {
         body = JSON.stringify(body)
         headers['Content-Type'] = 'application/json'
       }
-      const response = await fetch(url, {method, body, headers})
-      const data = response.json()
+      const response = await fetch(url, { method, body, headers })
+      const data = await response.json()
 
       if (!response.ok) {
         setError(data.message || 'Что-то пошло не так...')
@@ -20,9 +20,8 @@ const useHttp = () => {
 
       setLoading(false)
 
-      return data
+      return { error: !response.ok ? data.message : error, data }
     } catch (e) {
-      console.log(e)
       setError(e.message)
       setLoading(false)
     }
@@ -30,7 +29,7 @@ const useHttp = () => {
 
   const clearError = () => setError(null)
 
-  return {loading, request, error, clearError}
+  return { loading, request, error, clearError }
 }
 
 export default useHttp

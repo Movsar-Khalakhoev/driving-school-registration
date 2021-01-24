@@ -1,49 +1,45 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import s from './SettingsPage.module.sass'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import {
   getSettingsCurrentSchedule,
   getSettingsPeriodicSchedule,
   setSettingsCurrentSchedule,
   setSettingsPeriodicSchedule,
 } from '../../redux/actions/settings.action'
-import AuthContext from '../../context/AuthContext'
 import Loader from '../../components/Loader/Loader'
 import { getWeekInterval } from '../../utils/date'
 import Parameters from './subcomponents/Parameters.jsx'
 import TableHead from './subcomponents/TableHead.jsx'
 import TableRow from './subcomponents/TableRow'
+import useDispatchWithHttp from '../../hooks/dispatchWithHttp.hook'
 
 const SettingsPage = () => {
-  const dispatch = useDispatch()
-  const { changedCells, activeMode, loading } = useSelector(
+  const { changedCells, activeMode } = useSelector(
     state => state.settings.schedule
   )
-
   const { forRentHoursInterval } = useSelector(
     state => state.variables.variables
   )
-
-  const { token } = useContext(AuthContext)
+  const [dispatchSchedule, isLoadingSchedule] = useDispatchWithHttp()
   const [activeWeek, setActiveWeek] = useState(() => getWeekInterval())
-
-  useEffect(() => {
-    activeMode.value === 'periodic'
-      ? dispatch(getSettingsPeriodicSchedule(token))
-      : dispatch(getSettingsCurrentSchedule(token, activeWeek))
-  }, [activeMode, activeWeek])
 
   const fetchChangesHandler = () => {
     if (changedCells.length) {
       activeMode.value === 'periodic'
-        ? dispatch(setSettingsPeriodicSchedule(changedCells, token))
-        : dispatch(
-            setSettingsCurrentSchedule(changedCells, activeWeek[0], token)
-          )
+        ? dispatchSchedule(setSettingsPeriodicSchedule, [changedCells])
+        : dispatchSchedule(setSettingsCurrentSchedule, [
+            changedCells,
+            activeWeek[0],
+          ])
     }
   }
 
-  console.log(forRentHoursInterval)
+  useEffect(() => {
+    activeMode.value === 'periodic'
+      ? dispatchSchedule(getSettingsPeriodicSchedule)
+      : dispatchSchedule(getSettingsCurrentSchedule, [activeWeek])
+  }, [activeMode, activeWeek])
 
   return (
     <div className={s.settings}>
@@ -53,7 +49,7 @@ const SettingsPage = () => {
         activeMode={activeMode}
       />
       <div className={s.table_wrapper}>
-        {loading && (
+        {isLoadingSchedule && (
           <div className={s.loading}>
             <Loader />
           </div>
@@ -78,7 +74,7 @@ const SettingsPage = () => {
       <button
         className={`${s.save} btn_1`}
         onClick={fetchChangesHandler}
-        disabled={loading}
+        disabled={isLoadingSchedule}
       >
         Сохранить
       </button>

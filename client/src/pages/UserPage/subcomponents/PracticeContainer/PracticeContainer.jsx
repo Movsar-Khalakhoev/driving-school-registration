@@ -1,8 +1,7 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import s from './PracticeContainer.module.sass'
 import Select from 'react-select'
 import { useDispatch, useSelector } from 'react-redux'
-import AuthContext from '../../../../context/AuthContext'
 import {
   changePersonalMode,
   getPersonalModes,
@@ -11,43 +10,40 @@ import {
 import Loader from '../../../../components/Loader/Loader'
 import RentedInterval from '../RentedInterval/RentedInterval'
 import SkeletonLoader from '../../../../components/SkeletonLoader/SkeletonLoader'
+import useDispatchWithHttp from '../../../../hooks/dispatchWithHttp.hook'
 
 const PracticeContainer = ({ userId }) => {
   const dispatch = useDispatch()
-  const { intervals, loading: intervalsLoading } = useSelector(
-    state => state.personal.schedule
-  )
-
-  const { modes, active: mode, loading: modesLoading } = useSelector(
-    state => state.personal.modes
-  )
-  const { token } = useContext(AuthContext)
+  const [dispatchIntervals, isLoadingIntervals] = useDispatchWithHttp()
+  const [dispatchModes, isLoadingModes] = useDispatchWithHttp()
+  const { intervals } = useSelector(state => state.personal.schedule)
+  const { modes, active: mode } = useSelector(state => state.personal.modes)
 
   const changeModeHandler = mode => dispatch(changePersonalMode(mode))
 
   useEffect(() => {
     if (modes.length) return
-    dispatch(getPersonalModes(token))
-  }, [dispatch, token])
+    dispatchModes(getPersonalModes)
+  }, [dispatchModes])
 
   useEffect(() => {
     if (!mode.value) return
-    dispatch(getPersonSchedule(mode.value, token, userId))
-  }, [dispatch, token, mode, userId])
+    dispatchIntervals(getPersonSchedule, [mode.value, userId])
+  }, [dispatchIntervals, mode, userId])
 
   return (
     <div className={s.schedule}>
-      <SkeletonLoader loading={modesLoading} className={s.visits_loader}>
+      <SkeletonLoader loading={isLoadingModes} className={s.visits_loader}>
         <Select
           className={s.visits}
           defaultValue={mode.value ? mode : null}
           options={modes}
           onChange={changeModeHandler}
-          placeholder="Выберите категорию"
+          placeholder='Выберите категорию'
         />
       </SkeletonLoader>
       <div className={`${s.container} mt1`}>
-        {intervalsLoading ? (
+        {isLoadingIntervals ? (
           <Loader />
         ) : intervals.length ? (
           intervals.map(interval => (

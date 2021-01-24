@@ -28,8 +28,6 @@ const initialState = {
       ['Воскресенье', 'ВС'],
     ],
     activeMode: { label: 'Текущий', value: 'current' },
-    loading: false,
-    error: false,
   },
 }
 
@@ -60,38 +58,12 @@ export default function settingsReducer(state = initialState, action) {
           activeMode: action.mode,
         },
       }
-    case GET_SETTINGS_SCHEDULE_FETCH_START:
-      return {
-        ...state,
-        schedule: {
-          ...state.schedule,
-          loading: true,
-        },
-      }
     case GET_SETTINGS_SCHEDULE_FETCH_SUCCESS:
       return {
         ...state,
         schedule: {
           ...state.schedule,
           schedule: action.schedule,
-          loading: false,
-        },
-      }
-    case GET_SETTINGS_SCHEDULE_FETCH_ERROR:
-      return {
-        ...state,
-        schedule: {
-          ...state.schedule,
-          loading: false,
-          error: action.error,
-        },
-      }
-    case SET_SETTINGS_SCHEDULE_FETCH_START:
-      return {
-        ...state,
-        schedule: {
-          ...state.schedule,
-          loading: true,
         },
       }
     case SET_SETTINGS_SCHEDULE_FETCH_SUCCESS:
@@ -100,16 +72,6 @@ export default function settingsReducer(state = initialState, action) {
         schedule: {
           ...state.schedule,
           changedCells: [],
-          loading: false,
-        },
-      }
-    case SET_SETTINGS_SCHEDULE_FETCH_ERROR:
-      return {
-        ...state,
-        schedule: {
-          ...state.schedule,
-          loading: false,
-          error: action.error,
         },
       }
     default:

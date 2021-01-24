@@ -1,15 +1,10 @@
 import {
   CHANGE_SETTINGS_SCHEDULE_MODE,
-  GET_SETTINGS_SCHEDULE_FETCH_ERROR,
-  GET_SETTINGS_SCHEDULE_FETCH_START,
   GET_SETTINGS_SCHEDULE_FETCH_SUCCESS,
   SET_SETTINGS_CHANGED_CELLS,
   SET_SETTINGS_SCHEDULE,
-  SET_SETTINGS_SCHEDULE_FETCH_ERROR,
-  SET_SETTINGS_SCHEDULE_FETCH_START,
   SET_SETTINGS_SCHEDULE_FETCH_SUCCESS,
 } from '../actionTypes'
-import request from '../../services/request'
 import { errorToast, successToast } from '../../utils/toastNotifications'
 
 export function setSchedule(schedule) {
@@ -33,79 +28,45 @@ export function changeMode(mode) {
   }
 }
 
-export function getSettingsPeriodicSchedule(token) {
-  return async (dispatch) => {
-    dispatch(getSettingsScheduleFetchStart())
+export function getSettingsPeriodicSchedule({ request }) {
+  return async dispatch => {
     try {
+      const { error, data } = await request('/api/settings/schedule/periodic')
+
+      if (!error) {
+        dispatch({
+          type: GET_SETTINGS_SCHEDULE_FETCH_SUCCESS,
+          schedule: data.schedule,
+        })
+      } else {
+        errorToast(error)
+      }
+    } catch (e) {}
+  }
+}
+
+export function getSettingsCurrentSchedule(activeWeek, { request }) {
+  return async dispatch => {
+    try {
+      const timestamp = `${activeWeek[0].getTime()}-${activeWeek[1].getTime()}`
       const { error, data } = await request(
-        '/api/settings/schedule/periodic',
-        'GET',
-        null,
-        {
-          Authorization: `Bearer ${token}`,
-        }
+        `/api/settings/schedule/current/${timestamp}`
       )
 
       if (!error) {
-        dispatch(getSettingsScheduleFetchSuccess(data.schedule))
+        dispatch({
+          type: GET_SETTINGS_SCHEDULE_FETCH_SUCCESS,
+          schedule: data.schedule,
+        })
       } else {
-        dispatch(getSettingsScheduleFetchError(error))
         errorToast(error)
       }
-    } catch (e) {
-      dispatch(getSettingsScheduleFetchError(e))
-    }
+    } catch (e) {}
   }
 }
 
-export function getSettingsCurrentSchedule(token, interval) {
-  return async (dispatch) => {
-    dispatch(getSettingsScheduleFetchStart())
-    try {
-      const timestamp = `${interval[0].getTime()}-${interval[1].getTime()}`
-      const { error, data } = await request(
-        `/api/settings/schedule/current/${timestamp}`,
-        'GET',
-        null,
-        {
-          Authorization: `Bearer ${token}`,
-        }
-      )
-
-      if (!error) {
-        dispatch(getSettingsScheduleFetchSuccess(data.schedule))
-      } else {
-        dispatch(getSettingsScheduleFetchError(error))
-        errorToast(error)
-      }
-    } catch (e) {
-      dispatch(getSettingsScheduleFetchError(e))
-    }
-  }
-}
-
-function getSettingsScheduleFetchStart() {
-  return {
-    type: GET_SETTINGS_SCHEDULE_FETCH_START,
-  }
-}
-
-function getSettingsScheduleFetchSuccess(schedule) {
-  return {
-    type: GET_SETTINGS_SCHEDULE_FETCH_SUCCESS,
-    schedule,
-  }
-}
-
-function getSettingsScheduleFetchError(error) {
-  return {
-    type: GET_SETTINGS_SCHEDULE_FETCH_ERROR,
-    error,
-  }
-}
-
-export function setSettingsPeriodicSchedule(changed, token) {
-  return async (dispatch) => {
+export function setSettingsPeriodicSchedule(changed, { request }) {
+  return async dispatch => {
     dispatch(setSettingsScheduleFetchStart())
     try {
       const { error, data } = await request(
@@ -113,9 +74,6 @@ export function setSettingsPeriodicSchedule(changed, token) {
         'POST',
         {
           changed: changed,
-        },
-        {
-          Authorization: `Bearer ${token}`,
         }
       )
 
@@ -132,12 +90,11 @@ export function setSettingsPeriodicSchedule(changed, token) {
   }
 }
 
-export function setSettingsCurrentSchedule(changed, start, token) {
-  return async (dispatch) => {
-    dispatch(setSettingsScheduleFetchStart())
+export function setSettingsCurrentSchedule(changed, start, { request }) {
+  return async dispatch => {
     try {
       start = new Date(start)
-      changed = changed.map((item) => {
+      changed = changed.map(item => {
         item.timestamp = new Date(
           new Date(
             new Date(start).setDate(start.getDate() + item.weekDay - 1)
@@ -151,40 +108,17 @@ export function setSettingsCurrentSchedule(changed, start, token) {
         'POST',
         {
           changed,
-        },
-        {
-          Authorization: `Bearer ${token}`,
         }
       )
 
       if (!error) {
-        dispatch(setSettingsScheduleFetchSuccess())
+        dispatch({
+          type: SET_SETTINGS_SCHEDULE_FETCH_SUCCESS,
+        })
         successToast(data.message)
       } else {
-        dispatch(setSettingsScheduleFetchError(error))
         errorToast(error)
       }
-    } catch (e) {
-      dispatch(setSettingsScheduleFetchError(e))
-    }
-  }
-}
-
-function setSettingsScheduleFetchStart() {
-  return {
-    type: SET_SETTINGS_SCHEDULE_FETCH_START,
-  }
-}
-
-function setSettingsScheduleFetchSuccess() {
-  return {
-    type: SET_SETTINGS_SCHEDULE_FETCH_SUCCESS,
-  }
-}
-
-function setSettingsScheduleFetchError(error) {
-  return {
-    type: SET_SETTINGS_SCHEDULE_FETCH_ERROR,
-    error,
+    } catch (e) {}
   }
 }

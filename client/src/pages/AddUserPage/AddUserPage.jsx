@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react'
 import s from './AddUserPage.module.sass'
 import Select from 'react-select'
 import useFormValidator from '../../hooks/formValidator.hook'
-import useAuth from '../../hooks/auth.hook'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { addNewUser, getRoles } from '../../redux/actions/addUser.action'
 import SkeletonLoader from '../../components/SkeletonLoader/SkeletonLoader'
 import InputWithWarning from '../../components/InputWithWarning/InputWithWarning'
+import useDispatchWithHttp from '../../hooks/dispatchWithHttp.hook'
 
 const nameCondition = value => {
   return !value.match(/[\wa-z0-9]+/gi) && value.trim().length > 6
@@ -43,25 +43,20 @@ const AddUserPage = () => {
       condition: roleCondition,
     },
   ])
-  const { token } = useAuth()
-  const dispatch = useDispatch()
-  const { loading: addUserLoading } = useSelector(
-    state => state.addNewUser.addUser
-  )
-  const { loading: rolesLoading, roles } = useSelector(
-    state => state.addNewUser.roles
-  )
+  const [dispatchAddUser, isLoadingAddUser] = useDispatchWithHttp()
+  const [dispatchRoles, isLoadingRoles] = useDispatchWithHttp()
+  const { roles } = useSelector(state => state.addNewUser.roles)
 
   const buttonState =
-    addUserLoading || (isTried && (nameErr || phoneErr || rolesErr))
+    isLoadingAddUser || (isTried && (nameErr || phoneErr || rolesErr))
 
   const addUser = () => {
-    const func = (...args) => dispatch(addNewUser(...args, token))
+    const func = (...args) => dispatchAddUser(addNewUser, [...args])
 
     tryHandler(func)
   }
 
-  useEffect(() => dispatch(getRoles(token)), [dispatch, token])
+  useEffect(() => dispatchRoles(getRoles), [dispatchRoles])
 
   return (
     <div className={s.add}>
@@ -83,7 +78,7 @@ const AddUserPage = () => {
       />
       <div className={s.role}>
         <label className={s.label}>Статус пользователя:</label>
-        <SkeletonLoader loading={rolesLoading} className={s.select_loader}>
+        <SkeletonLoader loading={isLoadingRoles} className={s.select_loader}>
           <div className={s.wrapper}>
             <Select options={roles} onChange={rolesHandler} />
             {rolesErr && isTried ? (

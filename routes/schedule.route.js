@@ -16,11 +16,12 @@ router.get('/:date/:instructor/:mode', auth, async (req, res) => {
       { owner: req.params.instructor },
       { periodicSchedule: 1, currentSchedule: 1 }
     )
+
     let intervals = await Interval.find(
       {
         timestamp: {
           $gte: date,
-          $lte: addDay(),
+          $lte: addDay(date),
         },
         instructor: req.params.instructor,
       },
@@ -68,7 +69,6 @@ router.post('/', auth, async (req, res) => {
     const { timestamp, instructor, practiceMode } = req.body
     const date = new Date(timestamp)
     const weekInterval = getWeekInterval(date)
-    console.log(weekInterval)
     let intervalsInWeek = await Interval.find({
       user: req.user,
       timestamp: {
@@ -87,6 +87,8 @@ router.post('/', auth, async (req, res) => {
     const intervalsInDay = intervalsInWeek.filter(
       item => date.getDate() === new Date(item.timestamp).getDate()
     )
+
+    console.log(intervalsInDay)
 
     const maxInDay = settings.maxRentedInDay
     if (intervalsInDay.length >= maxInDay) {

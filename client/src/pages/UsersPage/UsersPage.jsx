@@ -1,18 +1,18 @@
-import React, { useEffect, useContext } from 'react'
+import React, { useEffect } from 'react'
 import s from './UsersPage.module.sass'
 import { useDispatch, useSelector } from 'react-redux'
 import Loader from '../../components/Loader/Loader'
 import { filterUsers, getAllUsers } from '../../redux/actions/users.action'
-import AuthContext from '../../context/AuthContext'
 import { NavLink } from 'react-router-dom'
+import useDispatchWithHttp from '../../hooks/dispatchWithHttp.hook'
 
 const UsersPage = () => {
   const dispatch = useDispatch()
-  const { loading, users, filteredUsers } = useSelector(state => state.users)
-  const { token } = useContext(AuthContext)
+  const [dispatchUsers, isLoadingUsers] = useDispatchWithHttp()
+  const { users, filteredUsers } = useSelector(state => state.users)
   let timeout
 
-  useEffect(() => dispatch(getAllUsers(token)), [dispatch, token])
+  useEffect(() => dispatchUsers(getAllUsers), [dispatch])
 
   const searchHandler = event => {
     clearTimeout(timeout)
@@ -26,11 +26,11 @@ const UsersPage = () => {
       <input
         className={`${s.input} mb2`}
         onChange={searchHandler}
-        type="text"
-        placeholder="ФИО пользователя"
+        type='text'
+        placeholder='ФИО пользователя'
       />
       <div className={s.container}>
-        {loading ? (
+        {isLoadingUsers ? (
           <Loader />
         ) : filteredUsers.length ? (
           filteredUsers.map(user => (
