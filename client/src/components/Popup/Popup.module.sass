@@ -1,0 +1,45 @@
+@import 'src/styleVariables'
+
+.popup
+  display: none
+  align-items: center
+  justify-content: center
+  position: absolute
+  top: 0
+  bottom: 0
+  left: 0
+  right: 0
+  background-color: rgba(0, 0, 0, 0.4)
+  z-index: 2
+  &.active
+    display: flex
+
+.modal
+  display: flex
+  flex-direction: column
+  justify-content: space-between
+  width: 95%
+  height: 95%
+  max-width: 500px
+  max-height: 300px
+  overflow: auto
+  background-color: $main_color
+  border-radius: 10px
+  border: 1px solid #000
+  padding: 20px
+
+.content
+  color: #ffffff
+  font-size: 18px
+  flex-grow: 1
+
+.action
+  display: flex
+  align-items: center
+  justify-content: space-around
+  margin-top: 20px
+
+.ok, .cancel
+  flex-grow: 1
+  padding: 10px
+  margin: 0 10px

@@ -1,29 +1,75 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import s from './SchedulePage.module.sass'
-import BookedHour from '../../components/BookedHour/BookedHour'
+import BookedHour from './subcomponents/BookedHour/BookedHour'
+import Loader from '../../components/Loader/Loader'
+import AuthContext from '../../context/AuthContext'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  getInstructors,
+  getPracticeModes,
+  getSchedule,
+  rentInterval,
+} from '../../redux/actions/schedule.action'
+import Parameters from './subcomponents/Parameters'
+import { dateWithoutTime } from '../../utils/date'
 
 const SchedulePage = () => {
+  const { loading: scheduleLoading, schedule } = useSelector(
+    state => state.schedule.schedule
+  )
+  const { active: instructor } = useSelector(
+    state => state.schedule.instructors
+  )
+  const { active: practiceMode } = useSelector(
+    state => state.schedule.practiceModes
+  )
+  const dispatch = useDispatch()
+  const [scheduleDate, setScheduleDate] = useState(dateWithoutTime())
+  const { token } = useContext(AuthContext)
+
+  const rentIntervalHandler = timestamp =>
+    dispatch(
+      rentInterval(instructor.value, practiceMode.value, timestamp, token)
+    )
+
+  useEffect(() => dispatch(getInstructors(token)), [dispatch, token])
+
+  useEffect(() => dispatch(getPracticeModes(token)), [dispatch, token])
+
+  useEffect(() => {
+    if (practiceMode.value && instructor.value) {
+      dispatch(
+        getSchedule(scheduleDate, practiceMode.value, instructor.value, token)
+      )
+    }
+  }, [practiceMode, instructor, dispatch, scheduleDate, token])
+
   return (
     <div className={s.schedule}>
-      <button className={`${s.select} btn_1 mb1`}>Дропдаун</button>
+      <Parameters
+        scheduleDate={scheduleDate}
+        setScheduleDate={setScheduleDate}
+      />
       <div className={s.container}>
-        <BookedHour hour='9:00 - 10:00' />
-        <BookedHour
-          rented
-          name='Иванов Иван Иванович'
-          hour='10:00 - 11:00'
-        />
-        <BookedHour hour='11:00 - 12:00' />
-        <BookedHour hour='12:00 - 13:00' />
-        <BookedHour hour='13:00 - 14:00' />
-        <BookedHour
-          rented
-          name='Иванов Иван Иванович'
-          hour='14:00 - 15:00'
-        />
-        <BookedHour hour='15:00 - 16:00' />
-        <BookedHour hour='16:00 - 17:00' />
-        <BookedHour hour='17:00 - 18:00' />
+        {!practiceMode.value ? (
+          <h2 className={s.warning}>Выберите режим</h2>
+        ) : null}
+        {!instructor.value ? (
+          <h2 className={s.warning}>Выберите инструктора</h2>
+        ) : null}
+        {scheduleLoading ? (
+          <Loader />
+        ) : (
+          schedule.map(item => (
+            <BookedHour
+              key={item.id}
+              rented={!!item.name || !item.isRentable}
+              name={item.name || ''}
+              interval={item.interval}
+              onClick={() => rentIntervalHandler(item.timestamp)}
+            />
+          ))
+        )}
       </div>
     </div>
   )

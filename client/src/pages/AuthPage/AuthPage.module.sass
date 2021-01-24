@@ -47,9 +47,18 @@
   color: $color-2
   font-size: 1.3rem
 
+.card_action
+  display: flex
+
 .button
-  height: 36px
-  width: 80px
+  padding: 10px 20px
+  margin-right: 10px
+
+.button_disabled
+  background-color: #c1c1c1
+  pointer-events: none
+  &:hover
+    background-color: #c1c1c1
 
 
 @media (max-width: 576px)

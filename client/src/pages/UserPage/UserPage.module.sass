@@ -1,0 +1,36 @@
+@import 'src/styleVariables'
+
+.personal
+  display: flex
+  flex-direction: column
+  height: calc( 100vh - #{$navbar_h} )
+  padding: 20px 10%
+
+.add_student
+  height: 40px
+  width: 170px
+
+
+@media (max-width: 992px)
+  .personal
+    padding: 20px 5%
+
+@media (max-width: 768px)
+  .personal
+    padding: 20px 10%
+
+@media (max-width: 576px)
+  .personal
+    padding: 10px 3%
+
+  .elems
+    justify-content: space-between
+    margin-top: 10px
+
+  .visits, .add_student
+    max-width: 170px
+    width: 49%
+    font-size: 0.9rem
+
+  .add_student, .visits
+    height: 35px

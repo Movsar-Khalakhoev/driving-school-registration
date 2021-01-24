@@ -1,0 +1,8 @@
+{
+  "maxRentedInDay": 1,
+  "maxRentedInWeek": 4,
+  "hoursToRevoke": 4,
+  "hoursToRent": 0.5,
+  "maxWeeksNum": 3,
+  "forRentHoursInterval": [9, 18]
+}

@@ -1,0 +1,38 @@
+@import 'src/styleVariables'
+
+.wrapper
+  position: relative
+  display: flex
+  flex-direction: column
+  justify-content: center
+
+.input
+  display: block
+  position: relative
+  height: 46px
+  width: 100%
+  font-size: 16px
+  padding: 0 10px
+  color: white
+  background-color: rgba(13, 71, 161, 0.7)
+  border: 1px solid #696969
+  border-bottom: 1px solid #c1c1c1
+  border-top-right-radius: 3px
+  border-top-left-radius: 3px
+  outline: none
+  transition: border-color .3s
+  &:focus
+    border-bottom: 1px solid $color-1
+  &::placeholder
+    color: #c1c1c1
+
+.label
+  display: inline-block
+  color: #ffffff
+  margin-bottom: 10px
+
+.error
+  position: absolute
+  right: 10px
+  color: $color-2
+  font-size: 1.3rem

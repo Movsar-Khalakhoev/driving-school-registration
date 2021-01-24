@@ -2,52 +2,44 @@ import {useState} from 'react'
 
 const useFormValidator = (inputs = []) => {
   const [isTried, setIsTried] = useState(false)
-  const validates = []
-  const handlers = []
+  const elemsErrors = []
+  const elemsValues = []
 
-  const triedHandler = () => {
-    const isCorrect = validates.map(validate => validate())
+  const tryHandler = func => {
+    if (!isTried) setIsTried(true)
 
-    if (!isTried) {
-      if (!isCorrect.reduce((acc, valid) => acc && valid)) {
-        setIsTried(true)
-        handlers.forEach(handler => handler(null, true))
-      }
-    }
-
-    if (isCorrect.reduce((acc, valid) => acc && valid)) {
-      console.log('Data is correct')
+    if (!elemsErrors.reduce((acc, isErr) => acc || isErr)) {
+      func(...elemsValues)
     }
   }
 
-  const valueHandler = (error, setError, validate, isTried) => (_, tried = false) => {
-    const isCorrect = validate()
+  const elementHandler = (setValue, setError, condition, idx) => value => {
 
-    if (!isCorrect) {
-      if (!error) setError(true)
-    } else if (error && (isTried || tried)) {
+    const isValid = condition(value)
+
+    if (isValid) {
+      setValue(value)
+    }
+
+    if (isValid && elemsErrors[idx]) {
       setError(false)
     }
+
+    if (!isValid && !elemsErrors[idx]) {
+      setError(true)
+    }
   }
 
-  const validateInput = (inputRef, condition) => () => {
-    const value = inputRef.current.value
-    return !condition(value)
-  }
+  const returnable = inputs.map((input, idx) => {
+    const {valueState, errorState, condition} = input
 
-  const returnable =  inputs.map(input => {
-    const {ref, errorState, condition} = input
-    const validate = validateInput(ref, condition)
-    const handler = valueHandler(...errorState, validate, isTried)
+    elemsValues.push(valueState[0])
+    elemsErrors.push(errorState[0])
+    const handler = elementHandler(valueState[1], errorState[1], condition, [idx])
 
-    validates.push(validate)
-    handlers.push(handler)
-
-    return [input.ref, handler, errorState[0]]
+    return [handler, errorState[0]]
   })
-
-  returnable.push([triedHandler, isTried])
-
+  returnable.push([isTried, tryHandler])
   return returnable
 }
 

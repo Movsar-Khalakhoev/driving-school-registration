@@ -1,23 +1,60 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import s from './Navbar.module.sass'
+import {NavLink} from 'react-router-dom'
+import AuthContext from '../../context/AuthContext'
 
 const Navbar = () => {
-  console.log(s)
+  const {userId} = useContext(AuthContext)
+
   return (
     <div className={s.navbar}>
       <p className={s.logo}>Автошкола</p>
       <div className={s.sections}>
-        <div className={s.section}>
+        <NavLink
+          exact
+          to='/users/'
+          activeClassName={s.active}
+          className={s.section}
+        >
+          <i className={`${s.ico} icofont-users-alt-3`} />
+          Пользователи
+        </NavLink>
+        <NavLink
+          to='/add-user'
+          activeClassName={s.active}
+          className={s.section}
+        >
+          <i className={`${s.ico} icofont-ui-add`} />
+          Добавить пользователя
+        </NavLink>
+        <NavLink
+          exact
+          to='/'
+          activeClassName={s.active}
+          className={s.section}
+        >
           <i className={`${s.ico} icofont-notepad`} />
           Расписание
-        </div>
-        <div className={`${s.section} mr3`}>
+        </NavLink>
+        <NavLink
+          to={`/users/${userId}`}
+          activeClassName={s.active}
+          className={s.section}
+        >
           <i className={`${s.ico} icofont-ui-user`} />
           Кабинет
-        </div>
+        </NavLink>
+        <NavLink
+          to='/settings'
+          activeClassName={s.active}
+          className={`${s.section} mr3`}
+        >
+          <i className={`${s.ico} icofont-settings-alt`} />
+          Настройки
+        </NavLink>
         <span className={s.logout}>
-				<i className='icofont-logout' />
-			</span>
+          <i className='icofont-logout' />
+        </span>
         <span className={s.hamburger}>
 				<span className={s.line_1} />
 				<span className={s.line_2} />
