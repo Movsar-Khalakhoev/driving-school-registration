@@ -24,6 +24,10 @@ const intervalSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User',
   },
+  createdAt: {
+    type: Date,
+    default: new Date(),
+  },
 })
 
 module.exports = model('Interval', intervalSchema)

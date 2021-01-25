@@ -17,7 +17,7 @@ const auth = async (req, res, next) => {
     const payload = jwt.verify(token, config.SECRET_KEY)
 
     if (payload) {
-      req.user = await User.findById(payload.userId).populate('roles')
+      req.user = payload.user
     } else {
       return res.status(401)
     }

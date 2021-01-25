@@ -33,7 +33,7 @@ const RentedInterval = ({ interval, mode }) => {
             {isLoadingDeleteRent ? <Loader width={20} /> : 'Отменить'}
           </button>
         ) : (
-          <p className={s.no_revokable}>Нельзя отменить</p>
+          <p className={s.no_revocable}>Нельзя отменить</p>
         )
       ) : null}
     </div>

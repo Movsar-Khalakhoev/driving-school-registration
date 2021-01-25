@@ -57,10 +57,8 @@ router.get('/:date/:instructor/:mode', auth, async (req, res) => {
       })),
     ]
 
-    console.log(intervals)
     return res.json({ schedule: intervals, hoursToRent: settings.hoursToRent })
   } catch (e) {
-    console.log(e)
     res.status(500)
   }
 })
@@ -89,8 +87,6 @@ router.post('/', auth, async (req, res) => {
       item => date.getDate() === new Date(item.timestamp).getDate()
     )
 
-    console.log(intervalsInDay)
-
     const maxInDay = settings.maxRentedInDay
     if (intervalsInDay.length >= maxInDay) {
       return res.status(400).json({
@@ -118,7 +114,6 @@ router.post('/', auth, async (req, res) => {
       message: 'Забронировано успешно!',
     })
   } catch (e) {
-    console.log(e)
     res.status(500).json({ message: 'Что-то пошло не так...' })
   }
 })
@@ -132,9 +127,7 @@ router.get('/instructors', async (req, res) => {
 
     instructors = instructors.map(i => ({ value: i._id, label: i.name }))
     return res.json({ instructors })
-  } catch (e) {
-    console.log(e)
-  }
+  } catch (e) {}
 })
 
 router.get('/practice-modes', async (req, res) => {

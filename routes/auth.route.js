@@ -10,7 +10,7 @@ router.post('/', async (req, res) => {
   try {
     const { login, password } = req.body
 
-    const candidate = await User.findOne({ login })
+    const candidate = await User.findOne({ login }).populate('roles')
 
     if (!candidate) {
       return res.status(400).json({ message: 'Пользователь не найден' })
@@ -18,21 +18,27 @@ router.post('/', async (req, res) => {
 
     const isCorrect = await bcrypt.compare(password, candidate.password)
 
-    console.log(isCorrect)
-
     if (!isCorrect) {
       return res.status(400).json({ message: 'Неправильный пароль' })
     }
 
-    const token = jwt.sign({ userId: candidate._id }, config.SECRET_KEY, {
-      expiresIn: '100h',
-    })
-
-    console.log(token)
+    const token = jwt.sign(
+      {
+        user: {
+          roles: candidate.roles,
+          _id: candidate._id,
+          name: candidate.name,
+          createdAt: candidate.createdAt,
+        },
+      },
+      config.SECRET_KEY,
+      {
+        expiresIn: '100h',
+      }
+    )
 
     return res.json({ token, userId: candidate._id })
   } catch (e) {
-    console.log(e)
     res.status(500).json({ message: 'Server Error' })
   }
 })

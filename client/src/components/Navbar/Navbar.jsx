@@ -1,10 +1,12 @@
-import React, {useContext} from 'react'
+import React, { useContext } from 'react'
 import s from './Navbar.module.sass'
-import {NavLink} from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import AuthContext from '../../context/AuthContext'
+import useAuth from '../../hooks/auth.hook'
 
 const Navbar = () => {
-  const {userId} = useContext(AuthContext)
+  const { logout } = useAuth()
+  const { userId } = useContext(AuthContext)
 
   return (
     <div className={s.navbar}>
@@ -27,12 +29,7 @@ const Navbar = () => {
           <i className={`${s.ico} icofont-ui-add`} />
           Добавить пользователя
         </NavLink>
-        <NavLink
-          exact
-          to='/'
-          activeClassName={s.active}
-          className={s.section}
-        >
+        <NavLink exact to='/' activeClassName={s.active} className={s.section}>
           <i className={`${s.ico} icofont-notepad`} />
           Расписание
         </NavLink>
@@ -52,14 +49,14 @@ const Navbar = () => {
           <i className={`${s.ico} icofont-settings-alt`} />
           Настройки
         </NavLink>
-        <span className={s.logout}>
+        <span className={s.logout} onClick={logout}>
           <i className='icofont-logout' />
         </span>
         <span className={s.hamburger}>
-				<span className={s.line_1} />
-				<span className={s.line_2} />
-				<span className={s.line_3} />
-			</span>
+          <span className={s.line_1} />
+          <span className={s.line_2} />
+          <span className={s.line_3} />
+        </span>
       </div>
     </div>
   )

@@ -67,7 +67,6 @@ export function getSettingsCurrentSchedule(activeWeek, { request }) {
 
 export function setSettingsPeriodicSchedule(changed, { request }) {
   return async dispatch => {
-    dispatch(setSettingsScheduleFetchStart())
     try {
       const { error, data } = await request(
         '/api/settings/schedule/periodic',
@@ -77,16 +76,17 @@ export function setSettingsPeriodicSchedule(changed, { request }) {
         }
       )
 
+      console.log(data)
       if (!error) {
-        dispatch(setSettingsScheduleFetchSuccess())
+        dispatch({
+          type: GET_SETTINGS_SCHEDULE_FETCH_SUCCESS,
+          schedule: data.schedule,
+        })
         successToast(data.message)
       } else {
-        dispatch(setSettingsScheduleFetchError(error))
         errorToast(error)
       }
-    } catch (e) {
-      dispatch(setSettingsScheduleFetchError(e))
-    }
+    } catch (e) {}
   }
 }
 

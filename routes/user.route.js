@@ -1,6 +1,7 @@
 const { Router } = require('express')
 const router = Router()
 const User = require('../models/User')
+const Settings = require('../models/Settings')
 const Interval = require('../models/Interval')
 const PracticeModes = require('../models/PracticeMode')
 const auth = require('../middlewares/auth.middleware')
@@ -17,9 +18,7 @@ router.get('/', async (req, res) => {
     }))
 
     res.json({ users })
-  } catch (e) {
-    console.log(e)
-  }
+  } catch (e) {}
 })
 
 router.get('/modes', async (req, res) => {
@@ -41,16 +40,14 @@ router.get('/modes', async (req, res) => {
     })
 
     res.json({ modes })
-  } catch (e) {
-    console.log(e)
-  }
+  } catch (e) {}
 })
 
 router.get('/delete-user/:userId', auth, async (req, res) => {
   try {
     const { userId } = req.params
 
-    const candidate = await User.findById(userId).populate('roles')
+    const candidate = await User.findById(userId).populate('roles settings')
 
     if (!candidate) {
       return res
@@ -76,11 +73,13 @@ router.get('/delete-user/:userId', auth, async (req, res) => {
     }
 
     await User.deleteOne({ _id: userId })
+    await Settings.deleteOne({ _id: candidate.settings._id })
+    await Interval.deleteMany({
+      $or: [{ instructor: userId }, { user: userId }],
+    })
 
     res.json({ message: `Пользователь "${candidate.name}" успешно удален!` })
-  } catch (e) {
-    console.log(e)
-  }
+  } catch (e) {}
 })
 
 router.post('/delete-rent', auth, async (req, res) => {
@@ -92,9 +91,7 @@ router.post('/delete-rent', auth, async (req, res) => {
     })
 
     res.json({ message: 'Бронирование отменено успешно!' })
-  } catch (e) {
-    console.log(e)
-  }
+  } catch (e) {}
 })
 
 router.get('/:userId', auth, async (req, res) => {
@@ -102,9 +99,7 @@ router.get('/:userId', auth, async (req, res) => {
     const user = await User.findById(req.params.userId, { __v: 0, password: 0 })
 
     res.json({ user })
-  } catch (e) {
-    console.log(e)
-  }
+  } catch (e) {}
 })
 
 router.get('/:userId/:mode/active', auth, async (req, res) => {
@@ -126,9 +121,7 @@ router.get('/:userId/:mode/active', auth, async (req, res) => {
     }))
 
     res.json({ schedule: practice })
-  } catch (e) {
-    console.log(e)
-  }
+  } catch (e) {}
 })
 
 router.get('/:userId/:mode/no-active', auth, async (req, res) => {
@@ -149,9 +142,7 @@ router.get('/:userId/:mode/no-active', auth, async (req, res) => {
     }))
 
     res.json({ schedule: practice })
-  } catch (e) {
-    console.log(e)
-  }
+  } catch (e) {}
 })
 
 module.exports = router
