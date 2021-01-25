@@ -1,4 +1,5 @@
 import {
+  CHANGE_DATE,
   CHANGE_INSTRUCTOR,
   CHANGE_PRACTICE_MODE,
   GET_INSTRUCTORS_FETCH_SUCCESS,
@@ -108,5 +109,12 @@ export function changeInstructor(instructor) {
   return {
     type: CHANGE_INSTRUCTOR,
     instructor,
+  }
+}
+
+export function changeDate(date) {
+  return {
+    type: CHANGE_DATE,
+    date,
   }
 }

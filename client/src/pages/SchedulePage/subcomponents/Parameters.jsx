@@ -4,6 +4,7 @@ import DatePicker from 'react-date-picker'
 import SkeletonLoader from '../../../components/SkeletonLoader/SkeletonLoader'
 import Select from 'react-select'
 import {
+  changeDate,
   changeInstructor,
   changePracticeMode,
   getInstructors,
@@ -13,7 +14,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { addMonth, dateWithoutTime } from '../../../utils/date'
 import useDispatchWithHttp from '../../../hooks/dispatchWithHttp.hook'
 
-const Parameters = ({ scheduleDate, setScheduleDate }) => {
+const Parameters = () => {
   const maxDate = addMonth()
   const dispatch = useDispatch()
   const { instructors, active: instructor } = useSelector(
@@ -22,6 +23,7 @@ const Parameters = ({ scheduleDate, setScheduleDate }) => {
   const { practiceModes, active: practiceMode } = useSelector(
     state => state.schedule.practiceModes
   )
+  const { active: scheduleDate } = useSelector(state => state.schedule.date)
   const [dispatchInstructors, isLoadingInstructors] = useDispatchWithHttp()
   const [dispatchPracticeModes, isLoadingPracticeModes] = useDispatchWithHttp()
 
@@ -29,7 +31,7 @@ const Parameters = ({ scheduleDate, setScheduleDate }) => {
     if (!value) return
     if (value.toString() === scheduleDate.toString()) return
 
-    setScheduleDate(value)
+    dispatch(changeDate(value))
   }
 
   const changeModeHandler = m => {

@@ -1,4 +1,5 @@
 import {
+  CHANGE_DATE,
   CHANGE_INSTRUCTOR,
   CHANGE_PRACTICE_MODE,
   GET_INSTRUCTORS_FETCH_SUCCESS,
@@ -6,6 +7,7 @@ import {
   GET_SCHEDULE_FETCH_SUCCESS,
   RENT_INTERVAL_FETCH_SUCCESS,
 } from '../actionTypes'
+import { dateWithoutTime } from '../../utils/date'
 
 const initialState = {
   schedule: {
@@ -18,6 +20,9 @@ const initialState = {
   practiceModes: {
     practiceModes: [],
     active: {},
+  },
+  date: {
+    active: dateWithoutTime(),
   },
 }
 
@@ -79,6 +84,14 @@ export default function scheduleReducer(state = initialState, action) {
         instructors: {
           ...state.instructors,
           active: action.instructor,
+        },
+      }
+    case CHANGE_DATE:
+      return {
+        ...state,
+        date: {
+          ...state.date,
+          active: action.date,
         },
       }
     default:

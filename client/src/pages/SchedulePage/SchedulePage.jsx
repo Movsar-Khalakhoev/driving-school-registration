@@ -16,9 +16,9 @@ const SchedulePage = () => {
   const { active: practiceMode } = useSelector(
     state => state.schedule.practiceModes
   )
+  const { active: scheduleDate } = useSelector(state => state.schedule.date)
   const [dispatchSchedule, isLoadingSchedule] = useDispatchWithHttp()
   const [dispatchRentInterval, isLoadingRentInterval] = useDispatchWithHttp()
-  const [scheduleDate, setScheduleDate] = useState(() => dateWithoutTime())
 
   const rentIntervalHandler = timestamp =>
     dispatchRentInterval(rentInterval, [
@@ -39,10 +39,7 @@ const SchedulePage = () => {
 
   return (
     <div className={s.schedule}>
-      <Parameters
-        scheduleDate={scheduleDate}
-        setScheduleDate={setScheduleDate}
-      />
+      <Parameters />
       <div className={s.container}>
         {!practiceMode.value ? (
           <h2 className={s.warning}>Выберите режим</h2>
