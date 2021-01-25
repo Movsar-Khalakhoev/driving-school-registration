@@ -4,6 +4,7 @@ const User = require('../models/User')
 const Role = require('../models/Role')
 const bcrypt = require('bcrypt')
 const generatePassword = require('../utils/generatePassword')
+const auth = require('../middlewares/auth.middleware')
 
 router.post('/', async (req, res) => {
   try {
@@ -38,9 +39,10 @@ router.post('/', async (req, res) => {
   }
 })
 
-router.get('/roles', async (req, res) => {
+router.get('/roles', auth, async (req, res) => {
   try {
-    let roles = await Role.find({}, { __v: 0 })
+    console.log(req.user)
+    let roles = await Role.find({}, { _id: 1, label: 1 })
     roles = roles.map(({ _id, label }) => ({ value: _id, label }))
 
     res.json({ roles })
@@ -51,7 +53,7 @@ router.get('/roles', async (req, res) => {
 
 router.post('/roles', async (req, res) => {
   try {
-    const { label } = req.body
+    const { label, level } = req.body
 
     const candidate = await Role.findOne({ label })
 
@@ -60,11 +62,12 @@ router.post('/roles', async (req, res) => {
 
     const role = new Role({
       label,
+      level,
     })
 
     await role.save()
 
-    res.json({ role: { value: role._id, label } })
+    res.json({ role: { value: role._id, label, level } })
   } catch (e) {
     console.log(e)
   }

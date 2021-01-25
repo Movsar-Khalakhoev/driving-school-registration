@@ -39,7 +39,7 @@ const AuthPage = () => {
 
   const login = () => {
     const func = async (login, password) => {
-      const data = await request('/api/auth', 'POST', { login, password })
+      const { data } = await request('/api/auth', 'POST', { login, password })
 
       if (data.token && data.userId) {
         loginFunc(data.token, data.userId)

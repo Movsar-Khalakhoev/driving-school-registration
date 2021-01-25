@@ -1,11 +1,15 @@
-const {Schema, model} = require('mongoose')
+const { Schema, model } = require('mongoose')
 
 const roleSchema = new Schema({
   label: {
     type: String,
     required: true,
-    unique: true
-  }
+    unique: true,
+  },
+  level: {
+    type: Number,
+    required: true,
+  },
 })
 
 module.exports = model('Role', roleSchema)

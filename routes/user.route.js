@@ -47,6 +47,43 @@ router.get('/modes', async (req, res) => {
   }
 })
 
+router.get('/delete/:userId', auth, async (req, res) => {
+  try {
+    const { userId } = req.params
+
+    const candidate = await User.findById(userId).populate('roles')
+
+    if (!candidate) {
+      return res
+        .status(400)
+        .json({ message: 'Пользователя с таким id не существует!' })
+    }
+
+    if (userId.toString() === req.user._id.toString()) {
+      return res
+        .status(400)
+        .json({ message: 'Вы не можете удалить самого себя' })
+    }
+
+    const candidateMaxRoleLevel = Math.max(
+      ...candidate.roles.map(role => role.level)
+    )
+    const userMaxRoleLevel = Math.max(...req.user.roles.map(role => role.level))
+
+    if (candidateMaxRoleLevel <= userMaxRoleLevel) {
+      return res
+        .status(400)
+        .json({ message: 'Вы не можете удалить этого пользователя' })
+    }
+
+    await User.deleteOne({ _id: userId })
+
+    res.json({ message: `Пользователь "${candidate.name}" успешно удален!` })
+  } catch (e) {
+    console.log(e)
+  }
+})
+
 router.get('/:userId', auth, async (req, res) => {
   try {
     const user = await User.findById(req.params.userId, { __v: 0, password: 0 })

@@ -1,13 +1,24 @@
 import React, { useEffect } from 'react'
 import s from './UserInfo.module.sass'
 import { useSelector } from 'react-redux'
-import { getPersonal } from '../../../../redux/actions/personal.action'
+import { useHistory } from 'react-router-dom'
+import {
+  deleteUser,
+  getPersonal,
+} from '../../../../redux/actions/personal.action'
 import SkeletonLoader from '../../../../components/SkeletonLoader/SkeletonLoader'
 import useDispatchWithHttp from '../../../../hooks/dispatchWithHttp.hook'
+import Loader from '../../../../components/Loader/Loader'
 
 const UserInfo = ({ userId }) => {
   const [dispatchUser, isLoadingUser] = useDispatchWithHttp()
+  const [dispatchDeleteUser, isLoadingDeleteUser] = useDispatchWithHttp()
   const { user } = useSelector(state => state.personal.info)
+  const history = useHistory()
+
+  const deleteUserHandler = () => {
+    dispatchDeleteUser(deleteUser, [userId], () => history.push('/users'))
+  }
 
   useEffect(() => {
     if (user._id === userId) return
@@ -53,7 +64,9 @@ const UserInfo = ({ userId }) => {
           </p>
         </SkeletonLoader>
       </div>
-      <div className={`${s.delete_student} btn_2`}>Удалить студента</div>
+      <div className={`${s.delete_student} btn_2`} onClick={deleteUserHandler}>
+        {isLoadingDeleteUser ? <Loader width={20} /> : 'Удалить студента'}
+      </div>
     </div>
   )
 }

@@ -15,8 +15,10 @@ const useDispatchWithHttp = () => {
     })
 
   const dispatch = useCallback(
-    (actionCreator, args = []) =>
-      originalDispatch(actionCreator(...args, { request, authData, error })),
+    (actionCreator, args = [], executedFunction = () => {}) =>
+      originalDispatch(
+        actionCreator(...args, { request, authData, error, executedFunction })
+      ),
     []
   )
 
