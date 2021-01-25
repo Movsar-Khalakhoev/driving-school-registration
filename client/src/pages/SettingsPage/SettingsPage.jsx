@@ -63,6 +63,7 @@ const SettingsPage = () => {
               ).keys(),
             ].map((cell, hourIdx) => (
               <TableRow
+                key={cell}
                 hour={hourIdx + forRentHoursInterval[0]}
                 activeMode={activeMode}
                 activeWeek={activeWeek}

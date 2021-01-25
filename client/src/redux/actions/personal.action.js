@@ -1,5 +1,6 @@
 import {
   CHANGE_PERSONAL_MODE,
+  DELETE_PERSONAL_RENT_INTERVAL,
   GET_PERSON_SCHEDULE_FETCH_SUCCESS,
   GET_PERSONAL_FETCH_SUCCESS,
   GET_PERSONAL_MODES_FETCH_SUCCESS,
@@ -67,7 +68,7 @@ export function changePersonalMode(mode) {
 export function deleteUser(userId, { request, executedFunction }) {
   return async () => {
     try {
-      const { error, data } = await request(`/api/users/delete/${userId}`)
+      const { error, data } = await request(`/api/users/delete-user/${userId}`)
 
       if (!error) {
         successToast(data.message)
@@ -78,5 +79,32 @@ export function deleteUser(userId, { request, executedFunction }) {
     } catch (e) {
       console.log(e)
     }
+  }
+}
+
+export function deleteRentRequest(timestamp, { request }) {
+  return async dispatch => {
+    try {
+      const test = await request('/api/users/delete-rent', 'POST', {
+        timestamp,
+      })
+
+      console.log(test.error, test.data)
+      if (!test.error) {
+        successToast(test.data.message)
+        dispatch(deleteRentInStore(timestamp))
+      } else {
+        errorToast(test.error)
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
+}
+
+function deleteRentInStore(timestamp) {
+  return {
+    type: DELETE_PERSONAL_RENT_INTERVAL,
+    timestamp,
   }
 }

@@ -2,6 +2,7 @@ const { Router } = require('express')
 const router = Router()
 const User = require('../models/User')
 const Role = require('../models/Role')
+const Settings = require('../models/Settings')
 const bcrypt = require('bcrypt')
 const generatePassword = require('../utils/generatePassword')
 const auth = require('../middlewares/auth.middleware')
@@ -19,12 +20,16 @@ router.post('/', async (req, res) => {
 
     const password = generatePassword(name)
     const hashedPassword = await bcrypt.hash(password, 10)
+    const settings = new Settings({})
+
+    await settings.save()
 
     const user = new User({
       login,
       password: hashedPassword,
       name,
       roles,
+      settings: settings._id,
       createdAt: new Date(),
     })
 

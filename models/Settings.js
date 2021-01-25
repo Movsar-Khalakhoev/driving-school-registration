@@ -1,12 +1,12 @@
 const { Schema, model } = require('mongoose')
 
 const settingsSchema = new Schema({
-  owner: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
-    required: true,
-    unique: true,
-  },
+  // owner: {
+  //   type: Schema.Types.ObjectId,
+  //   ref: 'User',
+  //   required: true,
+  //   unique: true,
+  // },
   periodicSchedule: [
     {
       hour: {

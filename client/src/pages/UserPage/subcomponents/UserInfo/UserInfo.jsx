@@ -65,7 +65,7 @@ const UserInfo = ({ userId }) => {
         </SkeletonLoader>
       </div>
       <div className={`${s.delete_student} btn_2`} onClick={deleteUserHandler}>
-        {isLoadingDeleteUser ? <Loader width={20} /> : 'Удалить студента'}
+        {isLoadingDeleteUser ? <Loader width={20} /> : 'Удалить пользователя'}
       </div>
     </div>
   )

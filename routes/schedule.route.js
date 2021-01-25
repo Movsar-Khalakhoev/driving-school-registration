@@ -3,7 +3,6 @@ const router = Router()
 const Interval = require('../models/Interval')
 const User = require('../models/User')
 const PracticeMode = require('../models/PracticeMode')
-const Settings = require('../models/Settings')
 const auth = require('../middlewares/auth.middleware')
 const settings = require('../config/settings.json')
 const { todayWithoutTime } = require('../utils/date')
@@ -12,10 +11,11 @@ const { addDay, getWeekInterval, dateByWeekDay } = require('../utils/date')
 router.get('/:date/:instructor/:mode', auth, async (req, res) => {
   try {
     const date = new Date(req.params.date)
-    let { periodicSchedule, currentSchedule } = await Settings.findOne(
-      { owner: req.params.instructor },
-      { periodicSchedule: 1, currentSchedule: 1 }
-    )
+    let instructor = await User.findById(req.params.instructor, {
+      settings: 1,
+    }).populate('settings')
+
+    let { periodicSchedule, currentSchedule } = instructor.settings
 
     let intervals = await Interval.find(
       {
@@ -57,6 +57,7 @@ router.get('/:date/:instructor/:mode', auth, async (req, res) => {
       })),
     ]
 
+    console.log(intervals)
     return res.json({ schedule: intervals, hoursToRent: settings.hoursToRent })
   } catch (e) {
     console.log(e)
@@ -125,7 +126,7 @@ router.post('/', auth, async (req, res) => {
 router.get('/instructors', async (req, res) => {
   try {
     let instructors = await User.find(
-      { roles: '600064d6bd21693d40bfabd5' },
+      { roles: '600e5f57e9732c401c66c712' },
       { name: 1, _id: 1 }
     )
 

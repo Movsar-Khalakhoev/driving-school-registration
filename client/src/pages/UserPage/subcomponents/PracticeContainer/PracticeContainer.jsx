@@ -8,7 +8,7 @@ import {
   getPersonSchedule,
 } from '../../../../redux/actions/personal.action'
 import Loader from '../../../../components/Loader/Loader'
-import RentedInterval from '../RentedInterval/RentedInterval'
+import RentedInterval from '../RentedInterval/RentedInterval.jsx'
 import SkeletonLoader from '../../../../components/SkeletonLoader/SkeletonLoader'
 import useDispatchWithHttp from '../../../../hooks/dispatchWithHttp.hook'
 

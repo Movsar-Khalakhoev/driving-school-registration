@@ -1,5 +1,6 @@
 import {
   CHANGE_PERSONAL_MODE,
+  DELETE_PERSONAL_RENT_INTERVAL,
   GET_PERSON_SCHEDULE_FETCH_SUCCESS,
   GET_PERSONAL_FETCH_SUCCESS,
   GET_PERSONAL_MODES_FETCH_SUCCESS,
@@ -50,6 +51,17 @@ const personalReducer = (state = initialState, action) => {
         modes: {
           ...state.modes,
           active: action.mode,
+        },
+      }
+    case DELETE_PERSONAL_RENT_INTERVAL:
+      const updatedSchedule = state.schedule.intervals.filter(
+        interval => interval.timestamp !== action.timestamp
+      )
+      return {
+        ...state,
+        schedule: {
+          ...state.schedule,
+          intervals: updatedSchedule,
         },
       }
     default:

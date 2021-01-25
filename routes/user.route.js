@@ -24,7 +24,6 @@ router.get('/', async (req, res) => {
 
 router.get('/modes', async (req, res) => {
   try {
-    console.log('fetched')
     const practiceModes = await PracticeModes.find({}, { __v: 0 })
 
     const modes = []
@@ -47,7 +46,7 @@ router.get('/modes', async (req, res) => {
   }
 })
 
-router.get('/delete/:userId', auth, async (req, res) => {
+router.get('/delete-user/:userId', auth, async (req, res) => {
   try {
     const { userId } = req.params
 
@@ -79,6 +78,20 @@ router.get('/delete/:userId', auth, async (req, res) => {
     await User.deleteOne({ _id: userId })
 
     res.json({ message: `Пользователь "${candidate.name}" успешно удален!` })
+  } catch (e) {
+    console.log(e)
+  }
+})
+
+router.post('/delete-rent', auth, async (req, res) => {
+  try {
+    const { timestamp } = req.body
+    await Interval.findOneAndDelete({
+      timestamp,
+      user: req.user._id,
+    })
+
+    res.json({ message: 'Бронирование отменено успешно!' })
   } catch (e) {
     console.log(e)
   }
