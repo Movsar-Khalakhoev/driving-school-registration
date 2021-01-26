@@ -18,6 +18,10 @@ function App() {
   const isAuthenticated = !!token
   const routes = useRoutes(isAuthenticated)
 
+  useEffect(() => console.log('auth changed', isAuthenticated), [
+    isAuthenticated,
+  ])
+
   useEffect(() => {
     if (isAuthenticated) {
       dispatchVariables(getVariables)

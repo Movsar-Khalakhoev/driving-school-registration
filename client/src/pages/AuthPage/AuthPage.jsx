@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import InputMask from 'react-input-mask'
 import s from './AuthPage.module.sass'
 import useFormValidator from '../../hooks/formValidator.hook'
 import useHttp from '../../hooks/http.hook'
-import useAuth from '../../hooks/auth.hook'
+import AuthContext from '../../context/AuthContext'
 
 const loginCondition = value => {
   return value.replace(/\D/g, '').length >= 11
@@ -33,7 +33,7 @@ const AuthPage = () => {
     },
   ])
   const { loading, request } = useHttp()
-  const { login: loginFunc } = useAuth()
+  const { login: loginFunc } = useContext(AuthContext)
 
   const buttonState = loading || (isTried && (loginErr || passErr))
 
