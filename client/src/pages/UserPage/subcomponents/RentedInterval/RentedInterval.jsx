@@ -3,9 +3,11 @@ import s from './RentedInterval.module.sass'
 import useDispatchWithHttp from '../../../../hooks/dispatchWithHttp.hook'
 import Loader from '../../../../components/Loader/Loader'
 import { deleteRentRequest } from '../../../../redux/actions/personal.action'
+import { useSelector } from 'react-redux'
 
 const RentedInterval = ({ interval, mode }) => {
   const [dispatchDeleteRent, isLoadingDeleteRent] = useDispatchWithHttp()
+  const { components } = useSelector(state => state.variables)
   const { timestamp, isRevocable, isActive } = interval
   const date = new Date(timestamp)
 
@@ -27,7 +29,7 @@ const RentedInterval = ({ interval, mode }) => {
           </span>
         </p>
       </div>
-      {isActive ? (
+      {isActive && components.removeRentButton ? (
         isRevocable ? (
           <button className={`${s.undo} btn_1`} onClick={deleteRentHandler}>
             {isLoadingDeleteRent ? <Loader width={20} /> : 'Отменить'}

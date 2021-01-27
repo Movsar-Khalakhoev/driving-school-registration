@@ -15,11 +15,9 @@ module.exports = (req, res, next) => {
         }
       })
     ) {
-      console.log(req.originalUrl, 'Доступ запрещен!')
       return res.status(404).json({})
     }
 
-    console.log(req.originalUrl, 'Доступ разрещен!')
     next()
   })
 }

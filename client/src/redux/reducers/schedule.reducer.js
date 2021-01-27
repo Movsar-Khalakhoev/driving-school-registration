@@ -6,6 +6,7 @@ import {
   GET_PRACTICE_MODES_FETCH_SUCCESS,
   GET_SCHEDULE_FETCH_SUCCESS,
   RENT_INTERVAL_FETCH_SUCCESS,
+  RESET_SCHEDULE_STATE,
 } from '../actionTypes'
 import { dateWithoutTime } from '../../utils/date'
 
@@ -25,6 +26,8 @@ const initialState = {
     active: dateWithoutTime(),
   },
 }
+
+const defaultState = { ...initialState }
 
 export default function scheduleReducer(state = initialState, action) {
   switch (action.type) {
@@ -94,6 +97,8 @@ export default function scheduleReducer(state = initialState, action) {
           active: action.date,
         },
       }
+    case RESET_SCHEDULE_STATE:
+      return defaultState
     default:
       return state
   }

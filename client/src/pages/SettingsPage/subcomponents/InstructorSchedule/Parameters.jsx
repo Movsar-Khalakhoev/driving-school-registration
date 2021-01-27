@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import s from '../SettingsPage.module.sass'
+import s from './InstrucrorSchedule.module.sass'
 import Select from 'react-select'
-import { addWeek, getWeekInterval, subWeek } from '../../../utils/date'
-import { changeMode } from '../../../redux/actions/settings.action'
+import { addWeek, getWeekInterval, subWeek } from '../../../../utils/date'
+import { changeMode } from '../../../../redux/actions/settings.action'
 import { useDispatch, useSelector } from 'react-redux'
 
 const Parameters = ({ activeWeek, setActiveWeek, activeMode }) => {
@@ -38,7 +38,7 @@ const Parameters = ({ activeWeek, setActiveWeek, activeMode }) => {
             className={`${s.arrow} ${weekNum <= 1 && s.arrow_disabled}`}
             onClick={decrementActiveWeekHandler}
           >
-            <i className="icofont-arrow-left" />
+            <i className='icofont-arrow-left' />
           </button>
           <span className={s.active_week}>
             {activeWeek[0].getDate()}-{activeWeek[1].getDate()}{' '}
@@ -52,7 +52,7 @@ const Parameters = ({ activeWeek, setActiveWeek, activeMode }) => {
             }`}
             onClick={incrementActiveWeekHandler}
           >
-            <i className="icofont-arrow-right" />
+            <i className='icofont-arrow-right' />
           </button>
         </div>
       )}

@@ -1,6 +1,7 @@
 import {
   CHANGE_SETTINGS_SCHEDULE_MODE,
   GET_SETTINGS_SCHEDULE_FETCH_SUCCESS,
+  RESET_SETTINGS_STATE,
   SET_SETTINGS_CHANGED_CELLS,
   SET_SETTINGS_SCHEDULE,
   SET_SETTINGS_SCHEDULE_FETCH_SUCCESS,
@@ -120,5 +121,11 @@ export function setSettingsCurrentSchedule(changed, start, { request }) {
         errorToast(error)
       }
     } catch (e) {}
+  }
+}
+
+export function resetSettingsState() {
+  return {
+    type: RESET_SETTINGS_STATE,
   }
 }

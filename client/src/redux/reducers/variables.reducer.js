@@ -1,11 +1,31 @@
-import { GET_VARIABLES_FETCH_SUCCESS } from '../actionTypes'
+import {
+  GET_COMPONENTS_LIST_FETCH_SUCCESS,
+  GET_VARIABLES_FETCH_SUCCESS,
+  RESET_VARIABLES_STATE,
+} from '../actionTypes'
 
 const initialState = {
   variables: {
     maxWeeksNum: 0, // Максимальное количество недель для пролистывания
     forRentHoursInterval: [0, 0], // Интервал, в который можно бронировать время на вождение
   },
+  components: {
+    usersPage: false, // Страница со всеми пользователями
+    addUserPage: false, // Страница добавления пользователя
+
+    schedulePage: false, // Страница с расписанием
+    rentIntervalButton: false, // Кнопка бронирования интервала на странице расписания
+
+    userPage: false, // Страница пользователя
+    deleteUserButton: false, // Кнопка удаления пользователя на странице пользователя
+    removeRentButton: false, // Кнопка отмены бронирования на странице пользователя
+
+    settingsPage: false, // Страница настроек
+    instructorSchedule: false, // Настройка расписания у инструктора
+  },
 }
+
+const defaultState = { ...initialState }
 
 export default function variablesReducer(state = initialState, action) {
   switch (action.type) {
@@ -14,6 +34,13 @@ export default function variablesReducer(state = initialState, action) {
         ...state,
         variables: action.variables,
       }
+    case GET_COMPONENTS_LIST_FETCH_SUCCESS:
+      return {
+        ...state,
+        components: { ...state.components, ...action.components },
+      }
+    case RESET_VARIABLES_STATE:
+      return defaultState
     default:
       return state
   }

@@ -10,10 +10,14 @@ import Loader from './components/Loader/Loader'
 import { ToastContainer } from 'react-toastify'
 import Popup from './components/Popup/Popup'
 import useDispatchWithHttp from './hooks/dispatchWithHttp.hook'
-import { getVariables } from './redux/actions/variables.actions'
+import {
+  getComponentsList,
+  getVariables,
+} from './redux/actions/variables.actions'
 
 function App() {
   const [dispatchVariables] = useDispatchWithHttp()
+  const [dispatchComponents] = useDispatchWithHttp()
   const { token, userId, login, logout, isReady } = useAuth()
   const isAuthenticated = !!token
   const routes = useRoutes(isAuthenticated, token)
@@ -21,6 +25,7 @@ function App() {
   useEffect(() => {
     if (isAuthenticated) {
       dispatchVariables(getVariables, [token])
+      dispatchComponents(getComponentsList, [token])
     }
   }, [isAuthenticated, token])
 

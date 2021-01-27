@@ -1,4 +1,8 @@
-import { FILTER_USERS, GET_ALL_USERS_FETCH_SUCCESS } from '../actionTypes'
+import {
+  FILTER_USERS,
+  GET_ALL_USERS_FETCH_SUCCESS,
+  RESET_ALL_USERS_STATE,
+} from '../actionTypes'
 import { errorToast } from '../../utils/toastNotifications'
 
 export function getAllUsers({ request }) {
@@ -25,5 +29,11 @@ export function filterUsers(users, filters = {}) {
   return {
     type: FILTER_USERS,
     filteredUsers,
+  }
+}
+
+export function resetAllUsersState() {
+  return {
+    type: RESET_ALL_USERS_STATE,
   }
 }

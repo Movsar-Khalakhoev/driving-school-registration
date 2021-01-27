@@ -28,7 +28,6 @@ const PracticeContainer = ({ userId }) => {
 
   useEffect(() => {
     if (!mode.value) return
-    console.log(userId)
     dispatchIntervals(getPersonSchedule, [mode.value, userId])
   }, [dispatchIntervals, mode, userId])
 

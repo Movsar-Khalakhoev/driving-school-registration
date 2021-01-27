@@ -6,6 +6,7 @@ import {
   GET_PRACTICE_MODES_FETCH_SUCCESS,
   GET_SCHEDULE_FETCH_SUCCESS,
   RENT_INTERVAL_FETCH_SUCCESS,
+  RESET_SCHEDULE_STATE,
 } from '../actionTypes'
 import normalizeSchedule from '../../utils/normalizeSchedule'
 import { errorToast, successToast } from '../../utils/toastNotifications'
@@ -116,5 +117,11 @@ export function changeDate(date) {
   return {
     type: CHANGE_DATE,
     date,
+  }
+}
+
+export function resetScheduleState() {
+  return {
+    type: RESET_SCHEDULE_STATE,
   }
 }

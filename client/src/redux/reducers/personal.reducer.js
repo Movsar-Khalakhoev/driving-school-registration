@@ -4,6 +4,7 @@ import {
   GET_PERSON_SCHEDULE_FETCH_SUCCESS,
   GET_PERSONAL_FETCH_SUCCESS,
   GET_PERSONAL_MODES_FETCH_SUCCESS,
+  RESET_PERSONAL_STATE,
 } from '../actionTypes'
 
 const initialState = {
@@ -18,6 +19,8 @@ const initialState = {
     active: {},
   },
 }
+
+const defaultState = { ...initialState }
 
 const personalReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -64,6 +67,8 @@ const personalReducer = (state = initialState, action) => {
           intervals: updatedSchedule,
         },
       }
+    case RESET_PERSONAL_STATE:
+      return defaultState
     default:
       return state
   }

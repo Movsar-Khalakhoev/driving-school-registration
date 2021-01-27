@@ -1,10 +1,16 @@
-import { FILTER_USERS, GET_ALL_USERS_FETCH_SUCCESS } from '../actionTypes'
+import {
+  FILTER_USERS,
+  GET_ALL_USERS_FETCH_SUCCESS,
+  RESET_ALL_USERS_STATE,
+} from '../actionTypes'
 
 const initialState = {
   users: [],
   filteredUsers: [],
   inputValue: '',
 }
+
+const defaultState = { ...initialState }
 
 export default function usersReducer(state = initialState, action) {
   switch (action.type) {
@@ -19,6 +25,8 @@ export default function usersReducer(state = initialState, action) {
         ...state,
         filteredUsers: action.filteredUsers,
       }
+    case RESET_ALL_USERS_STATE:
+      return defaultState
     default:
       return state
   }

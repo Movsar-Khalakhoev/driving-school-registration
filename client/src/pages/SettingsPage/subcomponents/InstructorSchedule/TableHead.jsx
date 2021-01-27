@@ -1,5 +1,5 @@
 import React from 'react'
-import s from '../SettingsPage.module.sass'
+import s from './InstrucrorSchedule.module.sass'
 import { useSelector } from 'react-redux'
 
 const TableHead = ({ activeWeek, activeMode }) => {

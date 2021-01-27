@@ -10,7 +10,12 @@ router.post('/', async (req, res) => {
   try {
     const { login, password } = req.body
 
-    const candidate = await User.findOne({ login }).populate('roles')
+    const candidate = await User.findOne(
+      { login },
+      { 'roles.components': 0 }
+    ).populate('roles', { components: 0 })
+
+    console.log(candidate)
 
     if (!candidate) {
       return res.status(400).json({ message: 'Пользователь не найден' })

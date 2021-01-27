@@ -1,6 +1,7 @@
 import {
   ADD_NEW_USER_FETCH_SUCCESS,
   GET_ROLES_FETCH_SUCCESS,
+  RESET_ADD_USER_STATE,
 } from '../actionTypes'
 import { errorToast, successToast } from '../../utils/toastNotifications'
 import { activatePopup } from './popup.action'
@@ -53,5 +54,11 @@ export function getRoles({ request }) {
         errorToast(error)
       }
     } catch (e) {}
+  }
+}
+
+export function resetAddUserState() {
+  return {
+    type: RESET_ADD_USER_STATE,
   }
 }

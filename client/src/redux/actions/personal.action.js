@@ -4,6 +4,7 @@ import {
   GET_PERSON_SCHEDULE_FETCH_SUCCESS,
   GET_PERSONAL_FETCH_SUCCESS,
   GET_PERSONAL_MODES_FETCH_SUCCESS,
+  RESET_PERSONAL_STATE,
 } from '../actionTypes'
 import { errorToast, successToast } from '../../utils/toastNotifications'
 
@@ -106,5 +107,11 @@ function deleteRentInStore(timestamp) {
   return {
     type: DELETE_PERSONAL_RENT_INTERVAL,
     timestamp,
+  }
+}
+
+export function resetPersonalState() {
+  return {
+    type: RESET_PERSONAL_STATE,
   }
 }

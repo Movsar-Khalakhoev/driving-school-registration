@@ -1,6 +1,7 @@
 import {
   ADD_NEW_USER_FETCH_SUCCESS,
   GET_ROLES_FETCH_SUCCESS,
+  RESET_ADD_USER_STATE,
 } from '../actionTypes'
 
 const initialState = {
@@ -12,6 +13,8 @@ const initialState = {
     roles: [],
   },
 }
+
+const defaultState = { ...initialState }
 
 const addNewUserReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -32,6 +35,8 @@ const addNewUserReducer = (state = initialState, action) => {
           roles: action.roles,
         },
       }
+    case RESET_ADD_USER_STATE:
+      return defaultState
     default:
       return state
   }

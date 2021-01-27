@@ -17,6 +17,7 @@ const SchedulePage = () => {
     state => state.schedule.practiceModes
   )
   const { active: scheduleDate } = useSelector(state => state.schedule.date)
+  const { components } = useSelector(state => state.variables)
   const [dispatchSchedule, isLoadingSchedule] = useDispatchWithHttp()
   const [dispatchRentInterval, isLoadingRentInterval] = useDispatchWithHttp()
 
@@ -54,6 +55,7 @@ const SchedulePage = () => {
             <BookedHour
               key={item.id}
               rented={!!item.name || !item.isRentable}
+              isDisabledForThisRole={components.rentIntervalButton}
               name={item.name || ''}
               interval={item.interval}
               onClick={() => rentIntervalHandler(item.timestamp)}

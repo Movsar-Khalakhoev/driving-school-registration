@@ -1,12 +1,9 @@
 import {
   CHANGE_SETTINGS_SCHEDULE_MODE,
-  GET_SETTINGS_SCHEDULE_FETCH_ERROR,
-  GET_SETTINGS_SCHEDULE_FETCH_START,
   GET_SETTINGS_SCHEDULE_FETCH_SUCCESS,
+  RESET_SETTINGS_STATE,
   SET_SETTINGS_CHANGED_CELLS,
   SET_SETTINGS_SCHEDULE,
-  SET_SETTINGS_SCHEDULE_FETCH_ERROR,
-  SET_SETTINGS_SCHEDULE_FETCH_START,
   SET_SETTINGS_SCHEDULE_FETCH_SUCCESS,
 } from '../actionTypes'
 
@@ -30,6 +27,8 @@ const initialState = {
     activeMode: { label: 'Текущий', value: 'current' },
   },
 }
+
+const defaultState = { ...initialState }
 
 export default function settingsReducer(state = initialState, action) {
   switch (action.type) {
@@ -74,6 +73,8 @@ export default function settingsReducer(state = initialState, action) {
           changedCells: [],
         },
       }
+    case RESET_SETTINGS_STATE:
+      return defaultState
     default:
       return state
   }

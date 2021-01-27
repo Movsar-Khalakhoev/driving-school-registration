@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react'
+import React from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
 import SchedulePage from './pages/SchedulePage/SchedulePage'
 import AuthPage from './pages/AuthPage/AuthPage'
@@ -7,18 +7,31 @@ import UserPage from './pages/UserPage/UserPage'
 import UsersPage from './pages/UsersPage/UsersPage'
 import AddUserPage from './pages/AddUserPage/AddUserPage'
 import SettingsPage from './pages/SettingsPage/SettingsPage'
+import { useSelector } from 'react-redux'
 
-const useRoutes = (isAuthenticated, token) => {
+const useRoutes = isAuthenticated => {
+  const { components } = useSelector(state => state.variables)
+
   if (isAuthenticated) {
     return (
       <>
         <Route path='/' component={Navbar} />
         <Switch>
-          <Route exact path='/' component={SchedulePage} />
-          <Route exact path='/users' component={UsersPage} />
-          <Route path='/users/:userId' component={UserPage} />
-          <Route path='/add-user' component={AddUserPage} />
-          <Route path='/settings' component={SettingsPage} />
+          {components.schedulePage && (
+            <Route exact path='/' component={SchedulePage} />
+          )}
+          {components.usersPage && (
+            <Route exact path='/users' component={UsersPage} />
+          )}
+          {components.userPage && (
+            <Route path='/users/:userId' component={UserPage} />
+          )}
+          {components.addUserPage && (
+            <Route path='/add-user' component={AddUserPage} />
+          )}
+          {components.settingsPage && (
+            <Route path='/settings' component={SettingsPage} />
+          )}
           <Redirect to='/' />
         </Switch>
       </>

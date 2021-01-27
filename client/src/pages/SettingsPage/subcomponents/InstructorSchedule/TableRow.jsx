@@ -1,11 +1,11 @@
 import React from 'react'
-import s from '../SettingsPage.module.sass'
+import s from './InstrucrorSchedule.module.sass'
 import {
   setChangedCells,
   setSchedule,
-} from '../../../redux/actions/settings.action'
+} from '../../../../redux/actions/settings.action'
 import { useDispatch, useSelector } from 'react-redux'
-import { dateByWeekDayAndHour } from '../../../utils/date'
+import { dateByWeekDayAndHour } from '../../../../utils/date'
 
 const TableRow = ({ hour, activeWeek, activeMode }) => {
   const dispatch = useDispatch()

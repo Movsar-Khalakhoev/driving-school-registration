@@ -14,6 +14,7 @@ const UserInfo = ({ userId }) => {
   const [dispatchUser, isLoadingUser] = useDispatchWithHttp()
   const [dispatchDeleteUser, isLoadingDeleteUser] = useDispatchWithHttp()
   const { user } = useSelector(state => state.personal.info)
+  const { components } = useSelector(state => state.variables)
   const history = useHistory()
 
   const deleteUserHandler = () => {
@@ -64,9 +65,14 @@ const UserInfo = ({ userId }) => {
           </p>
         </SkeletonLoader>
       </div>
-      <div className={`${s.delete_student} btn_2`} onClick={deleteUserHandler}>
-        {isLoadingDeleteUser ? <Loader width={20} /> : 'Удалить пользователя'}
-      </div>
+      {components.deleteUserButton && (
+        <div
+          className={`${s.delete_student} btn_2`}
+          onClick={deleteUserHandler}
+        >
+          {isLoadingDeleteUser ? <Loader width={20} /> : 'Удалить пользователя'}
+        </div>
+      )}
     </div>
   )
 }
