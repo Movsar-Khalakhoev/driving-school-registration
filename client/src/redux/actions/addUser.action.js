@@ -1,9 +1,5 @@
 import {
-  ADD_NEW_USER_FETCH_ERROR,
-  ADD_NEW_USER_FETCH_START,
   ADD_NEW_USER_FETCH_SUCCESS,
-  GET_ROLES_FETCH_ERROR,
-  GET_ROLES_FETCH_START,
   GET_ROLES_FETCH_SUCCESS,
 } from '../actionTypes'
 import { errorToast, successToast } from '../../utils/toastNotifications'
@@ -14,7 +10,7 @@ import React from 'react'
 export function addNewUser(name, phone, roles, { request }) {
   return async dispatch => {
     try {
-      const { error, data } = await request('/api/add-user', 'POST', {
+      const { error, data } = await request('/api/add-user/', 'POST', {
         name,
         phone,
         roles: [roles.value],

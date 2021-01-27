@@ -4,11 +4,12 @@ const Interval = require('../models/Interval')
 const User = require('../models/User')
 const PracticeMode = require('../models/PracticeMode')
 const auth = require('../middlewares/auth.middleware')
+const roles = require('../middlewares/roles.middleware')
 const settings = require('../config/settings.json')
 const { todayWithoutTime } = require('../utils/date')
 const { addDay, getWeekInterval, dateByWeekDay } = require('../utils/date')
 
-router.get('/:date/:instructor/:mode', auth, async (req, res) => {
+router.get('/:date/:instructor/:mode', auth, roles, async (req, res) => {
   try {
     const date = new Date(req.params.date)
     let instructor = await User.findById(req.params.instructor, {
@@ -63,7 +64,7 @@ router.get('/:date/:instructor/:mode', auth, async (req, res) => {
   }
 })
 
-router.post('/', auth, async (req, res) => {
+router.post('/', auth, roles, async (req, res) => {
   try {
     const { timestamp, instructor, practiceMode } = req.body
     const date = new Date(timestamp)
@@ -118,7 +119,7 @@ router.post('/', auth, async (req, res) => {
   }
 })
 
-router.get('/instructors', async (req, res) => {
+router.get('/instructors', auth, roles, async (req, res) => {
   try {
     let instructors = await User.find(
       { roles: '600e5f57e9732c401c66c712' },
@@ -130,7 +131,7 @@ router.get('/instructors', async (req, res) => {
   } catch (e) {}
 })
 
-router.get('/practice-modes', async (req, res) => {
+router.get('/practice-modes', auth, roles, async (req, res) => {
   let practiceModes = await PracticeMode.find({}, { __v: 0 })
 
   practiceModes = practiceModes.map(p => ({ value: p._id, label: p.label }))
@@ -138,7 +139,7 @@ router.get('/practice-modes', async (req, res) => {
   res.json({ practiceModes })
 })
 
-router.post('/practice-modes', async (req, res) => {
+router.post('/practice-modes', auth, roles, async (req, res) => {
   const practiceMode = new PracticeMode({
     label: req.body.label,
   })

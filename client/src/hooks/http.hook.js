@@ -20,7 +20,10 @@ const useHttp = () => {
 
       setLoading(false)
 
-      return { error: !response.ok ? data.message : error, data }
+      return {
+        error: !response.ok ? data.message || 'Что-то пошло не так...' : error,
+        data,
+      }
     } catch (e) {
       setError(e.message)
       setLoading(false)

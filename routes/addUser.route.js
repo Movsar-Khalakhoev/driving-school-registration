@@ -6,8 +6,9 @@ const Settings = require('../models/Settings')
 const bcrypt = require('bcrypt')
 const generatePassword = require('../utils/generatePassword')
 const auth = require('../middlewares/auth.middleware')
+const roles = require('../middlewares/roles.middleware')
 
-router.post('/', async (req, res) => {
+router.post('/', auth, roles, async (req, res) => {
   try {
     const { phone: login, name, roles } = req.body
     const candidate = await User.findOne({ login })
@@ -39,24 +40,19 @@ router.post('/', async (req, res) => {
       data: { login, password },
       message: 'Пользователь создан успешно',
     })
-  } catch (e) {
-    console.log(e)
-  }
+  } catch (e) {}
 })
 
-router.get('/roles', auth, async (req, res) => {
+router.get('/roles', auth, roles, async (req, res) => {
   try {
-    console.log(req.user)
     let roles = await Role.find({}, { _id: 1, label: 1 })
     roles = roles.map(({ _id, label }) => ({ value: _id, label }))
 
     res.json({ roles })
-  } catch (e) {
-    console.log(e)
-  }
+  } catch (e) {}
 })
 
-router.post('/roles', async (req, res) => {
+router.post('/roles', auth, roles, async (req, res) => {
   try {
     const { label, level } = req.body
 
@@ -73,9 +69,7 @@ router.post('/roles', async (req, res) => {
     await role.save()
 
     res.json({ role: { value: role._id, label, level } })
-  } catch (e) {
-    console.log(e)
-  }
+  } catch (e) {}
 })
 
 module.exports = router

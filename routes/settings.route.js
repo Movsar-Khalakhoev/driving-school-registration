@@ -3,9 +3,10 @@ const router = Router()
 const User = require('../models/User')
 const Interval = require('../models/Interval')
 const auth = require('../middlewares/auth.middleware')
+const roles = require('../middlewares/roles.middleware')
 const { toggleInterval } = require('../utils/settings.auxiliary')
 
-router.get('/schedule/periodic', auth, async (req, res) => {
+router.get('/schedule/periodic', auth, roles, async (req, res) => {
   const { settings } = await User.findOne(
     { _id: req.user._id },
     { settings: 1 }
@@ -14,7 +15,7 @@ router.get('/schedule/periodic', auth, async (req, res) => {
   res.json({ schedule: settings.periodicSchedule })
 })
 
-router.get('/schedule/current/:interval', auth, async (req, res) => {
+router.get('/schedule/current/:interval', auth, roles, async (req, res) => {
   try {
     const { settings } = await User.findOne(
       { _id: req.user._id },
@@ -73,7 +74,7 @@ router.get('/schedule/current/:interval', auth, async (req, res) => {
   } catch (e) {}
 })
 
-router.post('/schedule/periodic', auth, async (req, res) => {
+router.post('/schedule/periodic', auth, roles, async (req, res) => {
   try {
     const instructor = await User.findOne(
       { _id: req.user._id },
@@ -108,7 +109,7 @@ router.post('/schedule/periodic', auth, async (req, res) => {
   } catch (e) {}
 })
 
-router.post('/schedule/current', auth, async (req, res) => {
+router.post('/schedule/current', auth, roles, async (req, res) => {
   try {
     const instructor = await User.findOne(
       { _id: req.user._id },

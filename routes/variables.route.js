@@ -1,9 +1,11 @@
 const { Router } = require('express')
 const settings = require('../config/settings.json')
+const auth = require('../middlewares/auth.middleware')
+const roles = require('../middlewares/roles.middleware')
 
 const router = Router()
 
-router.get('/', (req, res) => {
+router.get('/', auth, roles, (req, res) => {
   try {
     const { maxWeeksNum, forRentHoursInterval } = settings
 

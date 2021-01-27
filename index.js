@@ -8,7 +8,7 @@ app.use(express.json())
 
 app.use('/api/auth', require('./routes/auth.route'))
 app.use('/api/schedule', require('./routes/schedule.route'))
-app.use('/api/users', require('./routes/user.route'))
+app.use('/api/users', require('./routes/users.route'))
 app.use('/api/add-user', require('./routes/addUser.route'))
 app.use('/api/settings', require('./routes/settings.route'))
 app.use('/api/variables', require('./routes/variables.route'))

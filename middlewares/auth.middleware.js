@@ -1,8 +1,7 @@
 const jwt = require('jsonwebtoken')
 const config = require('../config')
-const User = require('../models/User')
 
-const auth = async (req, res, next) => {
+module.exports = (req, res, next) => {
   if (req.method === 'OPTIONS') {
     return next()
   }
@@ -28,5 +27,3 @@ const auth = async (req, res, next) => {
     res.status(401)
   }
 }
-
-module.exports = auth

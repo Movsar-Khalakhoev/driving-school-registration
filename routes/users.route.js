@@ -5,9 +5,10 @@ const Settings = require('../models/Settings')
 const Interval = require('../models/Interval')
 const PracticeModes = require('../models/PracticeMode')
 const auth = require('../middlewares/auth.middleware')
+const roles = require('../middlewares/roles.middleware')
 const { isRevocable } = require('../utils/utils')
 
-router.get('/', async (req, res) => {
+router.get('/', auth, roles, async (req, res) => {
   try {
     let users = await User.find({}, { name: 1, roles: 1 }).populate('roles')
 
@@ -21,7 +22,7 @@ router.get('/', async (req, res) => {
   } catch (e) {}
 })
 
-router.get('/modes', async (req, res) => {
+router.get('/modes', auth, roles, async (req, res) => {
   try {
     const practiceModes = await PracticeModes.find({}, { __v: 0 })
 
@@ -43,7 +44,7 @@ router.get('/modes', async (req, res) => {
   } catch (e) {}
 })
 
-router.get('/delete-user/:userId', auth, async (req, res) => {
+router.get('/delete-user/:userId', auth, roles, async (req, res) => {
   try {
     const { userId } = req.params
 
@@ -82,7 +83,7 @@ router.get('/delete-user/:userId', auth, async (req, res) => {
   } catch (e) {}
 })
 
-router.post('/delete-rent', auth, async (req, res) => {
+router.post('/delete-rent', auth, roles, async (req, res) => {
   try {
     const { timestamp } = req.body
     await Interval.findOneAndDelete({
@@ -94,7 +95,7 @@ router.post('/delete-rent', auth, async (req, res) => {
   } catch (e) {}
 })
 
-router.get('/:userId', auth, async (req, res) => {
+router.get('/:userId', auth, roles, async (req, res) => {
   try {
     const user = await User.findById(req.params.userId, { __v: 0, password: 0 })
 
@@ -102,7 +103,7 @@ router.get('/:userId', auth, async (req, res) => {
   } catch (e) {}
 })
 
-router.get('/:userId/:mode/active', auth, async (req, res) => {
+router.get('/:userId/:mode/active', auth, roles, async (req, res) => {
   try {
     let practice = await Interval.find(
       {
@@ -124,7 +125,7 @@ router.get('/:userId/:mode/active', auth, async (req, res) => {
   } catch (e) {}
 })
 
-router.get('/:userId/:mode/no-active', auth, async (req, res) => {
+router.get('/:userId/:mode/no-active', auth, roles, async (req, res) => {
   try {
     let practice = await Interval.find(
       {

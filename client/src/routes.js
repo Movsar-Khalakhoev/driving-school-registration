@@ -1,5 +1,5 @@
-import React from 'react'
-import {Switch, Route, Redirect} from 'react-router-dom'
+import React, { useEffect, useContext } from 'react'
+import { Switch, Route, Redirect } from 'react-router-dom'
 import SchedulePage from './pages/SchedulePage/SchedulePage'
 import AuthPage from './pages/AuthPage/AuthPage'
 import Navbar from './components/Navbar/Navbar'
@@ -8,7 +8,7 @@ import UsersPage from './pages/UsersPage/UsersPage'
 import AddUserPage from './pages/AddUserPage/AddUserPage'
 import SettingsPage from './pages/SettingsPage/SettingsPage'
 
-const useRoutes = isAuthenticated => {
+const useRoutes = (isAuthenticated, token) => {
   if (isAuthenticated) {
     return (
       <>
