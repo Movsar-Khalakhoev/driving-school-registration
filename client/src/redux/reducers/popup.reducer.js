@@ -1,9 +1,12 @@
-import {ACTIVATE_POPUP, DEACTIVATE_POPUP} from '../actionTypes'
+import {
+  ACTIVATE_POPUP,
+  DEACTIVATE_POPUP,
+} from '../actionTypes/popup.actionTypes'
 
 const initialState = {
   isActive: false,
   content: '',
-  options: {}
+  options: {},
 }
 
 const popupReducer = (state = initialState, action) => {
@@ -20,7 +23,7 @@ const popupReducer = (state = initialState, action) => {
         ...state,
         content: '',
         options: {},
-        isActive: false
+        isActive: false,
       }
     default:
       return state

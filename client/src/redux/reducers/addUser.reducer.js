@@ -2,7 +2,7 @@ import {
   ADD_NEW_USER_FETCH_SUCCESS,
   GET_ROLES_FETCH_SUCCESS,
   RESET_ADD_USER_STATE,
-} from '../actionTypes'
+} from '../actionTypes/addUser.actionTypes'
 
 const initialState = {
   addUser: {

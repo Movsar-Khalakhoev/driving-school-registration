@@ -5,7 +5,7 @@ import {
   SET_SETTINGS_CHANGED_CELLS,
   SET_SETTINGS_SCHEDULE,
   SET_SETTINGS_SCHEDULE_FETCH_SUCCESS,
-} from '../actionTypes'
+} from '../actionTypes/settings.actionTypes'
 import { errorToast, successToast } from '../../utils/toastNotifications'
 
 export function setSchedule(schedule) {

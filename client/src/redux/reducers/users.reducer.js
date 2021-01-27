@@ -2,7 +2,7 @@ import {
   FILTER_USERS,
   GET_ALL_USERS_FETCH_SUCCESS,
   RESET_ALL_USERS_STATE,
-} from '../actionTypes'
+} from '../actionTypes/users.actionTypes'
 
 const initialState = {
   users: [],

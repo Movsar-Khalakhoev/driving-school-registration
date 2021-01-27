@@ -2,7 +2,7 @@ import {
   GET_COMPONENTS_LIST_FETCH_SUCCESS,
   GET_VARIABLES_FETCH_SUCCESS,
   RESET_VARIABLES_STATE,
-} from '../actionTypes'
+} from '../actionTypes/variables.actionTypes'
 
 export function getVariables(token, { request }) {
   return async dispatch => {

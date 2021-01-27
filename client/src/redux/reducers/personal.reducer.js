@@ -5,7 +5,7 @@ import {
   GET_PERSONAL_FETCH_SUCCESS,
   GET_PERSONAL_MODES_FETCH_SUCCESS,
   RESET_PERSONAL_STATE,
-} from '../actionTypes'
+} from '../actionTypes/personal.actionTypes'
 
 const initialState = {
   info: {

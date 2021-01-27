@@ -7,7 +7,7 @@ import {
   GET_SCHEDULE_FETCH_SUCCESS,
   RENT_INTERVAL_FETCH_SUCCESS,
   RESET_SCHEDULE_STATE,
-} from '../actionTypes'
+} from '../actionTypes/schedule.actionTypes'
 import normalizeSchedule from '../../utils/normalizeSchedule'
 import { errorToast, successToast } from '../../utils/toastNotifications'
 
