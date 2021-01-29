@@ -8,7 +8,7 @@ const { toggleInterval } = require('../utils/settings.auxiliary')
 
 router.get('/schedule/periodic', auth, roles, async (req, res) => {
   const { settings } = await User.findOne(
-    { _id: req.user._id },
+    { _id: req.user.userId },
     { settings: 1 }
   ).populate('settings')
 
@@ -18,7 +18,7 @@ router.get('/schedule/periodic', auth, roles, async (req, res) => {
 router.get('/schedule/current/:interval', auth, roles, async (req, res) => {
   try {
     const { settings } = await User.findOne(
-      { _id: req.user._id },
+      { _id: req.user.userId },
       { settings: 1 }
     ).populate('settings')
 
@@ -30,7 +30,7 @@ router.get('/schedule/current/:interval', auth, roles, async (req, res) => {
           $gte: new Date(+start),
           $lte: new Date(+end),
         },
-        instructor: req.user._id,
+        instructor: req.user.userId,
       },
       { timestamp: 1, name: 1 }
     ).populate('practiceMode')
@@ -71,13 +71,15 @@ router.get('/schedule/current/:interval', auth, roles, async (req, res) => {
     })
 
     res.json({ schedule: rentedIntervals })
-  } catch (e) {}
+  } catch (e) {
+    console.log(e)
+  }
 })
 
 router.post('/schedule/periodic', auth, roles, async (req, res) => {
   try {
     const instructor = await User.findOne(
-      { _id: req.user._id },
+      { _id: req.user.userId },
       { settings: 1 }
     ).populate('settings')
     const { settings } = instructor
@@ -112,7 +114,7 @@ router.post('/schedule/periodic', auth, roles, async (req, res) => {
 router.post('/schedule/current', auth, roles, async (req, res) => {
   try {
     const instructor = await User.findOne(
-      { _id: req.user._id },
+      { _id: req.user.userId },
       { settings: 1 }
     ).populate('settings')
     const { settings } = instructor

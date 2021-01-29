@@ -95,14 +95,14 @@ function setTokenCookie(res, token) {
   // create cookie with refresh token that expires in 7 days
   const cookieOptions = {
     httpOnly: true,
-    expires: new Date(Date.now() + 5 * 60 * 1000),
+    expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
   }
   res.cookie('refreshToken', token, cookieOptions)
 }
 
 function generateAccessToken(user) {
   return jwt.sign({ userId: user._id }, config.SECRET_KEY, {
-    expiresIn: '0.05h',
+    expiresIn: '1h',
   })
 }
 function generateRefreshToken(user, ipAddress) {

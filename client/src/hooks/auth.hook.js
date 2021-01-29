@@ -4,7 +4,7 @@ import useHttp from './http.hook'
 const { useState } = require('react')
 
 const storageName = 'userData'
-const spareSeconds = 170
+const spareSeconds = 60
 
 const useAuth = () => {
   const [token, setToken] = useState(null)

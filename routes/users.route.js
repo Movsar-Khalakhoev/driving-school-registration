@@ -56,7 +56,7 @@ router.get('/delete-user/:userId', auth, roles, async (req, res) => {
         .json({ message: 'Пользователя с таким id не существует!' })
     }
 
-    if (userId.toString() === req.user._id.toString()) {
+    if (userId.toString() === req.user.userId.toString()) {
       return res
         .status(400)
         .json({ message: 'Вы не можете удалить самого себя' })
@@ -88,7 +88,7 @@ router.post('/delete-rent', auth, roles, async (req, res) => {
     const { timestamp } = req.body
     await Interval.findOneAndDelete({
       timestamp,
-      user: req.user._id,
+      user: req.user.userId,
     })
 
     res.json({ message: 'Бронирование отменено успешно!' })
