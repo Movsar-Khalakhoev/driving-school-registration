@@ -11,14 +11,12 @@ router.get('/', auth, roles, (req, res) => {
     const { maxWeeksNum, forRentHoursInterval } = settings
 
     res.json({ variables: { maxWeeksNum, forRentHoursInterval } })
-  } catch (e) {
-    console.log(e)
-  }
+  } catch (e) {}
 })
 
 router.get('/components', auth, async (req, res) => {
   try {
-    const user = await User.findById(req.user._id).populate('roles', {
+    const user = await User.findById(req.user.userId).populate('roles', {
       components: 1,
       level: 1,
     })
@@ -39,9 +37,7 @@ router.get('/components', auth, async (req, res) => {
     })
 
     res.json({ components })
-  } catch (e) {
-    console.log(e)
-  }
+  } catch (e) {}
 })
 
 module.exports = router

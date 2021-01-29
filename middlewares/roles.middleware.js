@@ -1,7 +1,7 @@
 module.exports = (req, res, next) => {
   const roles = req.user.roles
 
-  roles.forEach(({ permissions }) => {
+  roles.forEach(({ _doc: { permissions } }) => {
     if (req.originalUrl[req.originalUrl.length - 1] === '/') {
       req.originalUrl = req.originalUrl.slice(0, req.originalUrl.length - 1)
     }
