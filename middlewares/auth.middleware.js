@@ -48,6 +48,10 @@ module.exports = [
       }
 
       req.user.roles = candidate.roles
+      req.user.maxLevelOfRoles = candidate.roles.reduce(
+        (acc, role) => Math.min(acc, role.level),
+        1000
+      )
 
       next()
     } catch (e) {

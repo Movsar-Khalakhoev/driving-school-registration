@@ -12,11 +12,29 @@ router.post('/', auth, roles, async (req, res) => {
   try {
     const { phone: login, name, roles } = req.body
     const candidate = await User.findOne({ login })
+    const allRoles = await Role.find({}, { level: 1 })
+    const roleLevels = []
+
+    allRoles.forEach(role => {
+      if (roles.includes(role._id.toString())) {
+        roleLevels.push(role.level)
+      }
+    })
 
     if (candidate) {
       return res
         .status(400)
         .json({ message: 'Пользователь с таким логином существует' })
+    }
+
+    if (
+      roleLevels.reduce((acc, level) => Math.min(acc, level), 1000) <=
+      req.user.maxLevelOfRoles
+    ) {
+      return res.status(400).json({
+        message:
+          'Вы не можете добавить пользователя с ролью, равной или больше Вашей',
+      })
     }
 
     const password = generatePassword(name)
@@ -40,12 +58,21 @@ router.post('/', auth, roles, async (req, res) => {
       data: { login, password },
       message: 'Пользователь создан успешно',
     })
-  } catch (e) {}
+  } catch (e) {
+    console.log(e)
+  }
 })
 
 router.get('/roles', auth, roles, async (req, res) => {
   try {
-    let roles = await Role.find({}, { _id: 1, label: 1 })
+    let roles = await Role.find(
+      {
+        level: {
+          $gt: req.user.maxLevelOfRoles,
+        },
+      },
+      { _id: 1, label: 1 }
+    )
     roles = roles.map(({ _id, label }) => ({ value: _id, label }))
 
     res.json({ roles })

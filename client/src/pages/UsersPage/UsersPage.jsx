@@ -21,7 +21,6 @@ const UsersPage = () => {
     }, 500)
   }
 
-  console.log(filteredUsers)
   return (
     <div className={s.users}>
       <input

@@ -23,7 +23,7 @@ const initialState = {
     settingsPage: false, // Страница настроек
     instructorSchedule: false, // Настройка расписания у инструктора
 
-    attendancePage: true, // Страница контроля посещаемости
+    attendancePage: false, // Страница контроля посещаемости
   },
 }
 
