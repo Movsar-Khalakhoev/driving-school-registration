@@ -24,7 +24,7 @@ exports.getWeekInterval = function (date = new Date()) {
 exports.todayWithoutTime = function (date = new Date()) {
   date = new Date(date)
 
-  return new Date(date.setHours(0))
+  return new Date(date.setHours(0, 0, 0, 0))
 }
 
 exports.addDay = function (date = new Date()) {

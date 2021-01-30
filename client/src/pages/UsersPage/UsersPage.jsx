@@ -3,8 +3,8 @@ import s from './UsersPage.module.sass'
 import { useDispatch, useSelector } from 'react-redux'
 import Loader from '../../components/Loader/Loader'
 import { filterUsers, getAllUsers } from '../../redux/actions/users.action'
-import { NavLink } from 'react-router-dom'
 import useDispatchWithHttp from '../../hooks/dispatchWithHttp.hook'
+import UserCard from '../../components/UserCard/UserCard'
 
 const UsersPage = () => {
   const dispatch = useDispatch()
@@ -21,6 +21,7 @@ const UsersPage = () => {
     }, 500)
   }
 
+  console.log(filteredUsers)
   return (
     <div className={s.users}>
       <input
@@ -34,12 +35,9 @@ const UsersPage = () => {
           <Loader />
         ) : filteredUsers.length ? (
           filteredUsers.map(user => (
-            <div className={s.user} key={user.id}>
-              <NavLink to={user.id} className={s.name}>
-                {user.name}
-              </NavLink>
+            <UserCard link={`/users/${user.id}`} name={user.name} key={user.id}>
               <p className={s.roles}>{user.roles[0]}</p>
-            </div>
+            </UserCard>
           ))
         ) : (
           <p className={s.warning}>Ничего не найдено</p>

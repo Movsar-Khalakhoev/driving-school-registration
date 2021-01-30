@@ -12,18 +12,7 @@ import { resetVariablesState } from '../../redux/actions/variables.actions'
 
 const Navbar = () => {
   const { userId, logout } = useContext(AuthContext)
-  const dispatch = useDispatch()
   const { components } = useSelector(state => state.variables)
-
-  const logoutHandler = () => {
-    dispatch(resetAddUserState())
-    dispatch(resetScheduleState())
-    dispatch(resetSettingsState())
-    dispatch(resetPersonalState())
-    dispatch(resetAllUsersState())
-    dispatch(resetVariablesState())
-    logout()
-  }
 
   return (
     <div className={s.navbar}>
@@ -38,6 +27,16 @@ const Navbar = () => {
           >
             <i className={`${s.ico} icofont-users-alt-3`} />
             Пользователи
+          </NavLink>
+        )}
+        {components.attendancePage && (
+          <NavLink
+            to='/attendance'
+            activeClassName={s.active}
+            className={s.section}
+          >
+            <i className={`${s.ico} icofont-notepad`} />
+            Посещаемость
           </NavLink>
         )}
         {components.addUserPage && (
@@ -57,7 +56,7 @@ const Navbar = () => {
             activeClassName={s.active}
             className={s.section}
           >
-            <i className={`${s.ico} icofont-notepad`} />
+            <i className={`${s.ico} icofont-contact-add`} />
             Расписание
           </NavLink>
         )}
@@ -81,7 +80,7 @@ const Navbar = () => {
             Настройки
           </NavLink>
         )}
-        <span className={s.logout} onClick={logoutHandler}>
+        <span className={s.logout} onClick={logout}>
           <i className='icofont-logout' />
         </span>
         <span className={s.hamburger}>

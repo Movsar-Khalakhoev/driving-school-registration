@@ -1,5 +1,13 @@
 import { useEffect } from 'react'
 import useHttp from './http.hook'
+import { resetAddUserState } from '../redux/actions/addUser.action'
+import { resetScheduleState } from '../redux/actions/schedule.action'
+import { resetSettingsState } from '../redux/actions/settings.action'
+import { resetPersonalState } from '../redux/actions/personal.action'
+import { resetAllUsersState } from '../redux/actions/users.action'
+import { resetVariablesState } from '../redux/actions/variables.actions'
+import { useDispatch } from 'react-redux'
+import { resetAttendanceStateAction } from '../redux/actions/AttendancePage.actions'
 
 const { useState } = require('react')
 
@@ -12,6 +20,7 @@ const useAuth = () => {
   const [isReady, setIsReady] = useState(false)
   const [autoRefreshTokensInterval, setAutoRefreshTokensInterval] = useState()
   const { request } = useHttp()
+  const dispatch = useDispatch()
 
   const login = (token, userId) => {
     setAuthData(token, userId)
@@ -27,6 +36,14 @@ const useAuth = () => {
   const logout = async () => {
     setToken(null)
     setUserId(null)
+
+    dispatch(resetAddUserState())
+    dispatch(resetScheduleState())
+    dispatch(resetSettingsState())
+    dispatch(resetPersonalState())
+    dispatch(resetAllUsersState())
+    dispatch(resetVariablesState())
+    dispatch(resetAttendanceStateAction())
 
     await request('/api/auth/revoke-token', 'POST')
 

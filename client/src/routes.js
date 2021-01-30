@@ -8,6 +8,7 @@ import UsersPage from './pages/UsersPage/UsersPage'
 import AddUserPage from './pages/AddUserPage/AddUserPage'
 import SettingsPage from './pages/SettingsPage/SettingsPage'
 import { useSelector } from 'react-redux'
+import AttendancePage from './pages/AttendancePage/AttendancePage'
 
 const useRoutes = isAuthenticated => {
   const { components } = useSelector(state => state.variables)
@@ -19,6 +20,9 @@ const useRoutes = isAuthenticated => {
         <Switch>
           {components.schedulePage && (
             <Route exact path='/' component={SchedulePage} />
+          )}
+          {components.attendancePage && (
+            <Route path='/attendance' component={AttendancePage} />
           )}
           {components.usersPage && (
             <Route exact path='/users' component={UsersPage} />

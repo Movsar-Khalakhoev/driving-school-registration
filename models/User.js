@@ -25,6 +25,12 @@ const userSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Settings',
   },
+  isAttend: [
+    {
+      timestamp: Date,
+      isAttend: Boolean,
+    },
+  ],
   image: {
     type: String,
     default: 'https://clck.ru/SgH52',

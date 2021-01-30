@@ -1,0 +1,61 @@
+@import 'src/styleVariables'
+
+.attendance
+  padding: 20px 10%
+  height: calc(100vh - #{$navbar_h})
+
+.header
+  display: flex
+  justify-content: space-between
+  align-items: center
+
+.today
+  font-size: 22px
+  color: white
+
+.modes
+  max-width: 300px
+  width: 100%
+  height: 40px
+  margin-bottom: 10px
+
+.info
+  display: flex
+  justify-content: flex-end
+  align-items: center
+  width: 60%
+
+.is_attend
+  font-size: 13px
+  color: white
+  margin-right: 10px
+
+.refresh
+  &_button
+    border: 1px solid white
+    border-radius: 14px
+    width: 90px
+    height: 20px
+    color: white
+    background-color: transparent
+    cursor: pointer
+    transition: color $trs-1, border $trs-1
+    &:hover
+      color: darken(white, 20%)
+      border-color: darken(white, 20%)
+  &_icon
+    margin-left: 5px
+
+.attend_button, .no_attend_button
+  width: 120px
+  height: 30px
+
+.no_attend_button
+  margin-right: 10px
+
+.students_list
+  overflow: auto
+  height: calc(100vh - #{$navbar_h} - 100px)
+
+.student_actions
+  display: flex

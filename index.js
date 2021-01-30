@@ -14,6 +14,7 @@ app.use('/api/users', require('./routes/users.route'))
 app.use('/api/add-user', require('./routes/addUser.route'))
 app.use('/api/settings', require('./routes/settings.route'))
 app.use('/api/variables', require('./routes/variables.route'))
+app.use('/api/attendance', require('./routes/attendance.route'))
 
 async function start() {
   await mongoose.connect(config.DB_URL, {

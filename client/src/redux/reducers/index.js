@@ -7,6 +7,7 @@ import popupReducer from './popup.reducer'
 import usersReducer from './users.reducer'
 import settingsReducer from './settings.reducer'
 import variablesReducer from './variables.reducer'
+import attendancePageReducer from './AttendancePage.reducers'
 
 const reducer = combineReducers({
   variables: variablesReducer,
@@ -16,6 +17,7 @@ const reducer = combineReducers({
   addNewUser: addNewUserReducer,
   users: usersReducer,
   settings: settingsReducer,
+  attendance: attendancePageReducer,
 })
 
 const store = createStore(reducer, applyMiddleware(ReduxThunk))

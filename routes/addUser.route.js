@@ -25,16 +25,16 @@ router.post('/', auth, roles, async (req, res) => {
 
     await settings.save()
 
-    const user = new User({
+    const newUser = {
       login,
       password: hashedPassword,
       name,
       roles,
       settings: settings._id,
       createdAt: new Date(),
-    })
+    }
 
-    await user.save()
+    await new User(newUser).save()
 
     return res.json({
       data: { login, password },

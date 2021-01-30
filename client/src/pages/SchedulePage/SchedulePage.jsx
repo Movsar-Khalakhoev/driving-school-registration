@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import s from './SchedulePage.module.sass'
 import BookedHour from './subcomponents/BookedHour/BookedHour'
 import Loader from '../../components/Loader/Loader'
 import { useSelector } from 'react-redux'
 import { getSchedule, rentInterval } from '../../redux/actions/schedule.action'
 import Parameters from './subcomponents/Parameters'
-import { dateWithoutTime } from '../../utils/date'
 import useDispatchWithHttp from '../../hooks/dispatchWithHttp.hook'
 
 const SchedulePage = () => {
