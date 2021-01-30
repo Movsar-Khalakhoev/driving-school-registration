@@ -1,6 +1,7 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const config = require('./config')
+const path = require('path')
 const cookieParser = require('cookie-parser')
 
 const app = express()
@@ -15,6 +16,14 @@ app.use('/api/add-user', require('./routes/addUser.route'))
 app.use('/api/settings', require('./routes/settings.route'))
 app.use('/api/variables', require('./routes/variables.route'))
 app.use('/api/attendance', require('./routes/attendance.route'))
+
+if (process.env.NODE_ENV === 'production') {
+  app.use('/', express.static(path.join(__dirname, 'client', 'build')))
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'))
+  })
+}
 
 async function start() {
   await mongoose.connect(config.DB_URL, {
