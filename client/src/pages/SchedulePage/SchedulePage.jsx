@@ -42,10 +42,10 @@ const SchedulePage = () => {
       <Parameters />
       <div className={s.container}>
         {!practiceMode.value ? (
-          <h2 className={s.warning}>Выберите режим</h2>
+          <div className={s.warning}>Выберите режим</div>
         ) : null}
         {!instructor.value ? (
-          <h2 className={s.warning}>Выберите инструктора</h2>
+          <div className={s.warning}>Выберите инструктора</div>
         ) : null}
         {isLoadingSchedule || isLoadingRentInterval ? (
           <Loader />

@@ -1,5 +1,15 @@
 @import 'src/styleVariables'
 
 .settings
-  padding: 20px 10%
+  padding: $container_p
   height: calc(100vh - #{$navbar_h})
+
+
+
+@media (max-width: 992px)
+  .settings
+    padding: $container_p_992
+
+@media (max-width: 576px)
+  .settings
+    padding: $container_p_576

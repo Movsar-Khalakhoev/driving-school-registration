@@ -26,6 +26,16 @@ const Parameters = () => {
   const { active: scheduleDate } = useSelector(state => state.schedule.date)
   const [dispatchInstructors, isLoadingInstructors] = useDispatchWithHttp()
   const [dispatchPracticeModes, isLoadingPracticeModes] = useDispatchWithHttp()
+  const selectStyles = {
+    placeholder: base => ({
+      ...base,
+      width: '100%',
+      paddingRight: 10,
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis',
+      overflow: 'hidden',
+    }),
+  }
 
   const changeDateHandler = value => {
     if (!value) return
@@ -81,6 +91,7 @@ const Parameters = () => {
           options={practiceModes}
           defaultValue={practiceMode.value ? practiceMode : null}
           placeholder='Выберите режим'
+          styles={selectStyles}
         />
       </SkeletonLoader>
       <SkeletonLoader loading={isLoadingInstructors} className={s.instructors}>
@@ -89,6 +100,7 @@ const Parameters = () => {
           options={instructors}
           defaultValue={instructor.value ? instructor : null}
           placeholder='Выберите инструктора'
+          styles={selectStyles}
         />
       </SkeletonLoader>
     </div>

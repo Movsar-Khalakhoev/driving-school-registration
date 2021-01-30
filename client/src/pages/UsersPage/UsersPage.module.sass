@@ -3,7 +3,7 @@
 $input_h: 46px
 
 .users
-  padding: 20px 10%
+  padding: $container_p
 
 .input
   display: block
@@ -40,10 +40,15 @@ $input_h: 46px
 
 
 
+@media (max-width: 992px)
+  .users
+    padding: $container_p_992
+
 @media (max-width: 768px)
-  .students
-    padding: 20px 5%
+  .roles
+    font-size: 1rem
+    margin-top: 10px
 
 @media (max-width: 576px)
-  .students
-    padding: 10px 2%
+  .users
+    padding: $container_p_576

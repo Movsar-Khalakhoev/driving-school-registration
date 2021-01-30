@@ -1,7 +1,7 @@
 @import "src/styleVariables"
 
 .add
-  padding: 20px 10%
+  padding: $container_p
   display: block
 
 .label
@@ -19,7 +19,8 @@
   margin-top: 40px
 
 .select_loader
-  width: 300px
+  width: 100%
+  max-width: 300px
   height: 40px
 
 .wrapper
@@ -37,3 +38,11 @@
   pointer-events: none
   &:hover
     background-color: #c1c1c1
+
+@media (max-width: 992px)
+  .add
+    padding: $container_p_992
+
+@media (max-width: 576px)
+  .add
+    padding: $container_p_576

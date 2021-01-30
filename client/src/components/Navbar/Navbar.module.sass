@@ -106,7 +106,12 @@
       transform: translateY(-200%) rotate(-45deg)
 
 
-@media (max-width: 768px)
+
+@media (max-width: 1440px)
+  .section
+    padding: 0 15px
+
+@media (max-width: 1210px)
   .sections
     position: absolute
     flex-direction: column
@@ -118,20 +123,25 @@
     right: 0
     transform: translateX(100%)
     background-color: #0d47a1
+    z-index: 10
 
   .section
     height: 50px
     width: 100%
-    background-color: darken(#0d47a1, 10%)
+    padding: unset
+    background-color: darken(#0d47a1, 5%)
     margin-right: 0
     margin-bottom: 10px
     &::after
       width: 0
+    &.active
+      background-color: darken(#0d47a1, 15%)
 
   .logout
     position: absolute
     top: 10px
     right: 10px
+    background-color: darken(#0d47a1, 5%)
 
   .hamburger
     position: absolute

@@ -2,7 +2,7 @@
   display: flex
   align-items: center
   justify-content: space-between
-  padding: 20px
+  padding: 0 20px
   margin-bottom: 5px
   height: 40px
   border-radius: 3px
@@ -14,3 +14,14 @@
 .name
   color: #fff
   font-size: 1.1rem
+
+@media (max-width: 768px)
+  .user
+    align-items: flex-start
+    flex-direction: column
+    padding: 10px
+    height: unset
+
+  .name
+    position: relative
+

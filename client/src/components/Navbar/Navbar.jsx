@@ -1,29 +1,25 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import s from './Navbar.module.sass'
 import { NavLink } from 'react-router-dom'
 import AuthContext from '../../context/AuthContext'
-import { useDispatch, useSelector } from 'react-redux'
-import { resetAddUserState } from '../../redux/actions/addUser.action'
-import { resetScheduleState } from '../../redux/actions/schedule.action'
-import { resetSettingsState } from '../../redux/actions/settings.action'
-import { resetPersonalState } from '../../redux/actions/personal.action'
-import { resetAllUsersState } from '../../redux/actions/users.action'
-import { resetVariablesState } from '../../redux/actions/variables.actions'
+import { useSelector } from 'react-redux'
 
 const Navbar = () => {
   const { userId, logout } = useContext(AuthContext)
   const { components } = useSelector(state => state.variables)
+  const [menuIsActive, setMenuIsActive] = useState(false)
 
   return (
     <div className={s.navbar}>
       <p className={s.logo}>Автошкола</p>
-      <div className={s.sections}>
+      <div className={`${s.sections} ${menuIsActive ? s.active : ''}`}>
         {components.usersPage && (
           <NavLink
             exact
             to='/users/'
             activeClassName={s.active}
             className={s.section}
+            onClick={() => setMenuIsActive(false)}
           >
             <i className={`${s.ico} icofont-users-alt-3`} />
             Пользователи
@@ -34,6 +30,7 @@ const Navbar = () => {
             to='/attendance'
             activeClassName={s.active}
             className={s.section}
+            onClick={() => setMenuIsActive(false)}
           >
             <i className={`${s.ico} icofont-notepad`} />
             Посещаемость
@@ -44,6 +41,7 @@ const Navbar = () => {
             to='/add-user'
             activeClassName={s.active}
             className={s.section}
+            onClick={() => setMenuIsActive(false)}
           >
             <i className={`${s.ico} icofont-ui-add`} />
             Добавить пользователя
@@ -55,6 +53,7 @@ const Navbar = () => {
             to='/'
             activeClassName={s.active}
             className={s.section}
+            onClick={() => setMenuIsActive(false)}
           >
             <i className={`${s.ico} icofont-contact-add`} />
             Расписание
@@ -65,6 +64,7 @@ const Navbar = () => {
             to={`/users/${userId}`}
             activeClassName={s.active}
             className={s.section}
+            onClick={() => setMenuIsActive(false)}
           >
             <i className={`${s.ico} icofont-ui-user`} />
             Кабинет
@@ -75,6 +75,7 @@ const Navbar = () => {
             to='/settings'
             activeClassName={s.active}
             className={`${s.section} mr3`}
+            onClick={() => setMenuIsActive(false)}
           >
             <i className={`${s.ico} icofont-settings-alt`} />
             Настройки
@@ -83,7 +84,10 @@ const Navbar = () => {
         <span className={s.logout} onClick={logout}>
           <i className='icofont-logout' />
         </span>
-        <span className={s.hamburger}>
+        <span
+          className={`${s.hamburger} ${menuIsActive ? s.active : ''}`}
+          onClick={() => setMenuIsActive(prev => !prev)}
+        >
           <span className={s.line_1} />
           <span className={s.line_2} />
           <span className={s.line_3} />

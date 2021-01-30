@@ -1,7 +1,7 @@
 @import 'src/styleVariables'
 
 .attendance
-  padding: 20px 10%
+  padding: $container_p
   height: calc(100vh - #{$navbar_h})
 
 .header
@@ -24,6 +24,12 @@
   justify-content: flex-end
   align-items: center
   width: 60%
+
+.warning
+  color: #bababa
+  margin-top: 20px
+  font-size: 25px
+  font-weight: bold
 
 .is_attend
   font-size: 13px
@@ -59,3 +65,35 @@
 
 .student_actions
   display: flex
+
+
+
+@media (max-width: 992px)
+  .attendance
+    padding: $container_p_992
+
+@media (max-width: 768px)
+  .header
+    flex-direction: column
+    align-items: flex-start
+
+  .students_list
+    margin-top: 20px
+
+  .info
+    margin-top: 20px
+    width: unset
+
+@media (max-width: 576px)
+  .attendance
+    padding: $container_p_576
+
+  .info, .student_actions
+    width: 100%
+    justify-content: flex-start
+
+  .attend_button, .no_attend_button
+    font-size: 14px
+    height: 25px
+    width: 47%
+    max-width: 120px

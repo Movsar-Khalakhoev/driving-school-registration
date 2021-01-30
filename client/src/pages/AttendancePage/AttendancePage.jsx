@@ -18,6 +18,13 @@ const AttendancePage = () => {
   const { studentsList, modes, activeMode } = useSelector(
     state => state.attendance
   )
+  const filteredStudentsList = studentsList.filter(student =>
+    activeMode.value !== 'all'
+      ? activeMode.value === 'marked'
+        ? student.isAttend
+        : !student.isAttend
+      : true
+  )
 
   useEffect(() => {
     fetchStudentsList(fetchStudentsListAction)
@@ -40,15 +47,8 @@ const AttendancePage = () => {
         </div>
       </div>
       <div className={s.students_list}>
-        {studentsList
-          .filter(student =>
-            activeMode.value !== 'all'
-              ? activeMode.value === 'marked'
-                ? student.isAttend
-                : !student.isAttend
-              : true
-          )
-          .map(student => {
+        {filteredStudentsList.length ? (
+          filteredStudentsList.map(student => {
             return (
               <UserCard
                 link={`/users/${student.id}`}
@@ -120,7 +120,10 @@ const AttendancePage = () => {
                 </div>
               </UserCard>
             )
-          })}
+          })
+        ) : (
+          <div className={s.warning}>Ничего не найдено</div>
+        )}
       </div>
     </div>
   )

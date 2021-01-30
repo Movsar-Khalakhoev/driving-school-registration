@@ -41,13 +41,17 @@ const InstructorSchedule = () => {
       : dispatchSchedule(getSettingsCurrentSchedule, [activeWeek])
   }, [activeMode, activeWeek])
   return (
-    <div>
+    <div className={s.instructor_schedule}>
       <Parameters
         activeWeek={activeWeek}
         setActiveWeek={setActiveWeek}
         activeMode={activeMode}
       />
-      <div className={s.table_wrapper}>
+      <div
+        className={`${s.table_wrapper} ${
+          isLoadingSchedule ? s.table_wrapper_loading : ''
+        }`}
+      >
         {isLoadingSchedule && (
           <div className={s.loading}>
             <Loader />
