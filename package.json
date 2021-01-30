@@ -13,9 +13,9 @@
     "client:start": "npm run start --prefix client",
     "client:build": "npm run build --prefix client",
     "client:install": "npm install --prefix client",
-    "start": "node index.js",
+    "start": "cross-env NODE_ENV=production node index.js",
     "server": "nodemon index.js",
-    "dev": "concurrently \"npm run client:start\" \"npm run server\""
+    "dev": "cross-env NODE_ENV=delelopment concurrently \"npm run client:start\" \"npm run server\""
   },
   "repository": {
     "type": "git",
@@ -29,6 +29,7 @@
   "homepage": "https://github.com/Movsar-Khalakhoev/driving-school-registration#readme",
   "devDependencies": {
     "concurrently": "^5.3.0",
+    "cross-env": "^7.0.3",
     "nodemon": "^2.0.6"
   },
   "dependencies": {
