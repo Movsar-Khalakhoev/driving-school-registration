@@ -21,7 +21,8 @@ const initialState = {
     removeRentButton: false, // Кнопка отмены бронирования на странице пользователя
 
     settingsPage: false, // Страница настроек
-    instructorSchedule: false, // Настройка расписания у инструктора
+    instructorSchedule: false, // Возможность видеть настройки расписания у инструктора
+    isEditableViewOfInstructorSchedule: false, // Возможность редактировать найстройки расписания у инструктора
 
     attendancePage: false, // Страница контроля посещаемости
   },

@@ -8,6 +8,7 @@ import usersReducer from './users.reducer'
 import settingsReducer from './settings.reducer'
 import variablesReducer from './variables.reducer'
 import attendancePageReducer from './AttendancePage.reducers'
+import generalReducer from './GENERAL.reducers'
 
 const reducer = combineReducers({
   variables: variablesReducer,
@@ -18,6 +19,7 @@ const reducer = combineReducers({
   users: usersReducer,
   settings: settingsReducer,
   attendance: attendancePageReducer,
+  general: generalReducer,
 })
 
 const store = createStore(reducer, applyMiddleware(ReduxThunk))

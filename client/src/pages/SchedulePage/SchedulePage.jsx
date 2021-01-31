@@ -9,42 +9,38 @@ import useDispatchWithHttp from '../../hooks/dispatchWithHttp.hook'
 
 const SchedulePage = () => {
   const { schedule } = useSelector(state => state.schedule.schedule)
-  const { active: instructor } = useSelector(
-    state => state.schedule.instructors
-  )
-  const { active: practiceMode } = useSelector(
-    state => state.schedule.practiceModes
-  )
-  const { active: scheduleDate } = useSelector(state => state.schedule.date)
+  const { activeInstructor } = useSelector(state => state.schedule)
+  const { activePracticeMode } = useSelector(state => state.schedule)
+  const { activeDate } = useSelector(state => state.schedule)
   const { components } = useSelector(state => state.variables)
   const [dispatchSchedule, isLoadingSchedule] = useDispatchWithHttp()
   const [dispatchRentInterval, isLoadingRentInterval] = useDispatchWithHttp()
 
   const rentIntervalHandler = timestamp =>
     dispatchRentInterval(rentInterval, [
-      instructor.value,
-      practiceMode.value,
+      activeInstructor.value,
+      activePracticeMode.value,
       timestamp,
     ])
 
   useEffect(() => {
-    if (practiceMode.value && instructor.value) {
+    if (activePracticeMode.value && activeInstructor.value) {
       dispatchSchedule(getSchedule, [
-        scheduleDate,
-        practiceMode.value,
-        instructor.value,
+        activeDate,
+        activePracticeMode.value,
+        activeInstructor.value,
       ])
     }
-  }, [practiceMode, instructor, dispatchSchedule, scheduleDate])
+  }, [activePracticeMode, activeInstructor, dispatchSchedule, activeDate])
 
   return (
     <div className={s.schedule}>
       <Parameters />
       <div className={s.container}>
-        {!practiceMode.value ? (
+        {!activePracticeMode.value ? (
           <div className={s.warning}>Выберите режим</div>
         ) : null}
-        {!instructor.value ? (
+        {!activeInstructor.value ? (
           <div className={s.warning}>Выберите инструктора</div>
         ) : null}
         {isLoadingSchedule || isLoadingRentInterval ? (

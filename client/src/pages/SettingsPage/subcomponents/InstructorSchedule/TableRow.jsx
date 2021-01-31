@@ -7,7 +7,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux'
 import { dateByWeekDayAndHour } from '../../../../utils/date'
 
-const TableRow = ({ hour, activeWeek, activeMode }) => {
+const TableRow = ({ hour, activeWeek, activeMode, isEditableView }) => {
   const dispatch = useDispatch()
   const { schedule, changedCells } = useSelector(
     state => state.settings.schedule
@@ -39,6 +39,15 @@ const TableRow = ({ hour, activeWeek, activeMode }) => {
     dispatch(setSchedule(newCells))
   }
 
+  const isPastTime = dayIdx => {
+    return (
+      activeMode.value === 'current' &&
+      new Date().getTime() -
+        dateByWeekDayAndHour(activeWeek[0], dayIdx, hour).getTime() >
+        0
+    )
+  }
+
   const cellClasses = (candidate, dayIdx) => {
     return `${s.cell} ${
       Object.keys(candidate).length
@@ -47,14 +56,7 @@ const TableRow = ({ hour, activeWeek, activeMode }) => {
           : s.no_active
         : s.active
     }
-    ${
-      activeMode.value === 'current' &&
-      new Date().getTime() -
-        dateByWeekDayAndHour(activeWeek[0], dayIdx, hour).getTime() >
-        0
-        ? s.past
-        : ''
-    }`
+    ${isPastTime(dayIdx) && isEditableView ? s.past : ''}`
   }
 
   return (
@@ -74,7 +76,7 @@ const TableRow = ({ hour, activeWeek, activeMode }) => {
                   <p className={s.rented_info}>{candidate.practiceMode}</p>
                 </>
               )}
-              {!candidate.disabled && (
+              {!candidate.disabled && !isPastTime(dayIdx) && isEditableView && (
                 <button
                   onClick={() => toggleCellState(hour, dayIdx + 1)}
                   className={s.toggle_mode}

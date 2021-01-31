@@ -7,23 +7,22 @@ import {
   changeDate,
   changeInstructor,
   changePracticeMode,
-  getInstructors,
-  getPracticeModes,
 } from '../../../redux/actions/schedule.action'
 import { useDispatch, useSelector } from 'react-redux'
 import { addMonth, dateWithoutTime } from '../../../utils/date'
 import useDispatchWithHttp from '../../../hooks/dispatchWithHttp.hook'
+import {
+  getInstructors,
+  getPracticeModes,
+} from '../../../redux/actions/GENERAL.actions'
 
 const Parameters = () => {
   const maxDate = addMonth()
   const dispatch = useDispatch()
-  const { instructors, active: instructor } = useSelector(
-    state => state.schedule.instructors
-  )
-  const { practiceModes, active: practiceMode } = useSelector(
-    state => state.schedule.practiceModes
-  )
-  const { active: scheduleDate } = useSelector(state => state.schedule.date)
+  const { activeInstructor } = useSelector(state => state.schedule)
+  const { activePracticeMode } = useSelector(state => state.schedule)
+  const { activeDate } = useSelector(state => state.schedule)
+  const { instructors, practiceModes } = useSelector(state => state.general)
   const [dispatchInstructors, isLoadingInstructors] = useDispatchWithHttp()
   const [dispatchPracticeModes, isLoadingPracticeModes] = useDispatchWithHttp()
   const selectStyles = {
@@ -39,29 +38,29 @@ const Parameters = () => {
 
   const changeDateHandler = value => {
     if (!value) return
-    if (value.toString() === scheduleDate.toString()) return
+    if (value.toString() === activeDate.toString()) return
 
     dispatch(changeDate(value))
   }
 
-  const changeModeHandler = m => {
-    if (!m.value) return
-    if (practiceMode.value) {
-      if (m.value.toString() === practiceMode.value.toString()) {
+  const changeModeHandler = mode => {
+    if (!mode.value) return
+    if (activePracticeMode.value) {
+      if (mode.value.toString() === activePracticeMode.value.toString()) {
         return false
       }
     }
 
-    dispatch(changePracticeMode(m))
+    dispatch(changePracticeMode(mode))
   }
 
-  const changeInstructorHandler = i => {
-    if (!i.value) return
-    if (instructor.value) {
-      if (i.value.toString() === i.toString()) return false
+  const changeInstructorHandler = instructor => {
+    if (!instructor.value) return
+    if (activeInstructor.value) {
+      if (instructor.value.toString() === instructor.toString()) return false
     }
 
-    dispatch(changeInstructor(i))
+    dispatch(changeInstructor(instructor))
   }
 
   useEffect(() => dispatchInstructors(getInstructors), [dispatchInstructors])
@@ -75,7 +74,7 @@ const Parameters = () => {
       <DatePicker
         className={s.datepicker}
         onChange={changeDateHandler}
-        value={scheduleDate}
+        value={activeDate}
         format='dd-MM-yyyy'
         minDate={dateWithoutTime()}
         maxDate={maxDate}
@@ -89,7 +88,7 @@ const Parameters = () => {
         <Select
           onChange={changeModeHandler}
           options={practiceModes}
-          defaultValue={practiceMode.value ? practiceMode : null}
+          defaultValue={activePracticeMode.value ? activePracticeMode : null}
           placeholder='Выберите режим'
           styles={selectStyles}
         />
@@ -98,7 +97,7 @@ const Parameters = () => {
         <Select
           onChange={changeInstructorHandler}
           options={instructors}
-          defaultValue={instructor.value ? instructor : null}
+          defaultValue={activeInstructor.value ? activeInstructor : null}
           placeholder='Выберите инструктора'
           styles={selectStyles}
         />

@@ -16,6 +16,7 @@ app.use('/api/add-user', require('./routes/addUser.route'))
 app.use('/api/settings', require('./routes/settings.route'))
 app.use('/api/variables', require('./routes/variables.route'))
 app.use('/api/attendance', require('./routes/attendance.route'))
+app.use('/api/general', require('./routes/GENERAL.route'))
 
 if (process.env.NODE_ENV === 'production') {
   app.use('/', express.static(path.join(__dirname, 'client', 'build')))

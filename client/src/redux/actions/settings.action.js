@@ -1,4 +1,5 @@
 import {
+  CHANGE_SETTINGS_SCHEDULE_INSTRUCTOR,
   CHANGE_SETTINGS_SCHEDULE_MODE,
   GET_SETTINGS_SCHEDULE_FETCH_SUCCESS,
   RESET_SETTINGS_STATE,
@@ -29,10 +30,25 @@ export function changeMode(mode) {
   }
 }
 
-export function getSettingsPeriodicSchedule({ request }) {
+export function changeInstructor(instructor) {
+  return {
+    type: CHANGE_SETTINGS_SCHEDULE_INSTRUCTOR,
+    instructor,
+  }
+}
+
+export function getSettingsPeriodicSchedule(
+  instructor,
+  isEditableView,
+  { request, authData }
+) {
   return async dispatch => {
     try {
-      const { error, data } = await request('/api/settings/schedule/periodic')
+      const { error, data } = await request(
+        `/api/settings/${
+          isEditableView ? authData.userId : instructor.value
+        }/schedule/periodic`
+      )
 
       if (!error) {
         dispatch({
@@ -46,12 +62,19 @@ export function getSettingsPeriodicSchedule({ request }) {
   }
 }
 
-export function getSettingsCurrentSchedule(activeWeek, { request }) {
+export function getSettingsCurrentSchedule(
+  activeWeek,
+  instructor,
+  isEditableView,
+  { request, authData }
+) {
   return async dispatch => {
     try {
       const timestamp = `${activeWeek[0].getTime()}-${activeWeek[1].getTime()}`
       const { error, data } = await request(
-        `/api/settings/schedule/current/${timestamp}`
+        `/api/settings/${
+          isEditableView ? authData.userId : instructor.value
+        }/schedule/current/${timestamp}`
       )
 
       if (!error) {
@@ -77,7 +100,6 @@ export function setSettingsPeriodicSchedule(changed, { request }) {
         }
       )
 
-      console.log(data)
       if (!error) {
         dispatch({
           type: GET_SETTINGS_SCHEDULE_FETCH_SUCCESS,

@@ -119,26 +119,6 @@ router.post('/', auth, roles, async (req, res) => {
   }
 })
 
-router.get('/instructors', auth, roles, async (req, res) => {
-  try {
-    let instructors = await User.find(
-      { roles: '600e5f57e9732c401c66c712' },
-      { name: 1, _id: 1 }
-    )
-
-    instructors = instructors.map(i => ({ value: i._id, label: i.name }))
-    return res.json({ instructors })
-  } catch (e) {}
-})
-
-router.get('/practice-modes', auth, roles, async (req, res) => {
-  let practiceModes = await PracticeMode.find({}, { __v: 0 })
-
-  practiceModes = practiceModes.map(p => ({ value: p._id, label: p.label }))
-
-  res.json({ practiceModes })
-})
-
 router.post('/practice-modes', auth, roles, async (req, res) => {
   const practiceMode = new PracticeMode({
     label: req.body.label,

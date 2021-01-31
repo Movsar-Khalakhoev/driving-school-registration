@@ -2,8 +2,6 @@ import {
   CHANGE_DATE,
   CHANGE_INSTRUCTOR,
   CHANGE_PRACTICE_MODE,
-  GET_INSTRUCTORS_FETCH_SUCCESS,
-  GET_PRACTICE_MODES_FETCH_SUCCESS,
   GET_SCHEDULE_FETCH_SUCCESS,
   RENT_INTERVAL_FETCH_SUCCESS,
   RESET_SCHEDULE_STATE,
@@ -14,17 +12,9 @@ const initialState = {
   schedule: {
     schedule: [],
   },
-  instructors: {
-    instructors: [],
-    active: {},
-  },
-  practiceModes: {
-    practiceModes: [],
-    active: {},
-  },
-  date: {
-    active: dateWithoutTime(),
-  },
+  activeInstructor: {},
+  activePracticeMode: {},
+  activeDate: dateWithoutTime(),
 }
 
 const defaultState = { ...initialState }
@@ -57,45 +47,20 @@ export default function scheduleReducer(state = initialState, action) {
           schedule,
         },
       }
-    case GET_INSTRUCTORS_FETCH_SUCCESS:
-      return {
-        ...state,
-        instructors: {
-          ...state.instructors,
-          instructors: action.instructors,
-        },
-      }
-    case GET_PRACTICE_MODES_FETCH_SUCCESS:
-      return {
-        ...state,
-        practiceModes: {
-          ...state.practiceModes,
-          practiceModes: action.practiceModes,
-        },
-      }
     case CHANGE_PRACTICE_MODE:
       return {
         ...state,
-        practiceModes: {
-          ...state.practiceModes,
-          active: action.mode,
-        },
+        activePracticeMode: action.mode,
       }
     case CHANGE_INSTRUCTOR:
       return {
         ...state,
-        instructors: {
-          ...state.instructors,
-          active: action.instructor,
-        },
+        activeInstructor: action.instructor,
       }
     case CHANGE_DATE:
       return {
         ...state,
-        date: {
-          ...state.date,
-          active: action.date,
-        },
+        activeDate: action.date,
       }
     case RESET_SCHEDULE_STATE:
       return defaultState

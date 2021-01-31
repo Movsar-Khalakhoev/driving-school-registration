@@ -7,7 +7,11 @@ const SettingsPage = () => {
   const { components } = useSelector(state => state.variables)
   return (
     <div className={s.settings}>
-      {components.instructorSchedule && <InstructorSchedule />}
+      {components.instructorSchedule && (
+        <InstructorSchedule
+          isEditableView={components.isEditableViewOfInstructorSchedule}
+        />
+      )}
     </div>
   )
 }

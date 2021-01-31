@@ -1,4 +1,5 @@
 import {
+  CHANGE_SETTINGS_SCHEDULE_INSTRUCTOR,
   CHANGE_SETTINGS_SCHEDULE_MODE,
   GET_SETTINGS_SCHEDULE_FETCH_SUCCESS,
   RESET_SETTINGS_STATE,
@@ -11,6 +12,7 @@ const initialState = {
   schedule: {
     schedule: [],
     changedCells: [],
+    activeInstructor: {},
     modes: [
       { label: 'Периодический', value: 'periodic' },
       { label: 'Текущий', value: 'current' },
@@ -55,6 +57,14 @@ export default function settingsReducer(state = initialState, action) {
           ...state.schedule,
           changedCells: [],
           activeMode: action.mode,
+        },
+      }
+    case CHANGE_SETTINGS_SCHEDULE_INSTRUCTOR:
+      return {
+        ...state,
+        schedule: {
+          ...state.schedule,
+          activeInstructor: action.instructor,
         },
       }
     case GET_SETTINGS_SCHEDULE_FETCH_SUCCESS:

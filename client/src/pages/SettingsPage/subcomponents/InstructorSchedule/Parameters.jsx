@@ -1,16 +1,39 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import s from './InstrucrorSchedule.module.sass'
 import Select from 'react-select'
 import { addWeek, getWeekInterval, subWeek } from '../../../../utils/date'
-import { changeMode } from '../../../../redux/actions/settings.action'
+import {
+  changeInstructor,
+  changeMode,
+} from '../../../../redux/actions/settings.action'
 import { useDispatch, useSelector } from 'react-redux'
+import SkeletonLoader from '../../../../components/SkeletonLoader/SkeletonLoader'
+import useDispatchWithHttp from '../../../../hooks/dispatchWithHttp.hook'
+import { getInstructors } from '../../../../redux/actions/GENERAL.actions'
 
-const Parameters = ({ activeWeek, setActiveWeek, activeMode }) => {
+const Parameters = ({
+  activeWeek,
+  setActiveWeek,
+  activeMode,
+  isEditableView,
+}) => {
   const dispatch = useDispatch()
+  const [dispatchInstructors, isLoadingInstructors] = useDispatchWithHttp()
   const { maxWeeksNum } = useSelector(state => state.variables.variables)
-  const { modes } = useSelector(state => state.settings.schedule)
-
+  const { modes, activeInstructor } = useSelector(
+    state => state.settings.schedule
+  )
+  const { instructors } = useSelector(state => state.general)
   const [weekNum, setWeekNum] = useState(1)
+  const selectStyles = {
+    placeholder: base => ({
+      ...base,
+      paddingRight: 10,
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis',
+      overflow: 'hidden',
+    }),
+  }
 
   const incrementActiveWeekHandler = () => {
     setWeekNum(prev => prev + 1)
@@ -23,15 +46,40 @@ const Parameters = ({ activeWeek, setActiveWeek, activeMode }) => {
   }
 
   const changeModeHandler = mode => dispatch(changeMode(mode))
+  const changeInstructorHandler = instructor =>
+    dispatch(changeInstructor(instructor))
+
+  useEffect(() => {
+    if (!isEditableView) {
+      dispatchInstructors(getInstructors)
+    }
+  }, [dispatchInstructors, isEditableView])
 
   return (
     <div className={s.parameters}>
-      <Select
-        className={s.mode}
-        onChange={changeModeHandler}
-        defaultValue={activeMode}
-        options={modes}
-      />
+      <div className={s.selects_wrapper}>
+        {!isEditableView && (
+          <SkeletonLoader
+            loading={isLoadingInstructors}
+            className={s.instructors}
+          >
+            <Select
+              onChange={changeInstructorHandler}
+              options={instructors}
+              defaultValue={activeInstructor.value ? activeInstructor : null}
+              placeholder='Выберите инструктора'
+              styles={selectStyles}
+            />
+          </SkeletonLoader>
+        )}
+        <Select
+          className={s.mode}
+          onChange={changeModeHandler}
+          defaultValue={activeMode}
+          options={modes}
+          styles={selectStyles}
+        />
+      </div>
       {activeMode.value === 'current' && (
         <div className={s.weeks}>
           <button

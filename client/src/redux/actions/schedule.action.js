@@ -2,8 +2,6 @@ import {
   CHANGE_DATE,
   CHANGE_INSTRUCTOR,
   CHANGE_PRACTICE_MODE,
-  GET_INSTRUCTORS_FETCH_SUCCESS,
-  GET_PRACTICE_MODES_FETCH_SUCCESS,
   GET_SCHEDULE_FETCH_SUCCESS,
   RENT_INTERVAL_FETCH_SUCCESS,
   RESET_SCHEDULE_STATE,
@@ -62,40 +60,6 @@ export function rentInterval(instructor, practiceMode, timestamp, { request }) {
     } catch (e) {
       errorToast(e.message)
     }
-  }
-}
-
-export function getInstructors({ request }) {
-  return async dispatch => {
-    try {
-      const { error, data } = await request('/api/schedule/instructors')
-
-      if (!error) {
-        dispatch({
-          type: GET_INSTRUCTORS_FETCH_SUCCESS,
-          instructors: data.instructors,
-        })
-      } else {
-        errorToast(error)
-      }
-    } catch (e) {}
-  }
-}
-
-export function getPracticeModes({ request }) {
-  return async dispatch => {
-    try {
-      const { error, data } = await request('/api/schedule/practice-modes')
-
-      if (!error) {
-        dispatch({
-          type: GET_PRACTICE_MODES_FETCH_SUCCESS,
-          practiceModes: data.practiceModes,
-        })
-      } else {
-        errorToast(error)
-      }
-    } catch (e) {}
   }
 }
 

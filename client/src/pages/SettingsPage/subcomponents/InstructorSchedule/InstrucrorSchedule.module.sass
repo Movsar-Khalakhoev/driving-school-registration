@@ -7,8 +7,20 @@
   height: 40px
   margin-bottom: 20px
 
+.selects_wrapper
+  display: flex
+  align-items: center
+  flex-grow: 1
+  margin-right: 20px
+
+.instructors
+  height: 40px
+  width: 48%
+  max-width: 300px
+  margin-right: 20px
+
 .mode
-  width: 100%
+  width: 48%
   max-width: 300px
 
 .weeks
@@ -16,7 +28,7 @@
   align-items: center
   justify-content: space-between
   height: 100%
-  width: 230px
+  width: 220px
 
 .arrow
   display: flex
@@ -105,14 +117,37 @@
   font-size: 10px
   color: #fff
 
+.warning
+  color: #bababa
+  margin: 10px 0
+  font-size: 22px
+  font-weight: bold
+  &:last-child
+    margin-bottom: unset
+
 @media (max-width: 768px)
   .parameters
     height: unset
     flex-direction: column
     align-items: flex-start
 
+  .selects_wrapper
+    width: 100%
+    margin-right: unset
+
   .weeks
     margin-top: 10px
 
   .arrow
     height: 40px
+
+@media (max-width: 576px)
+  .instructors, .mode
+    margin-bottom: 10px
+
+  .selects_wrapper
+    flex-direction: column
+    align-items: flex-start
+
+  .instructors, .mode
+    width: 100%

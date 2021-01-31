@@ -6,75 +6,78 @@ const auth = require('../middlewares/auth.middleware')
 const roles = require('../middlewares/roles.middleware')
 const { toggleInterval } = require('../utils/settings.auxiliary')
 
-router.get('/schedule/periodic', auth, roles, async (req, res) => {
+router.get('/:userId/schedule/periodic', auth, roles, async (req, res) => {
   const { settings } = await User.findOne(
-    { _id: req.user.userId },
+    { _id: req.params.userId },
     { settings: 1 }
   ).populate('settings')
 
   res.json({ schedule: settings.periodicSchedule })
 })
 
-router.get('/schedule/current/:interval', auth, roles, async (req, res) => {
-  try {
-    const { settings } = await User.findOne(
-      { _id: req.user.userId },
-      { settings: 1 }
-    ).populate('settings')
+router.get(
+  '/:userId/schedule/current/:interval',
+  auth,
+  roles,
+  async (req, res) => {
+    try {
+      const { settings } = await User.findOne(
+        { _id: req.params.userId },
+        { settings: 1 }
+      ).populate('settings')
 
-    const [start, end] = req.params.interval.split('-')
-    let rentedIntervals = await Interval.find(
-      {
-        timestamp: {
-          // $gte: new Date() > new Date(+start) ? new Date() : new Date(+start)
-          $gte: new Date(+start),
-          $lte: new Date(+end),
+      const [start, end] = req.params.interval.split('-')
+      let rentedIntervals = await Interval.find(
+        {
+          timestamp: {
+            // $gte: new Date() > new Date(+start) ? new Date() : new Date(+start)
+            $gte: new Date(+start),
+            $lte: new Date(+end),
+          },
+          instructor: req.params.userId,
         },
-        instructor: req.user.userId,
-      },
-      { timestamp: 1, name: 1 }
-    ).populate('practiceMode')
+        { timestamp: 1, name: 1 }
+      ).populate('practiceMode')
 
-    rentedIntervals = rentedIntervals.map(interval => ({
-      name: interval.name,
-      hour: new Date(interval.timestamp).getHours(),
-      weekDay: new Date(interval.timestamp).getDay() || 7,
-      practiceMode: interval.practiceMode.label,
-      disabled: true,
-    }))
+      rentedIntervals = rentedIntervals.map(interval => ({
+        name: interval.name,
+        hour: new Date(interval.timestamp).getHours(),
+        weekDay: new Date(interval.timestamp).getDay() || 7,
+        practiceMode: interval.practiceMode.label,
+        disabled: true,
+      }))
 
-    const intervalTemplate = (item, isDisabled) => ({
-      id: item._id,
-      hour: item.hour,
-      weekDay: item.weekDay,
-      disabled: isDisabled,
-    })
+      const intervalTemplate = (item, isDisabled) => ({
+        id: item._id,
+        hour: item.hour,
+        weekDay: item.weekDay,
+        disabled: isDisabled,
+      })
 
-    settings.periodicSchedule.forEach(item => {
-      if (
-        !rentedIntervals.find(
-          interval =>
-            interval.hour === item.hour && interval.weekDay === item.weekDay
-        )
-      ) {
-        rentedIntervals.push(intervalTemplate(item, true))
-      }
-    })
+      settings.periodicSchedule.forEach(item => {
+        if (
+          !rentedIntervals.find(
+            interval =>
+              interval.hour === item.hour && interval.weekDay === item.weekDay
+          )
+        ) {
+          rentedIntervals.push(intervalTemplate(item, true))
+        }
+      })
 
-    settings.currentSchedule.forEach(interval => {
-      if (
-        new Date(interval.timestamp) > new Date(+start) &&
-        new Date(interval.timestamp) < new Date(+end)
-      ) {
-        rentedIntervals.push(intervalTemplate(interval, false))
-      }
-    })
+      settings.currentSchedule.forEach(interval => {
+        if (
+          new Date(interval.timestamp) > new Date(+start) &&
+          new Date(interval.timestamp) < new Date(+end)
+        ) {
+          rentedIntervals.push(intervalTemplate(interval, false))
+        }
+      })
 
-    res.json({ schedule: rentedIntervals })
-  } catch (e) {
-    console.log(e)
+      res.json({ schedule: rentedIntervals })
+    } catch (e) {}
   }
-})
+)
 
 router.post('/schedule/periodic', auth, roles, async (req, res) => {
   try {
