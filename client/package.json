@@ -19,7 +19,9 @@
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "node-sass": "^4.14.1"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build"
@@ -29,9 +31,9 @@
   "license": "ISC",
   "browserslist": {
     "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
+      "last 5 chrome version",
+      "last 5 chrome version",
+      "last 5 safari version"
     ],
     "development": [
       "last 1 chrome version",
