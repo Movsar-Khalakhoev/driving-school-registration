@@ -13,7 +13,7 @@ import useDispatchWithHttp from './hooks/dispatchWithHttp.hook'
 import {
   getComponentsList,
   getVariables,
-} from './redux/actions/variables.actions'
+} from './redux/actions/Variables.actions'
 
 function App() {
   const [dispatchVariables] = useDispatchWithHttp()

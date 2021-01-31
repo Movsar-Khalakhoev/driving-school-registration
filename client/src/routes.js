@@ -1,14 +1,14 @@
 import React from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
-import SchedulePage from './pages/SchedulePage/SchedulePage'
-import AuthPage from './pages/AuthPage/AuthPage'
+import SchedulePage from './pages/SchedulePage/Schedule.page'
+import AuthPage from './pages/Auth.page/Auth.page'
 import Navbar from './components/Navbar/Navbar'
-import UserPage from './pages/UserPage/UserPage'
-import UsersPage from './pages/UsersPage/UsersPage'
-import AddUserPage from './pages/AddUserPage/AddUserPage'
-import SettingsPage from './pages/SettingsPage/SettingsPage'
+import UserPage from './pages/UserPage/User.page'
+import UsersPage from './pages/UsersPage/Users.page'
+import AddUserPage from './pages/AddUser.page/AddUser.page'
+import SettingsPage from './pages/SettingsPage/Settings.page'
 import { useSelector } from 'react-redux'
-import AttendancePage from './pages/AttendancePage/AttendancePage'
+import AttendancePage from './pages/Attendance.page/Attendance.page'
 
 const useRoutes = isAuthenticated => {
   const { components } = useSelector(state => state.variables)

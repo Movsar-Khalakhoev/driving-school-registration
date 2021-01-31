@@ -1,23 +1,23 @@
 import { applyMiddleware, combineReducers, createStore } from 'redux'
-import scheduleReducer from './schedule.reducer'
-import personalReducer from './personal.reducer'
+import schedulePageReducers from './SchedulePage.reducers'
+import userPageReducers from './UserPage.reducers'
 import ReduxThunk from 'redux-thunk'
-import addNewUserReducer from './addUser.reducer'
-import popupReducer from './popup.reducer'
-import usersReducer from './users.reducer'
-import settingsReducer from './settings.reducer'
-import variablesReducer from './variables.reducer'
+import addNewUserReducer from './AddUserPage.reducers'
+import popupReducers from './Popup.reducers'
+import usersPageReducers from './UsersPage.reducers'
+import settingsPageReducers from './SettingsPage.reducers'
+import variablesReducers from './Variables.reducers'
 import attendancePageReducer from './AttendancePage.reducers'
 import generalReducer from './GENERAL.reducers'
 
 const reducer = combineReducers({
-  variables: variablesReducer,
-  popup: popupReducer,
-  schedule: scheduleReducer,
-  personal: personalReducer,
+  variables: variablesReducers,
+  popup: popupReducers,
+  schedule: schedulePageReducers,
+  personal: userPageReducers,
   addNewUser: addNewUserReducer,
-  users: usersReducer,
-  settings: settingsReducer,
+  users: usersPageReducers,
+  settings: settingsPageReducers,
   attendance: attendancePageReducer,
   general: generalReducer,
 })
