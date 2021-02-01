@@ -6,6 +6,7 @@ import {
 } from '../../../../redux/actions/SettingsPage.actions'
 import { useDispatch, useSelector } from 'react-redux'
 import { dateByWeekDayAndHour } from '../../../../utils/date'
+import TableCell from '../../../../components/TableCell/TableCell'
 
 const TableRow = ({ hour, activeWeek, activeMode, isEditableView }) => {
   const dispatch = useDispatch()
@@ -48,15 +49,14 @@ const TableRow = ({ hour, activeWeek, activeMode, isEditableView }) => {
     )
   }
 
-  const cellClasses = (candidate, dayIdx) => {
-    return `${s.cell} ${
+  const cellClass = candidate => {
+    return `${
       Object.keys(candidate).length
         ? candidate.disabled
           ? s.disabled
           : s.no_active
         : s.active
-    }
-    ${isPastTime(dayIdx) && isEditableView ? s.past : ''}`
+    }`
   }
 
   return (
@@ -69,20 +69,23 @@ const TableRow = ({ hour, activeWeek, activeMode, isEditableView }) => {
             schedule.find(c => c.hour === hour && c.weekDay === dayIdx + 1) ||
             {}
           return (
-            <th key={dayIdx} className={cellClasses(candidate, dayIdx)}>
+            <TableCell
+              key={candidate.id}
+              isButton={
+                !candidate.disabled && !isPastTime(dayIdx) && isEditableView
+              }
+              isTranslucentView={isPastTime(dayIdx)}
+              isDisabledView={candidate.disabled}
+              isActiveView={!Object.keys(candidate).length}
+              onClick={() => toggleCellState(hour, dayIdx + 1)}
+            >
               {candidate.name && (
                 <>
                   <p className={s.rented_info}>{candidate.name}</p>
                   <p className={s.rented_info}>{candidate.practiceMode}</p>
                 </>
               )}
-              {!candidate.disabled && !isPastTime(dayIdx) && isEditableView && (
-                <button
-                  onClick={() => toggleCellState(hour, dayIdx + 1)}
-                  className={s.toggle_mode}
-                />
-              )}
-            </th>
+            </TableCell>
           )
         })}
     </tr>

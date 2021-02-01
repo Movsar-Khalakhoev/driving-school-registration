@@ -1,0 +1,198 @@
+[
+  {
+    "components": {
+      "usersPage": true
+    },
+    "links": [
+      {
+        "link": "/api/users",
+        "method": "GET"
+      }
+    ]
+  },
+  {
+    "components": {
+      "addUserPage": true
+    },
+    "links": [
+      {
+        "link": "/api/add-user/roles",
+        "method": "GET"
+      },
+      {
+        "link": "/api/add-user",
+        "method": "POST"
+      }
+    ]
+  },
+  {
+    "components": {
+      "schedulePage": true
+    },
+    "links": [
+      {
+        "regExp": "\/api\/schedule\/[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}\/[a-z0-9]+\/[a-z0-9]+",
+        "method": "GET"
+      }
+    ]
+  },
+  {
+    "components": {
+      "rentIntervalButton": true
+    },
+    "links": [
+      {
+        "link": "/api/schedule",
+        "method": "POST"
+      }
+    ]
+  },
+  {
+    "components": {
+      "userPage": true
+    },
+    "links": [
+      {
+        "link": "/api/users/modes",
+        "method": "GET"
+      },
+      {
+        "regExp": "\/api\/users\/[a-z0-9]+",
+        "method": "GET"
+      },
+      {
+        "regExp": "\/api\/users\/[a-z0-9]+\/[a-z0-9]+\/active",
+        "method": "GET"
+      },
+      {
+        "regExp": "\/api\/users\/[a-z0-9]+\/[a-z0-9]+\/no-active",
+        "method": "GET"
+      }
+    ]
+  },
+  {
+    "components": {
+      "deleteUserButton": true
+    },
+    "links": [
+      {
+        "regExp": "\/api\/users\/delete-user\/[a-z0-9]+",
+        "method": "GET"
+      }
+    ]
+  },
+  {
+    "components": {
+      "removeRentButton": true
+    },
+    "links": [
+      {
+        "link": "/api/users/delete-rent",
+        "method": "POST"
+      }
+    ]
+  },
+  {
+    "components": {
+      "settingsPage": true
+    },
+    "links": {}
+  },
+  {
+    "components": {
+      "instructorSchedule": true
+    },
+    "links": [
+      {
+        "regExp": "\/api\/settings\/[a-z0-9]+\/schedule\/periodic",
+        "method": "GET"
+      },
+      {
+        "regExp": "\/api\/settings\/[a-z0-9]+\/schedule\/current\/[0-9]+-[0-9]+",
+        "method": "GET"
+      }
+    ]
+  },
+  {
+    "components": {
+      "isEditableViewOfInstructorSchedule": true
+    },
+    "links": [
+      {
+        "link": "/api/settings/schedule/periodic",
+        "method": "POST"
+      },
+      {
+        "link": "/api/settings/schedule/current",
+        "method": "POST"
+      }
+    ]
+  },
+  {
+    "components": {
+      "attendancePage": true
+    },
+    "links": [
+      {
+        "link": "/api/attendance",
+        "method": "GET"
+      },
+      {
+        "link": "/api/attendance/mark",
+        "method": "POST"
+      }
+    ]
+  },
+  {
+    "components": {
+      "variables": true
+    },
+    "links": [
+      {
+        "link": "/api/variables",
+        "method": "GET"
+      },
+      {
+        "link": "/api/variables/components",
+        "method": "GET"
+      }
+    ]
+  },
+  {
+    "components": {
+      "general": true
+    },
+    "links": [
+      {
+        "link": "/api/general/instructors",
+        "method": "GET"
+      },
+      {
+        "link": "/api/general/practice-modes",
+        "method": "GET"
+      }
+    ]
+  },
+  {
+    "components": {
+        "functionalitiesController": true
+    },
+    "links": [
+      {
+        "link": "/api/settings/functionality/all-functionalities",
+        "method": "GET"
+      }
+    ]
+  },
+  {
+    "components": {
+      "allRoles": true
+    },
+    "links": [
+      {
+        "link": "/api/general/all-roles",
+        "method": "GET"
+      }
+    ]
+  }
+]

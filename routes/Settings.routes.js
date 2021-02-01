@@ -2,6 +2,8 @@ const { Router } = require('express')
 const router = Router()
 const User = require('../models/User')
 const Interval = require('../models/Interval')
+const Functionality = require('../models/Functionality.model')
+const Role = require('../models/Role')
 const auth = require('../middlewares/auth.middleware')
 const roles = require('../middlewares/roles.middleware')
 const { toggleInterval } = require('../utils/settings.auxiliary')
@@ -135,6 +137,83 @@ router.post('/schedule/current', auth, roles, async (req, res) => {
     await settings.save()
 
     res.json({ message: 'Настройки успешно сохранены!' })
+  } catch (e) {}
+})
+
+router.post('/functionality/add-functionality', async (req, res) => {
+  try {
+    const { functionality } = req.body
+    const candidate = await Functionality.findOne({
+      [`components.${Object.keys(functionality.components)[0]}`]: true,
+    })
+
+    if (candidate) {
+      return res
+        .status(400)
+        .json({ message: 'Такая функциональность уже существует!' })
+    }
+
+    await new Functionality(functionality).save()
+
+    return res.json({ message: 'Фукциональность зарегистрирована!' })
+  } catch (e) {
+    console.log(e)
+  }
+})
+
+router.get(
+  '/functionality/all-functionalities',
+  auth,
+  roles,
+  async (req, res) => {
+    try {
+      const functionalities = await Functionality.find(
+        {},
+        { _id: 1, components: 1, links: 1 }
+      )
+
+      res.json({ functionalities })
+    } catch (e) {
+      console.log(e)
+    }
+  }
+)
+
+router.post('/functionality/change-functionalities', async (req, res) => {
+  try {
+    const { changes } = req.body
+    const allRoles = await Role.find({})
+
+    for (const role of allRoles) {
+      const roleChanges = changes.reduce(
+        (acc, change) =>
+          change.roleId === role._id.toString() ? [...acc, change] : acc,
+        []
+      )
+
+      if (!roleChanges.length) {
+        continue
+      }
+
+      roleChanges.forEach(change => {
+        const permissionIndex = role.permissions.findIndex(
+          permission => permission.toString() === change.functionalityId
+        )
+
+        if (permissionIndex === -1) {
+          role.permissions.push(change.functionalityId)
+        } else {
+          role.permissions = [
+            ...role.permissions.slice(0, permissionIndex),
+            ...role.permissions.slice(permissionIndex + 1),
+          ]
+        }
+      })
+
+      await role.save()
+    }
+
+    res.json({})
   } catch (e) {}
 })
 

@@ -12,7 +12,7 @@ const loginCondition = value => {
 const passCondition = value => {
   const passwordLength = value.length
 
-  return passwordLength >= 6 && passwordLength <= 12
+  return passwordLength >= 6 && passwordLength <= 22
 }
 
 const AuthPage = () => {

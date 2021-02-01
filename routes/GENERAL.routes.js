@@ -2,6 +2,7 @@ const { Router } = require('express')
 const auth = require('../middlewares/auth.middleware')
 const roles = require('../middlewares/roles.middleware')
 const User = require('../models/User')
+const Role = require('../models/Role')
 const PracticeMode = require('../models/PracticeMode')
 const router = Router()
 
@@ -25,6 +26,16 @@ router.get('/practice-modes', auth, roles, async (req, res) => {
 
     res.json({ practiceModes })
   } catch (e) {}
+})
+
+router.get('/all-roles', auth, roles, async (req, res) => {
+  try {
+    const roles = await Role.find()
+
+    res.json({ roles })
+  } catch (e) {
+    console.log(e)
+  }
 })
 
 module.exports = router

@@ -10,6 +10,7 @@ const initialState = {
     forRentHoursInterval: [0, 0], // Интервал, в который можно бронировать время на вождение
   },
   components: {
+    allRoles: false, // Возможность получить список всех ролей
     usersPage: false, // Страница со всеми пользователями
     addUserPage: false, // Страница добавления пользователя
 
@@ -22,7 +23,8 @@ const initialState = {
 
     settingsPage: false, // Страница настроек
     instructorSchedule: false, // Возможность видеть настройки расписания у инструктора
-    isEditableViewOfInstructorSchedule: false, // Возможность редактировать найстройки расписания у инструктора
+    isEditableViewOfInstructorSchedule: false, // Возможность редактировать найстройки расписания у инструктора,
+    functionalitiesController: true, // Возможность видеть настройки доступа до функциональностей для ролей
 
     attendancePage: false, // Страница контроля посещаемости
   },

@@ -1,0 +1,40 @@
+.table
+  width: 100%
+  min-width: 950px
+
+.table_wrapper
+  position: relative
+  width: 100%
+  overflow-y: auto
+
+.table_wrapper_loading
+  pointer-events: none
+
+.loading_wrapper
+  position: relative
+
+.loading
+  position: absolute
+  display: flex
+  align-items: center
+  justify-content: center
+  top: 0
+  left: 0
+  width: 100%
+  height: 100%
+  background-color: #c1c1c1
+  opacity: 0.4
+  z-index: 2
+
+.cell
+  width: calc(100%/8)
+  max-width: 130px
+  overflow: hidden
+  text-overflow: ellipsis
+  height: 40px
+  border: 1px solid #fff
+  color: #fff
+
+.rented_info
+  font-size: 10px
+  color: #fff

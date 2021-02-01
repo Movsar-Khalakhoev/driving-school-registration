@@ -10,6 +10,12 @@ const roleSchema = new Schema({
     type: Number,
     required: true,
   },
+  permissions: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Functionality',
+    },
+  ],
 })
 
 module.exports = model('Role', roleSchema)

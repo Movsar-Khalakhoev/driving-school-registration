@@ -1,23 +1,37 @@
 module.exports = (req, res, next) => {
   const roles = req.user.roles
 
-  roles.forEach(({ _doc: { permissions } }) => {
-    if (req.originalUrl[req.originalUrl.length - 1] === '/') {
-      req.originalUrl = req.originalUrl.slice(0, req.originalUrl.length - 1)
+  const allLinksAndRegExps = roles
+    .map(({ permissions }) =>
+      permissions.map(({ links }) =>
+        links.map(item =>
+          item.link ? { link: item.link } : { regExp: item.regExp }
+        )
+      )
+    )
+    .flat()
+    .flat()
+
+  const isRight = allLinksAndRegExps.find(item => {
+    if (item.link) {
+      return item.link === req.originalUrl
     }
 
-    if (
-      !permissions.find(permission => {
-        if (permission.link) {
-          return permission.link === req.originalUrl
-        } else if (permission.regExp) {
-          return !req.originalUrl.replace(RegExp(permission.regExp), '').length
-        }
-      })
-    ) {
-      return res.status(404).json({})
-    }
-
-    next()
+    return !req.originalUrl.replace(RegExp(item.regExp), '').length
   })
+
+  if (!isRight) {
+    return res.status(404).json({})
+  }
+
+  req.user.maxLevelOfRoles = roles.reduce(
+    (acc, role) => Math.min(acc, role.level),
+    1000
+  )
+  req.user.components = roles
+    .map(({ permissions }) => permissions.map(({ components }) => components))
+    .flat()
+    .reduce((acc, component) => ({ ...acc, ...component }))
+
+  next()
 }

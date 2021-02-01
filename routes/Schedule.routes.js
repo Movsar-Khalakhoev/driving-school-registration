@@ -60,7 +60,7 @@ router.get('/:date/:instructor/:mode', auth, roles, async (req, res) => {
 
     return res.json({ schedule: intervals, hoursToRent: settings.hoursToRent })
   } catch (e) {
-    res.status(500)
+    console.log(e)
   }
 })
 
@@ -70,7 +70,7 @@ router.post('/', auth, roles, async (req, res) => {
     const date = new Date(timestamp)
     const weekInterval = getWeekInterval(date)
     let intervalsInWeek = await Interval.find({
-      user: req.user,
+      user: req.user.userId,
       timestamp: {
         $gte: weekInterval[0],
         $lte: weekInterval[1],
@@ -97,7 +97,7 @@ router.post('/', auth, roles, async (req, res) => {
 
     const hour = {
       timestamp,
-      user: req.user,
+      user: req.user.userId,
       name: req.user.name,
       practiceMode,
       instructor,

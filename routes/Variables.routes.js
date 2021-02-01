@@ -14,30 +14,12 @@ router.get('/', auth, roles, (req, res) => {
   } catch (e) {}
 })
 
-router.get('/components', auth, async (req, res) => {
+router.get('/components', auth, roles, async (req, res) => {
   try {
-    const user = await User.findById(req.user.userId).populate('roles', {
-      components: 1,
-      level: 1,
-    })
-
-    let components = {}
-    let rolesMaxLevel = null
-    user.roles.forEach(role => {
-      if (rolesMaxLevel === null) {
-        rolesMaxLevel = role.level
-      }
-
-      if (role.level < rolesMaxLevel) {
-        components = { ...components, ...role._doc.components }
-        rolesMaxLevel = role.level
-      } else {
-        components = { ...role._doc.components, ...components }
-      }
-    })
-
-    res.json({ components })
-  } catch (e) {}
+    res.json({ components: req.user.components })
+  } catch (e) {
+    console.log(e)
+  }
 })
 
 module.exports = router

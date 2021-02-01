@@ -1,33 +1,3 @@
-// const jwt = require('jsonwebtoken')
-// const config = require('../config')
-//
-// module.exports = (req, res, next) => {
-//   if (req.method === 'OPTIONS') {
-//     return next()
-//   }
-//
-//   try {
-//     const token = req.headers.authorization.split(' ')[1]
-//
-//     if (!token) {
-//       return res.status(401)
-//     }
-//
-//     const payload = jwt.verify(token, config.SECRET_KEY)
-//
-//     if (payload) {
-//       req.user = payload.user
-//     } else {
-//       return res.status(401)
-//     }
-//
-//     next()
-//   } catch (e) {
-//     console.log(e)
-//     res.status(401)
-//   }
-// }
-
 const User = require('../models/User')
 const jwt = require('express-jwt')
 const { SECRET_KEY } = require('../config/index')
@@ -39,8 +9,11 @@ module.exports = [
       return next()
     }
     try {
-      const candidate = await User.findById(req.user.userId).populate('roles', {
-        components: 0,
+      const candidate = await User.findById(req.user.userId).populate({
+        path: 'roles',
+        populate: {
+          path: 'permissions',
+        },
       })
 
       if (!candidate) {
@@ -48,10 +21,7 @@ module.exports = [
       }
 
       req.user.roles = candidate.roles
-      req.user.maxLevelOfRoles = candidate.roles.reduce(
-        (acc, role) => Math.min(acc, role.level),
-        1000
-      )
+      req.user.name = candidate.name
 
       next()
     } catch (e) {

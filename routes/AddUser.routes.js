@@ -8,7 +8,7 @@ const generatePassword = require('../utils/generatePassword')
 const auth = require('../middlewares/auth.middleware')
 const roles = require('../middlewares/roles.middleware')
 
-router.post('/', auth, roles, async (req, res) => {
+router.post('/', async (req, res) => {
   try {
     const { phone: login, name, roles } = req.body
     const candidate = await User.findOne({ login })
@@ -27,15 +27,15 @@ router.post('/', auth, roles, async (req, res) => {
         .json({ message: 'Пользователь с таким логином существует' })
     }
 
-    if (
-      roleLevels.reduce((acc, level) => Math.min(acc, level), 1000) <=
-      req.user.maxLevelOfRoles
-    ) {
-      return res.status(400).json({
-        message:
-          'Вы не можете добавить пользователя с ролью, равной или больше Вашей',
-      })
-    }
+    // if (
+    //   roleLevels.reduce((acc, level) => Math.min(acc, level), 1000) <=
+    //   req.user.maxLevelOfRoles
+    // ) {
+    //   return res.status(400).json({
+    //     message:
+    //       'Вы не можете добавить пользователя с ролью, равной или больше Вашей',
+    //   })
+    // }
 
     const password = generatePassword(name)
     const hashedPassword = await bcrypt.hash(password, 10)
@@ -79,9 +79,9 @@ router.get('/roles', auth, roles, async (req, res) => {
   } catch (e) {}
 })
 
-router.post('/roles', auth, roles, async (req, res) => {
+router.post('/roles', async (req, res) => {
   try {
-    const { label, level } = req.body
+    const { label, level, permissions } = req.body
 
     const candidate = await Role.findOne({ label })
 
@@ -91,6 +91,7 @@ router.post('/roles', auth, roles, async (req, res) => {
     const role = new Role({
       label,
       level,
+      permissions,
     })
 
     await role.save()
