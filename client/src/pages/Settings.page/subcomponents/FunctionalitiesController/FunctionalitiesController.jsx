@@ -4,6 +4,7 @@ import useHttp from '../../../../hooks/http.hook'
 import AuthContext from '../../../../context/AuthContext'
 import Loader from '../../../../components/Loader/Loader'
 import Table from '../Table/Table'
+import { successToast } from '../../../../utils/toastNotifications'
 
 const FunctionalitiesController = () => {
   const [functionalities, setFunctionalities] = useState([])
@@ -37,19 +38,19 @@ const FunctionalitiesController = () => {
     }
   }
 
-  useEffect(() => console.log(changedCells), [changedCells])
-
   const fetchChangesHandler = async () => {
-    await changesRequest(
-      '/api/settings/functionality/change-functionalities',
-      'POST',
-      {
-        changes: changedCells,
-      },
-      {
-        Authorization: `Bearer ${token}`,
-      }
-    )
+    if (changedCells.length) {
+      changesRequest(
+        '/api/settings/functionality/change-permissions',
+        'POST',
+        {
+          changes: changedCells,
+        },
+        {
+          Authorization: `Bearer ${token}`,
+        }
+      ).then(res => successToast(res.data.message))
+    }
   }
 
   const getTableHeadLabels = () => {
@@ -84,7 +85,9 @@ const FunctionalitiesController = () => {
     ).then(res => setFunctionalities(res.data.functionalities))
     rolesRequest('/api/general/all-roles', 'GET', null, {
       Authorization: `Bearer ${token}`,
-    }).then(res => setRoles(res.data.roles))
+    }).then(res => {
+      setRoles(res.data.roles)
+    })
   }, [])
 
   return (

@@ -6,19 +6,23 @@ const Role = require('../models/Role')
 const PracticeMode = require('../models/PracticeMode')
 const router = Router()
 
-router.get('/instructors', auth, roles, async (req, res) => {
+router.get('/instructors', auth, roles, getInstructors)
+router.get('/practice-modes', auth, roles, getPracticeModes)
+router.get('/all-roles', auth, roles, getAllRoles)
+
+async function getInstructors(req, res) {
   try {
     let instructors = await User.find(
-      { roles: '600e5f57e9732c401c66c712' },
+      { roles: '6016cb1f404e3f42dce06681' },
       { name: 1, _id: 1 }
     )
 
     instructors = instructors.map(i => ({ value: i._id, label: i.name }))
     return res.json({ instructors })
   } catch (e) {}
-})
+}
 
-router.get('/practice-modes', auth, roles, async (req, res) => {
+async function getPracticeModes(req, res) {
   try {
     let practiceModes = await PracticeMode.find({}, { __v: 0 })
 
@@ -26,16 +30,14 @@ router.get('/practice-modes', auth, roles, async (req, res) => {
 
     res.json({ practiceModes })
   } catch (e) {}
-})
+}
 
-router.get('/all-roles', auth, roles, async (req, res) => {
+async function getAllRoles(req, res) {
   try {
     const roles = await Role.find()
 
     res.json({ roles })
-  } catch (e) {
-    console.log(e)
-  }
-})
+  } catch (e) {}
+}
 
 module.exports = router

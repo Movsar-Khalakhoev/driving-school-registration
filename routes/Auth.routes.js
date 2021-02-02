@@ -4,11 +4,18 @@ const jwt = require('jsonwebtoken')
 const User = require('../models/User')
 const RefreshToken = require('../models/RefreshToken.model')
 const crypto = require('crypto')
+const Joi = require('joi')
+const validateRequest = require('../middlewares/validate-request.middleware')
+const auth = require('../middlewares/auth.middleware')
 const config = require('../config')
 
 const router = Router()
 
-router.post('/', async (req, res) => {
+router.post('/', loginSchema, login)
+router.post('/refresh-token', refreshToken)
+router.post('/revoke-token', auth, revokeToken)
+
+async function login(req, res) {
   try {
     const { login, password } = req.body
 
@@ -36,9 +43,19 @@ router.post('/', async (req, res) => {
   } catch (e) {
     res.status(500).json({ message: 'Server Error' })
   }
-})
+}
+function loginSchema(req, res, next) {
+  const schema = Joi.object({
+    login: Joi.string()
+      .pattern(new RegExp(/\+\d \(\d{3}\) \d{3} \d{2} \d{2}/))
+      .required(),
+    password: Joi.string().min(6).max(22).required(),
+  })
 
-router.post('/refresh-token', async (req, res) => {
+  validateRequest(req, res, next, schema)
+}
+
+async function refreshToken(req, res) {
   try {
     const token = req.cookies.refreshToken
 
@@ -75,9 +92,9 @@ router.post('/refresh-token', async (req, res) => {
     setTokenCookie(res, newRefreshToken.token)
     res.json({ token: accessToken, userId: oldRefreshToken.user._id })
   } catch (e) {}
-})
+}
 
-router.post('/revoke-token', async (req, res) => {
+async function revokeToken(req, res) {
   try {
     const token = req.cookies.refreshToken
     const deleter = await RefreshToken.deleteOne({ token })
@@ -89,7 +106,7 @@ router.post('/revoke-token', async (req, res) => {
     setTokenCookie(res, 'logout')
     res.json({ message: 'Токен успешно удалён!' })
   } catch (e) {}
-})
+}
 
 function setTokenCookie(res, token) {
   // create cookie with refresh token that expires in 7 days
@@ -99,7 +116,6 @@ function setTokenCookie(res, token) {
   }
   res.cookie('refreshToken', token, cookieOptions)
 }
-
 function generateAccessToken(user) {
   return jwt.sign({ userId: user._id }, config.SECRET_KEY, {
     expiresIn: '1h',

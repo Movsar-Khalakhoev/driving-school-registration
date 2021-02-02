@@ -9,7 +9,12 @@ import InputWithWarning from '../../components/InputWithWarning/InputWithWarning
 import useDispatchWithHttp from '../../hooks/dispatchWithHttp.hook'
 
 const nameCondition = value => {
-  return !value.match(/[\wa-z0-9]+/gi) && value.trim().length > 6
+  return (
+    !value.match(/[\wa-z0-9]+/gi) &&
+    value.trim().length > 6 &&
+    !value.match(/[\wa-z0-9]+/gi) &&
+    value.trim().length < 40
+  )
 }
 
 const phoneCondition = value => {

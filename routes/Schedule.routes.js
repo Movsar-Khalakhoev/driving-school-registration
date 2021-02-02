@@ -3,13 +3,19 @@ const router = Router()
 const Interval = require('../models/Interval')
 const User = require('../models/User')
 const PracticeMode = require('../models/PracticeMode')
+const Joi = require('joi')
+const validateRequest = require('../middlewares/validate-request.middleware')
 const auth = require('../middlewares/auth.middleware')
 const roles = require('../middlewares/roles.middleware')
 const settings = require('../config/settings.json')
 const { todayWithoutTime } = require('../utils/date')
 const { addDay, getWeekInterval, dateByWeekDay } = require('../utils/date')
 
-router.get('/:date/:instructor/:mode', auth, roles, async (req, res) => {
+router.get('/:date/:instructor/:mode', auth, roles, getSchedule)
+router.post('/', auth, rentIntervalSchema, roles, rentInterval)
+router.post('/practice-modes', auth, serPracticeMode, roles, setPracticeMode)
+
+async function getSchedule(req, res) {
   try {
     const date = new Date(req.params.date)
     let instructor = await User.findById(req.params.instructor, {
@@ -59,12 +65,10 @@ router.get('/:date/:instructor/:mode', auth, roles, async (req, res) => {
     ]
 
     return res.json({ schedule: intervals, hoursToRent: settings.hoursToRent })
-  } catch (e) {
-    console.log(e)
-  }
-})
+  } catch (e) {}
+}
 
-router.post('/', auth, roles, async (req, res) => {
+async function rentInterval(req, res) {
   try {
     const { timestamp, instructor, practiceMode } = req.body
     const date = new Date(timestamp)
@@ -117,9 +121,18 @@ router.post('/', auth, roles, async (req, res) => {
   } catch (e) {
     res.status(500).json({ message: 'Что-то пошло не так...' })
   }
-})
+}
+function rentIntervalSchema(req, res, next) {
+  const schema = Joi.object({
+    timestamp: Joi.date().required(),
+    instructor: Joi.string().not().empty().required(),
+    practiceMode: Joi.string().not().empty().required(),
+  })
 
-router.post('/practice-modes', auth, roles, async (req, res) => {
+  validateRequest(req, res, next, schema)
+}
+
+async function setPracticeMode(req, res) {
   const practiceMode = new PracticeMode({
     label: req.body.label,
   })
@@ -127,6 +140,13 @@ router.post('/practice-modes', auth, roles, async (req, res) => {
   await practiceMode.save()
 
   res.json({ message: 'Режим занятий создан успешно!' })
-})
+}
+function serPracticeMode(req, res, next) {
+  const schema = Joi.object({
+    label: Joi.string().not().empty().required(),
+  })
+
+  validateRequest(req, res, next, schema)
+}
 
 module.exports = router

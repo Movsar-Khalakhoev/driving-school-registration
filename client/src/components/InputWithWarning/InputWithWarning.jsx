@@ -5,6 +5,7 @@ import InputMask from 'react-input-mask'
 const InputWithWarning = ({
   containerClassName = '',
   inputClassName = '',
+  inputType = 'text',
   label,
   placeholder,
   onChange,
@@ -18,7 +19,7 @@ const InputWithWarning = ({
       <label className={s.label}>{label}</label>
       <div className={s.wrapper}>
         <InputMask
-          type='text'
+          type={inputType}
           className={`${s.input} ${inputClassName}`}
           onChange={onChange}
           mask={mask || ''}

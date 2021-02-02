@@ -1,12 +1,19 @@
 const { Router } = require('express')
 const User = require('../models/User')
 const { todayWithoutTime } = require('../utils/date')
+const auth = require('../middlewares/auth.middleware')
+const roles = require('../middlewares/roles.middleware')
+const Joi = require('joi')
+const validateRequest = require('../middlewares/validate-request.middleware')
 const router = Router()
 
-router.get('/', async (req, res) => {
+router.get('/', auth, roles, getAttendance)
+router.post('/mark', auth, setUserAttendanceSchema, roles, setUserAttendance)
+
+async function getAttendance(req, res) {
   let students = await User.find(
     {
-      roles: '600e5fb4c6bccf1e30ffa334',
+      roles: '6016ccad404e3f42dce06682',
     },
     {
       _id: 1,
@@ -34,9 +41,9 @@ router.get('/', async (req, res) => {
   })
 
   res.json({ students })
-})
+}
 
-router.post('/mark', async (req, res) => {
+async function setUserAttendance(req, res) {
   try {
     const { id, isAttend } = req.body
     const student = await User.findById(id, { isAttend: 1 })
@@ -58,9 +65,15 @@ router.post('/mark', async (req, res) => {
     await student.save()
 
     res.json({})
-  } catch (e) {
-    console.log(e)
-  }
-})
+  } catch (e) {}
+}
+function setUserAttendanceSchema(req, res, next) {
+  const schema = Joi.object({
+    id: Joi.string().required(),
+    isAttend: Joi.allow(null).allow(Joi.boolean()).required(),
+  })
+
+  validateRequest(req, res, next, schema)
+}
 
 module.exports = router

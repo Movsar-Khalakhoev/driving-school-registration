@@ -194,5 +194,11 @@
         "method": "GET"
       }
     ]
+  },
+  {
+    "components": {
+      "isViewSomeInstructors": true
+    },
+    "links": {}
   }
 ]

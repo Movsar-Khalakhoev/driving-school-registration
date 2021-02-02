@@ -1,25 +1,25 @@
 const { Router } = require('express')
-const User = require('../models/User')
 const settings = require('../config/settings.json')
 const auth = require('../middlewares/auth.middleware')
 const roles = require('../middlewares/roles.middleware')
 
 const router = Router()
 
-router.get('/', auth, roles, (req, res) => {
+router.get('/', auth, roles, getVariables)
+router.get('/components', auth, roles, getComponentsList)
+
+function getVariables(req, res) {
   try {
     const { maxWeeksNum, forRentHoursInterval } = settings
 
     res.json({ variables: { maxWeeksNum, forRentHoursInterval } })
   } catch (e) {}
-})
+}
 
-router.get('/components', auth, roles, async (req, res) => {
+async function getComponentsList(req, res) {
   try {
     res.json({ components: req.user.components })
-  } catch (e) {
-    console.log(e)
-  }
-})
+  } catch (e) {}
+}
 
 module.exports = router

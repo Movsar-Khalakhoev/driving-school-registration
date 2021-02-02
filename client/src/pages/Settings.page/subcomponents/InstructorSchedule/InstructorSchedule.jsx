@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import s from './InstructorSchedule.module.sass'
 import Parameters from './Parameters'
-import Loader from '../../../../components/Loader/Loader'
-import TableHead from './TableHead'
-import TableRow from './TableRow'
 import {
   getSettingsCurrentSchedule,
   getSettingsPeriodicSchedule,
@@ -12,12 +9,13 @@ import {
   setSettingsCurrentSchedule,
   setSettingsPeriodicSchedule,
 } from '../../../../redux/actions/SettingsPage.actions'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import useDispatchWithHttp from '../../../../hooks/dispatchWithHttp.hook'
 import { dateByWeekDayAndHour, getWeekInterval } from '../../../../utils/date'
 import Table from '../Table/Table'
 
-const InstructorSchedule = ({ isEditableView = true }) => {
+const InstructorSchedule = ({ isEditableView, isViewSomeInstructors }) => {
+  const dispatch = useDispatch()
   const {
     schedule,
     changedCells,
@@ -37,9 +35,13 @@ const InstructorSchedule = ({ isEditableView = true }) => {
   const fetchChangesHandler = () => {
     if (changedCells.length) {
       activeMode.value === 'periodic'
-        ? dispatchSchedule(setSettingsPeriodicSchedule, [changedCells])
+        ? dispatchSchedule(setSettingsPeriodicSchedule, [
+            changedCells,
+            activeInstructor.value,
+          ])
         : dispatchSchedule(setSettingsCurrentSchedule, [
             changedCells,
+            activeInstructor.value,
             activeWeek[0],
           ])
     }
@@ -86,11 +88,12 @@ const InstructorSchedule = ({ isEditableView = true }) => {
       }:00`,
       cells: weekDayLabels.map((label, dayIndex) => {
         const candidate =
-          schedule.find(
-            c =>
+          schedule.find(c => {
+            return (
               c.hour === hourIndex + forRentHoursInterval[0] &&
               c.weekDay === dayIndex + 1
-          ) || {}
+            )
+          }) || {}
         return {
           isActiveView: !Object.keys(candidate).length,
           isTranslucentView: isPastTime(
@@ -105,8 +108,8 @@ const InstructorSchedule = ({ isEditableView = true }) => {
             practiceMode: candidate.practiceMode,
           },
           data: {
-            hour: hourIndex,
-            weekDay: dayIndex,
+            hour: hourIndex + forRentHoursInterval[0],
+            weekDay: dayIndex + 1,
           },
         }
       }),
@@ -123,9 +126,10 @@ const InstructorSchedule = ({ isEditableView = true }) => {
   }
 
   useEffect(() => {
-    if (!isEditableView && !activeInstructor.value) {
+    if (isViewSomeInstructors && !activeInstructor.value) {
       return
     }
+
     activeMode.value === 'periodic'
       ? dispatchSchedule(getSettingsPeriodicSchedule, [
           activeInstructor,
@@ -146,8 +150,10 @@ const InstructorSchedule = ({ isEditableView = true }) => {
         setActiveWeek={setActiveWeek}
         activeMode={activeMode}
         isEditableView={isEditableView}
+        isViewSomeInstructors={isViewSomeInstructors}
       />
-      {isEditableView || (!isEditableView && activeInstructor.value) ? (
+      {(isEditableView && !isViewSomeInstructors) ||
+      (isViewSomeInstructors && activeInstructor.value) ? (
         <Table
           isLoading={isLoadingSchedule}
           head={getTableHeadLabels()}

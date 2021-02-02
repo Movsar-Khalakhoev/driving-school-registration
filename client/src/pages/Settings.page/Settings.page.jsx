@@ -11,9 +11,10 @@ const SettingsPage = () => {
       {components.instructorSchedule && (
         <InstructorSchedule
           isEditableView={components.isEditableViewOfInstructorSchedule}
+          isViewSomeInstructors={components.isViewSomeInstructors}
         />
       )}
-      <FunctionalitiesController />
+      {components.functionalitiesController && <FunctionalitiesController />}
     </div>
   )
 }

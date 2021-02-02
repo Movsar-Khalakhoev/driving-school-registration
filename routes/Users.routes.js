@@ -8,7 +8,20 @@ const auth = require('../middlewares/auth.middleware')
 const roles = require('../middlewares/roles.middleware')
 const { isRevocable } = require('../utils/utils')
 
-router.get('/', auth, roles, async (req, res) => {
+router.get('/', auth, roles, getAllUsers)
+router.get('/modes', auth, roles, getUserAttendanceModes)
+router.get('/delete-user/:userId', auth, roles, deleteUser)
+router.get('/:userId', auth, roles, getUser)
+router.get('/:userId/:mode/active', auth, roles, getUserActiveRentedIntervals)
+router.get(
+  '/:userId/:mode/no-active',
+  auth,
+  roles,
+  getUserNoActiveRentedIntervals
+)
+router.post('/delete-rent', auth, roles, deleteRentedInterval)
+
+async function getAllUsers(req, res) {
   try {
     let users = await User.find({}, { name: 1, roles: 1 }).populate('roles')
 
@@ -20,9 +33,9 @@ router.get('/', auth, roles, async (req, res) => {
 
     res.json({ users })
   } catch (e) {}
-})
+}
 
-router.get('/modes', auth, roles, async (req, res) => {
+async function getUserAttendanceModes(req, res) {
   try {
     const practiceModes = await PracticeModes.find({}, { __v: 0 })
 
@@ -42,9 +55,9 @@ router.get('/modes', auth, roles, async (req, res) => {
 
     res.json({ modes })
   } catch (e) {}
-})
+}
 
-router.get('/delete-user/:userId', auth, roles, async (req, res) => {
+async function deleteUser(req, res) {
   try {
     const { userId } = req.params
 
@@ -81,9 +94,9 @@ router.get('/delete-user/:userId', auth, roles, async (req, res) => {
 
     res.json({ message: `Пользователь "${candidate.name}" успешно удален!` })
   } catch (e) {}
-})
+}
 
-router.post('/delete-rent', auth, roles, async (req, res) => {
+async function deleteRentedInterval(req, res) {
   try {
     const { timestamp } = req.body
     await Interval.findOneAndDelete({
@@ -93,9 +106,9 @@ router.post('/delete-rent', auth, roles, async (req, res) => {
 
     res.json({ message: 'Бронирование отменено успешно!' })
   } catch (e) {}
-})
+}
 
-router.get('/:userId', auth, roles, async (req, res) => {
+async function getUser(req, res) {
   try {
     const user = await User.findById(req.params.userId, {
       __v: 0,
@@ -110,9 +123,9 @@ router.get('/:userId', auth, roles, async (req, res) => {
       ),
     })
   } catch (e) {}
-})
+}
 
-router.get('/:userId/:mode/active', auth, roles, async (req, res) => {
+async function getUserActiveRentedIntervals(req, res) {
   try {
     let practice = await Interval.find(
       {
@@ -132,9 +145,9 @@ router.get('/:userId/:mode/active', auth, roles, async (req, res) => {
 
     res.json({ schedule: practice })
   } catch (e) {}
-})
+}
 
-router.get('/:userId/:mode/no-active', auth, roles, async (req, res) => {
+async function getUserNoActiveRentedIntervals(req, res) {
   try {
     let practice = await Interval.find(
       {
@@ -153,6 +166,6 @@ router.get('/:userId/:mode/no-active', auth, roles, async (req, res) => {
 
     res.json({ schedule: practice })
   } catch (e) {}
-})
+}
 
 module.exports = router

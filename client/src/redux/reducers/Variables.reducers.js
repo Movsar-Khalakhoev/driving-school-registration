@@ -23,8 +23,9 @@ const initialState = {
 
     settingsPage: false, // Страница настроек
     instructorSchedule: false, // Возможность видеть настройки расписания у инструктора
-    isEditableViewOfInstructorSchedule: false, // Возможность редактировать найстройки расписания у инструктора,
-    functionalitiesController: true, // Возможность видеть настройки доступа до функциональностей для ролей
+    isEditableViewOfInstructorSchedule: false, // Возможность редактировать найстройки расписания у инструктора
+    isViewSomeInstructors: false, // Возможность видеть расписания всех инструкторов
+    functionalitiesController: false, // Возможность видеть настройки доступа до функциональностей для ролей
 
     attendancePage: false, // Страница контроля посещаемости
   },

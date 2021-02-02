@@ -14,6 +14,7 @@ module.exports = (req, res, next) => {
 
   const isRight = allLinksAndRegExps.find(item => {
     if (item.link) {
+      req.originalUrl = req.originalUrl.replace(/\/$/, '')
       return item.link === req.originalUrl
     }
 

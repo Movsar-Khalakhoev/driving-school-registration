@@ -4,11 +4,33 @@ const User = require('../models/User')
 const Role = require('../models/Role')
 const Settings = require('../models/Settings')
 const bcrypt = require('bcrypt')
+const Joi = require('joi')
+const validateRequest = require('../middlewares/validate-request.middleware')
 const generatePassword = require('../utils/generatePassword')
 const auth = require('../middlewares/auth.middleware')
 const roles = require('../middlewares/roles.middleware')
 
-router.post('/', async (req, res) => {
+router.get('/roles', auth, roles, getRoles)
+router.post('/', auth, addUserSchema, roles, addUser)
+router.post('/roles', auth, addRoleSchema, roles, addRole)
+
+async function getRoles(req, res) {
+  try {
+    let roles = await Role.find(
+      {
+        level: {
+          $gt: req.user.maxLevelOfRoles,
+        },
+      },
+      { _id: 1, label: 1 }
+    )
+    roles = roles.map(({ _id, label }) => ({ value: _id, label }))
+
+    res.json({ roles })
+  } catch (e) {}
+}
+
+async function addUser(req, res) {
   try {
     const { phone: login, name, roles } = req.body
     const candidate = await User.findOne({ login })
@@ -58,28 +80,20 @@ router.post('/', async (req, res) => {
       data: { login, password },
       message: 'Пользователь создан успешно',
     })
-  } catch (e) {
-    console.log(e)
-  }
-})
-
-router.get('/roles', auth, roles, async (req, res) => {
-  try {
-    let roles = await Role.find(
-      {
-        level: {
-          $gt: req.user.maxLevelOfRoles,
-        },
-      },
-      { _id: 1, label: 1 }
-    )
-    roles = roles.map(({ _id, label }) => ({ value: _id, label }))
-
-    res.json({ roles })
   } catch (e) {}
-})
+}
+function addUserSchema(req, res, next) {
+  const schema = Joi.object({
+    phone: Joi.string()
+      .pattern(new RegExp(/\+\d \(\d{3}\) \d{3} \d{2} \d{2}/))
+      .required(),
+    name: Joi.string().min(6).max(40).required(),
+    roles: Joi.array().items(Joi.string()).required(),
+  })
+  validateRequest(req, res, next, schema)
+}
 
-router.post('/roles', async (req, res) => {
+async function addRole(req, res) {
   try {
     const { label, level, permissions } = req.body
 
@@ -98,6 +112,15 @@ router.post('/roles', async (req, res) => {
 
     res.json({ role: { value: role._id, label, level } })
   } catch (e) {}
-})
+}
+function addRoleSchema(req, res, next) {
+  const schema = Joi.object({
+    label: Joi.string().required(),
+    level: Joi.number().required(),
+    permissions: Joi.array().items(Joi.string()).required(),
+  })
+
+  validateRequest(req, res, next, schema)
+}
 
 module.exports = router

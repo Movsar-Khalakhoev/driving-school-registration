@@ -16,6 +16,7 @@ const Parameters = ({
   setActiveWeek,
   activeMode,
   isEditableView,
+  isViewSomeInstructors,
 }) => {
   const dispatch = useDispatch()
   const [dispatchInstructors, isLoadingInstructors] = useDispatchWithHttp()
@@ -58,7 +59,7 @@ const Parameters = ({
   return (
     <div className={s.parameters}>
       <div className={s.selects_wrapper}>
-        {!isEditableView && (
+        {isViewSomeInstructors && (
           <SkeletonLoader
             loading={isLoadingInstructors}
             className={s.instructors}

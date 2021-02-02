@@ -75,48 +75,12 @@ const AuthPage = () => {
           <InputWithWarning
             containerClassName={s.input_container}
             placeholder='Пароль'
+            inputType='password'
             onChange={event => passHandler(event.target.value)}
             error={passErr}
             isTried={isTried}
             errorMessage='Длина пароля от 6 до 22 символов'
           />
-          {/*<div className={`${s.input_container} mb2`}>*/}
-          {/*  <InputMask*/}
-          {/*    className={`${s.input} ${*/}
-          {/*      loginErr && isTried ? s.input_error : ''*/}
-          {/*    }`}*/}
-          {/*    type='text'*/}
-          {/*    onChange={event => loginHandler(event.target.value)}*/}
-          {/*    mask='+9 (999) 999 99 99'*/}
-          {/*    placeholder='Логин'*/}
-          {/*  />*/}
-          {/*  {loginErr && isTried ? (*/}
-          {/*    <>*/}
-          {/*      <i className={`${s.error} icofont-warning-alt`} />*/}
-          {/*      <small className={s.error_message}>*/}
-          {/*        Введите корректный номер телефона*/}
-          {/*      </small>*/}
-          {/*    </>*/}
-          {/*  ) : null}*/}
-          {/*</div>*/}
-          {/*<div className={`${s.input_container} mb3`}>*/}
-          {/*  <input*/}
-          {/*    className={`${s.input} ${*/}
-          {/*      passErr && isTried ? s.input_error : ''*/}
-          {/*    }`}*/}
-          {/*    type='password'*/}
-          {/*    onChange={event => passHandler(event.target.value)}*/}
-          {/*    placeholder='Пароль'*/}
-          {/*  />*/}
-          {/*  {passErr && isTried ? (*/}
-          {/*    <>*/}
-          {/*      <i className={`${s.error} icofont-warning-alt`} />*/}
-          {/*      <small className={s.error_message}>*/}
-          {/*        Длина пароля от 6 до 22 символов*/}
-          {/*      </small>*/}
-          {/*    </>*/}
-          {/*  ) : null}*/}
-          {/*</div>*/}
         </div>
         <div className={s.card_action}>
           <button

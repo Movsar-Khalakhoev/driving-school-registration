@@ -4,92 +4,146 @@ const User = require('../models/User')
 const Interval = require('../models/Interval')
 const Functionality = require('../models/Functionality.model')
 const Role = require('../models/Role')
+const Joi = require('joi')
+const validateRequest = require('../middlewares/validate-request.middleware')
 const auth = require('../middlewares/auth.middleware')
+const settings = require('../config/settings.json')
 const roles = require('../middlewares/roles.middleware')
 const { toggleInterval } = require('../utils/settings.auxiliary')
 
-router.get('/:userId/schedule/periodic', auth, roles, async (req, res) => {
-  const { settings } = await User.findOne(
-    { _id: req.params.userId },
-    { settings: 1 }
-  ).populate('settings')
-
-  res.json({ schedule: settings.periodicSchedule })
-})
-
+router.get('/:userId/schedule/periodic', auth, roles, getPeriodicSchedule)
 router.get(
   '/:userId/schedule/current/:interval',
   auth,
   roles,
-  async (req, res) => {
-    try {
-      const { settings } = await User.findOne(
-        { _id: req.params.userId },
-        { settings: 1 }
-      ).populate('settings')
-
-      const [start, end] = req.params.interval.split('-')
-      let rentedIntervals = await Interval.find(
-        {
-          timestamp: {
-            // $gte: new Date() > new Date(+start) ? new Date() : new Date(+start)
-            $gte: new Date(+start),
-            $lte: new Date(+end),
-          },
-          instructor: req.params.userId,
-        },
-        { timestamp: 1, name: 1 }
-      ).populate('practiceMode')
-
-      rentedIntervals = rentedIntervals.map(interval => ({
-        name: interval.name,
-        hour: new Date(interval.timestamp).getHours(),
-        weekDay: new Date(interval.timestamp).getDay() || 7,
-        practiceMode: interval.practiceMode.label,
-        disabled: true,
-      }))
-
-      const intervalTemplate = (item, isDisabled) => ({
-        id: item._id,
-        hour: item.hour,
-        weekDay: item.weekDay,
-        disabled: isDisabled,
-      })
-
-      settings.periodicSchedule.forEach(item => {
-        if (
-          !rentedIntervals.find(
-            interval =>
-              interval.hour === item.hour && interval.weekDay === item.weekDay
-          )
-        ) {
-          rentedIntervals.push(intervalTemplate(item, true))
-        }
-      })
-
-      settings.currentSchedule.forEach(interval => {
-        if (
-          new Date(interval.timestamp) > new Date(+start) &&
-          new Date(interval.timestamp) < new Date(+end)
-        ) {
-          rentedIntervals.push(intervalTemplate(interval, false))
-        }
-      })
-
-      res.json({ schedule: rentedIntervals })
-    } catch (e) {}
-  }
+  getCurrentSchedule
+)
+router.get(
+  '/functionality/all-functionalities',
+  auth,
+  roles,
+  getAllFunctionalities
+)
+router.post(
+  '/schedule/periodic',
+  auth,
+  setPeriodicScheduleSchema,
+  roles,
+  setPeriodicSchedule
+)
+router.post(
+  '/schedule/current',
+  auth,
+  setCurrentScheduleSchema,
+  roles,
+  setCurrentSchedule
+)
+router.post(
+  '/functionality/add-functionality',
+  auth,
+  setFunctionalitySchema,
+  roles,
+  setFunctionality
+)
+router.post(
+  '/functionality/change-permissions',
+  auth,
+  changePermissionsSchema,
+  roles,
+  changePermissions
 )
 
-router.post('/schedule/periodic', auth, roles, async (req, res) => {
+async function getPeriodicSchedule(req, res) {
   try {
+    const { settings } = await User.findOne(
+      { _id: req.params.userId },
+      { settings: 1 }
+    ).populate('settings')
+
+    res.json({ schedule: settings.periodicSchedule })
+  } catch (e) {}
+}
+
+async function getCurrentSchedule(req, res) {
+  try {
+    const { settings } = await User.findOne(
+      { _id: req.params.userId },
+      { settings: 1 }
+    ).populate('settings')
+
+    const [start, end] = req.params.interval.split('-')
+    let rentedIntervals = await Interval.find(
+      {
+        timestamp: {
+          // $gte: new Date() > new Date(+start) ? new Date() : new Date(+start)
+          $gte: new Date(+start),
+          $lte: new Date(+end),
+        },
+        instructor: req.params.userId,
+      },
+      { timestamp: 1, name: 1 }
+    ).populate('practiceMode')
+
+    rentedIntervals = rentedIntervals.map(interval => ({
+      name: interval.name,
+      hour: new Date(interval.timestamp).getHours(),
+      weekDay: new Date(interval.timestamp).getDay() || 7,
+      practiceMode: interval.practiceMode.label,
+      disabled: true,
+    }))
+
+    const intervalTemplate = (item, isDisabled) => ({
+      id: item._id,
+      hour: item.hour,
+      weekDay: item.weekDay,
+      disabled: isDisabled,
+    })
+
+    settings.periodicSchedule.forEach(item => {
+      if (
+        !rentedIntervals.find(
+          interval =>
+            interval.hour === item.hour && interval.weekDay === item.weekDay
+        )
+      ) {
+        rentedIntervals.push(intervalTemplate(item, true))
+      }
+    })
+
+    settings.currentSchedule.forEach(interval => {
+      if (
+        new Date(interval.timestamp) > new Date(+start) &&
+        new Date(interval.timestamp) < new Date(+end)
+      ) {
+        rentedIntervals.push(intervalTemplate(interval, false))
+      }
+    })
+
+    res.json({ schedule: rentedIntervals })
+  } catch (e) {}
+}
+
+async function getAllFunctionalities(req, res) {
+  try {
+    const functionalities = await Functionality.find(
+      {},
+      { _id: 1, components: 1, links: 1 }
+    )
+
+    res.json({ functionalities })
+  } catch (e) {}
+}
+
+async function setPeriodicSchedule(req, res) {
+  try {
+    const { changed, instructorId } = req.body
     const instructor = await User.findOne(
-      { _id: req.user.userId },
+      { _id: instructorId },
       { settings: 1 }
     ).populate('settings')
     const { settings } = instructor
 
-    req.body.changed.forEach(item => {
+    changed.forEach(item => {
       const filtered = toggleInterval(settings.periodicSchedule, item)
 
       if (filtered) {
@@ -99,7 +153,7 @@ router.post('/schedule/periodic', auth, roles, async (req, res) => {
       settings.periodicSchedule.push(item)
     })
 
-    req.body.changed.forEach(item => {
+    changed.forEach(item => {
       const filtered = toggleInterval(settings.currentSchedule, item)
 
       if (filtered) {
@@ -114,17 +168,35 @@ router.post('/schedule/periodic', auth, roles, async (req, res) => {
       message: 'Настройки успешно сохранены!',
     })
   } catch (e) {}
-})
+}
+function setPeriodicScheduleSchema(req, res, next) {
+  const schema = Joi.object({
+    changed: Joi.array()
+      .items(
+        Joi.object({
+          hour: Joi.number()
+            .min(settings.forRentHoursInterval[0])
+            .max(settings.forRentHoursInterval[1]),
+          weekDay: Joi.number().min(1).max(7),
+        })
+      )
+      .required(),
+    instructorId: Joi.string().required(),
+  })
 
-router.post('/schedule/current', auth, roles, async (req, res) => {
+  validateRequest(req, res, next, schema)
+}
+
+async function setCurrentSchedule(req, res) {
   try {
+    const { changed, instructorId } = req.body
     const instructor = await User.findOne(
-      { _id: req.user.userId },
+      { _id: instructorId },
       { settings: 1 }
     ).populate('settings')
     const { settings } = instructor
 
-    req.body.changed.forEach(item => {
+    changed.forEach(item => {
       const filtered = toggleInterval(settings.currentSchedule, item)
 
       if (filtered) {
@@ -138,9 +210,27 @@ router.post('/schedule/current', auth, roles, async (req, res) => {
 
     res.json({ message: 'Настройки успешно сохранены!' })
   } catch (e) {}
-})
+}
+function setCurrentScheduleSchema(req, res, next) {
+  const schema = Joi.object({
+    changed: Joi.array()
+      .items(
+        Joi.object({
+          hour: Joi.number()
+            .min(settings.forRentHoursInterval[0])
+            .max(settings.forRentHoursInterval[1]),
+          weekDay: Joi.number().min(1).max(7),
+          timestamp: Joi.date().required(),
+        })
+      )
+      .required(),
+    instructorId: Joi.string().required(),
+  })
 
-router.post('/functionality/add-functionality', async (req, res) => {
+  validateRequest(req, res, next, schema)
+}
+
+async function setFunctionality(req, res) {
   try {
     const { functionality } = req.body
     const candidate = await Functionality.findOne({
@@ -156,32 +246,29 @@ router.post('/functionality/add-functionality', async (req, res) => {
     await new Functionality(functionality).save()
 
     return res.json({ message: 'Фукциональность зарегистрирована!' })
-  } catch (e) {
-    console.log(e)
-  }
-})
+  } catch (e) {}
+}
+function setFunctionalitySchema(req, res, next) {
+  const schema = Joi.object({
+    functionality: Joi.object({
+      components: Joi.object(),
+      links: Joi.array().items(
+        Joi.object({
+          link: Joi.string(),
+          regExp: Joi.string(),
+          method: Joi.string().required(),
+        })
+      ),
+    }),
+  })
 
-router.get(
-  '/functionality/all-functionalities',
-  auth,
-  roles,
-  async (req, res) => {
-    try {
-      const functionalities = await Functionality.find(
-        {},
-        { _id: 1, components: 1, links: 1 }
-      )
+  validateRequest(req, res, next, schema)
+}
 
-      res.json({ functionalities })
-    } catch (e) {
-      console.log(e)
-    }
-  }
-)
-
-router.post('/functionality/change-functionalities', async (req, res) => {
+async function changePermissions(req, res) {
   try {
     const { changes } = req.body
+    console.log(changes)
     const allRoles = await Role.find({})
 
     for (const role of allRoles) {
@@ -213,8 +300,20 @@ router.post('/functionality/change-functionalities', async (req, res) => {
       await role.save()
     }
 
-    res.json({})
+    res.json({ message: 'Настройки сохранены!' })
   } catch (e) {}
-})
+}
+function changePermissionsSchema(req, res, next) {
+  const schema = Joi.object({
+    change: Joi.array().items(
+      Joi.object({
+        roleId: Joi.string().required(),
+        functionalityId: Joi.string().required(),
+      })
+    ),
+  })
+
+  validateRequest(req, res, next, schema)
+}
 
 module.exports = router
