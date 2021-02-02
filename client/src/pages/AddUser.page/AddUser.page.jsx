@@ -62,19 +62,23 @@ const AddUserPage = () => {
     <div className={s.add}>
       <InputWithWarning
         containerClassName={s.input_container}
+        inputClassName={s.input}
         label='ФИО пользователя:'
         onChange={event => nameHandler(event.target.value)}
         error={nameErr}
         isTried={isTried}
+        errorMessage='ФИО не должно содержать латинских букв, цифр; должно быть не короче 6 символов'
       />
       <InputWithWarning
         containerClassName={s.input_container}
+        inputClassName={s.input}
         label='Логин (номер телефона):'
         placeholder='Номер телефона'
         mask='+9 (999) 999 99 99'
         onChange={event => phoneHandler(event.target.value)}
         error={phoneErr}
         isTried={isTried}
+        errorMessage='Введите корректный номер телефона'
       />
       <div className={s.role}>
         <label className={s.label}>Статус пользователя:</label>
@@ -82,7 +86,10 @@ const AddUserPage = () => {
           <div className={s.wrapper}>
             <Select options={roles} onChange={rolesHandler} />
             {rolesErr && isTried ? (
-              <i className={`${s.error} icofont-warning-alt`} />
+              <>
+                <i className={`${s.error} icofont-warning-alt`} />
+                <small className={s.error_message}>Выберите роль</small>
+              </>
             ) : null}
           </div>
         </SkeletonLoader>

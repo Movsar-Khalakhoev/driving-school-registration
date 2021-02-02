@@ -18,28 +18,8 @@
     color: white
     font-size: 1.5rem
 
-.input
-  height: 46px
-  width: 100%
-  font-size: 16px
-  padding: 0 10px
-  color: white
-  background-color: inherit
-  border: none
-  border-bottom: 1px solid #c1c1c1
-  outline: none
-  transition: border-color .3s
-  &_container
-    position: relative
-    display: flex
-    align-items: center
-  &_error
-    &:focus
-      border-bottom: 1px solid $color-2 !important
-  &:focus
-    border-bottom: 1px solid $color-1
-  &::placeholder
-    color: #c1c1c1
+.input_container
+  margin-bottom: 10px
 
 .error
   position: absolute
@@ -53,6 +33,7 @@
 .button
   padding: 10px 20px
   margin-right: 10px
+  margin-top: 20px
 
 .button_disabled
   background-color: #c1c1c1
