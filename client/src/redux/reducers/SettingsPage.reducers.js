@@ -68,11 +68,19 @@ export default function settingsPageReducers(state = initialState, action) {
         },
       }
     case GET_SETTINGS_SCHEDULE_FETCH_SUCCESS:
+      const schedule = action.schedule.map(interval => {
+        const { hour, weekDay, timestamp, ...args } = interval
+        return {
+          ...args,
+          hour: new Date(timestamp).getHours(),
+          weekDay: new Date(timestamp).getDay() || 7,
+        }
+      })
       return {
         ...state,
         schedule: {
           ...state.schedule,
-          schedule: action.schedule,
+          schedule,
         },
       }
     case SET_SETTINGS_SCHEDULE_FETCH_SUCCESS:

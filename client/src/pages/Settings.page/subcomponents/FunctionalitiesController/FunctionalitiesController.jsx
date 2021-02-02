@@ -49,7 +49,10 @@ const FunctionalitiesController = () => {
         {
           Authorization: `Bearer ${token}`,
         }
-      ).then(res => successToast(res.data.message))
+      ).then(res => {
+        setChangedCells([])
+        successToast(res.data.message)
+      })
     }
   }
 

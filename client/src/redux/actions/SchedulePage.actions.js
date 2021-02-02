@@ -8,6 +8,7 @@ import {
 } from '../actionTypes/SchedulePage.actionTypes'
 import normalizeSchedule from '../../utils/normalizeSchedule'
 import { errorToast, successToast } from '../../utils/toastNotifications'
+import { dateWithoutTime } from '../../utils/date'
 
 export function getSchedule(date, practiceMode, instructor, { request }) {
   return async (dispatch, getState) => {

@@ -84,13 +84,14 @@ async function getCurrentSchedule(req, res) {
       { timestamp: 1, name: 1 }
     ).populate('practiceMode')
 
-    rentedIntervals = rentedIntervals.map(interval => ({
-      name: interval.name,
-      hour: new Date(interval.timestamp).getHours(),
-      weekDay: new Date(interval.timestamp).getDay() || 7,
-      practiceMode: interval.practiceMode.label,
-      disabled: true,
-    }))
+    rentedIntervals = rentedIntervals.map(interval => {
+      return {
+        name: interval.name,
+        timestamp: interval.timestamp,
+        practiceMode: interval.practiceMode.label,
+        disabled: true,
+      }
+    })
 
     const intervalTemplate = (item, isDisabled) => ({
       id: item._id,
@@ -267,8 +268,7 @@ function setFunctionalitySchema(req, res, next) {
 
 async function changePermissions(req, res) {
   try {
-    const { changes } = req.body
-    console.log(changes)
+    const { changes = [] } = req.body
     const allRoles = await Role.find({})
 
     for (const role of allRoles) {
@@ -305,7 +305,7 @@ async function changePermissions(req, res) {
 }
 function changePermissionsSchema(req, res, next) {
   const schema = Joi.object({
-    change: Joi.array().items(
+    changes: Joi.array().items(
       Joi.object({
         roleId: Joi.string().required(),
         functionalityId: Joi.string().required(),

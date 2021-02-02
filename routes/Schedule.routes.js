@@ -100,7 +100,7 @@ async function rentInterval(req, res) {
     }
 
     const hour = {
-      timestamp,
+      timestamp: new Date(timestamp).toISOString(),
       user: req.user.userId,
       name: req.user.name,
       practiceMode,
