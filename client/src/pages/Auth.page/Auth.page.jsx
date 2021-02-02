@@ -4,6 +4,7 @@ import s from './Auth.module.sass'
 import useFormValidator from '../../hooks/formValidator.hook'
 import useHttp from '../../hooks/http.hook'
 import AuthContext from '../../context/AuthContext'
+import { errorToast } from '../../utils/toastNotifications'
 
 const loginCondition = value => {
   return value.replace(/\D/g, '').length >= 11
@@ -39,21 +40,18 @@ const AuthPage = () => {
 
   const login = () => {
     const func = async (login, password) => {
-      const { data } = await request('/api/auth', 'POST', { login, password })
+      const { error, data } = await request('/api/auth', 'POST', {
+        login,
+        password,
+      })
+
+      if (error) {
+        return errorToast(error)
+      }
 
       if (data.token && data.userId) {
         loginFunc(data.token, data.userId)
       }
-    }
-
-    tryHandler(func)
-  }
-
-  const register = () => {
-    const func = async (login, password) => {
-      try {
-        await request('/api/auth/register', 'POST', { login, password })
-      } catch (e) {}
     }
 
     tryHandler(func)
@@ -101,15 +99,6 @@ const AuthPage = () => {
             disabled={buttonState}
           >
             Войти
-          </button>
-          <button
-            className={`${s.button} ${
-              buttonState ? s.button_disabled : ''
-            } btn_1`}
-            onClick={register}
-            disabled={buttonState}
-          >
-            Зарегистрироваться
           </button>
         </div>
       </div>
