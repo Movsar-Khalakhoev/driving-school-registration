@@ -155,7 +155,7 @@ const InstructorSchedule = ({ isEditableView, isViewSomeInstructors }) => {
       {(isEditableView && !isViewSomeInstructors) ||
       (isViewSomeInstructors && activeInstructor.value) ? (
         <Table
-          isLoading={true}
+          isLoading={isLoadingSchedule}
           head={getTableHeadLabels()}
           rows={getTableRows()}
           changedCells={changedCells}
