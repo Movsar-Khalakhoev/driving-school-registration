@@ -17,6 +17,7 @@ export function getPersonal(userId, { request }) {
         dispatch({
           type: GET_PERSONAL_FETCH_SUCCESS,
           user: data.user,
+          isVisitsVisible: data.isVisitsVisible,
         })
       } else {
         errorToast(error)

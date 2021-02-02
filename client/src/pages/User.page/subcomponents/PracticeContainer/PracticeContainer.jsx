@@ -16,8 +16,8 @@ const PracticeContainer = ({ userId }) => {
   const dispatch = useDispatch()
   const [dispatchIntervals, isLoadingIntervals] = useDispatchWithHttp()
   const [dispatchModes, isLoadingModes] = useDispatchWithHttp()
-  const { intervals } = useSelector(state => state.personal.schedule)
-  const { modes, active: mode } = useSelector(state => state.personal.modes)
+  const { intervals } = useSelector(state => state.user.schedule)
+  const { modes, active: mode } = useSelector(state => state.user.modes)
 
   const changeModeHandler = mode => dispatch(changePersonalMode(mode))
 

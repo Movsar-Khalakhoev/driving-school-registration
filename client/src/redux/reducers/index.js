@@ -14,7 +14,7 @@ const reducer = combineReducers({
   variables: variablesReducers,
   popup: popupReducers,
   schedule: schedulePageReducers,
-  personal: userPageReducers,
+  user: userPageReducers,
   addNewUser: addNewUserReducer,
   users: usersPageReducers,
   settings: settingsPageReducers,

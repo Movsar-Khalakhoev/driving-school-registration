@@ -13,6 +13,7 @@ const initialState = {
   },
   schedule: {
     intervals: [],
+    isVisitsVisible: false,
   },
   modes: {
     modes: [],
@@ -30,6 +31,10 @@ const userPageReducers = (state = initialState, action) => {
         info: {
           ...state.info,
           user: action.user,
+        },
+        schedule: {
+          ...state.schedule,
+          isVisitsVisible: action.isVisitsVisible,
         },
       }
     case GET_PERSON_SCHEDULE_FETCH_SUCCESS:

@@ -10,6 +10,10 @@ const roleSchema = new Schema({
     type: Number,
     required: true,
   },
+  isVisitsVisible: {
+    type: Boolean,
+    required: true,
+  },
   permissions: [
     {
       type: Schema.Types.ObjectId,

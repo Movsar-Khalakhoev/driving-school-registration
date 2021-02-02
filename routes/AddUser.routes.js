@@ -27,15 +27,15 @@ router.post('/', async (req, res) => {
         .json({ message: 'Пользователь с таким логином существует' })
     }
 
-    // if (
-    //   roleLevels.reduce((acc, level) => Math.min(acc, level), 1000) <=
-    //   req.user.maxLevelOfRoles
-    // ) {
-    //   return res.status(400).json({
-    //     message:
-    //       'Вы не можете добавить пользователя с ролью, равной или больше Вашей',
-    //   })
-    // }
+    if (
+      roleLevels.reduce((acc, level) => Math.min(acc, level), 1000) <=
+      req.user.maxLevelOfRoles
+    ) {
+      return res.status(400).json({
+        message:
+          'Вы не можете добавить пользователя с ролью, равной или больше Вашей',
+      })
+    }
 
     const password = generatePassword(name)
     const hashedPassword = await bcrypt.hash(password, 10)

@@ -13,7 +13,7 @@ import Loader from '../../../../components/Loader/Loader'
 const UserInfo = ({ userId }) => {
   const [dispatchUser, isLoadingUser] = useDispatchWithHttp()
   const [dispatchDeleteUser, isLoadingDeleteUser] = useDispatchWithHttp()
-  const { user } = useSelector(state => state.personal.info)
+  const { user } = useSelector(state => state.user.info)
   const { components } = useSelector(state => state.variables)
   const history = useHistory()
 

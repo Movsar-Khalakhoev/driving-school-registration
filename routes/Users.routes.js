@@ -97,9 +97,18 @@ router.post('/delete-rent', auth, roles, async (req, res) => {
 
 router.get('/:userId', auth, roles, async (req, res) => {
   try {
-    const user = await User.findById(req.params.userId, { __v: 0, password: 0 })
+    const user = await User.findById(req.params.userId, {
+      __v: 0,
+      password: 0,
+    }).populate('roles', { isVisitsVisible: 1 })
 
-    res.json({ user })
+    res.json({
+      user,
+      isVisitsVisible: user.roles.reduce(
+        (acc, { isVisitsVisible }) => acc && isVisitsVisible,
+        true
+      ),
+    })
   } catch (e) {}
 })
 
